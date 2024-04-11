@@ -1,0 +1,160 @@
+import { StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { useGetAllAppointmentQuery } from "../services/appointment";
+import {
+  useGetAllAppointments,
+  useGetAppointmentById,
+  useCreateNewAppointment,
+  useDeleteAppointmentById,
+} from "../hooks/apiAppointment";
+
+const JWTScreen = () => {
+  //   const shouldFetchAppointments = true;
+
+  //   const { data, isLoading, isError, status } = useGetAllAppointmentQuery(null, {
+  //     skip: !shouldFetchAppointments,
+  //   });
+
+  const {
+    appointments,
+    loading: appointmentsLoading,
+    error: appointmentsError,
+  } = useGetAllAppointments();
+  // Use other hooks similarly...
+
+  if (appointmentsLoading) {
+    return (
+      <View
+        style={{ flex: 1, justifyContent: "center", flexDirection: "column" }}
+      >
+        <Text>Loading... </Text>
+      </View>
+    );
+  }
+
+  if (appointmentsError) {
+    return (
+      <View
+        style={{ flex: 1, justifyContent: "center", flexDirection: "column" }}
+      >
+        <Text>Error: {appointmentsError.message}</Text>
+      </View>
+    );
+  }
+  return (
+    <View
+      style={{ flex: 1, justifyContent: "center", flexDirection: "column" }}
+    >
+      <Text>{JSON.stringify(appointments)}</Text>
+    </View>
+  );
+};
+
+export default JWTScreen;
+
+const styles = StyleSheet.create({});
+
+
+
+
+
+
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+import { BASE_URL } from '@env';
+
+const baseURL = BASE_URL.toString();
+
+
+// Custom function to construct headers
+const constructHeaders = async () => {
+  const headers = new Headers();
+
+  const token = await ReactNativeAsyncStorage.getItem('jwtToken');
+  const googleAccessToken = await ReactNativeAsyncStorage.getItem('googleAccessToken');
+
+  if (token && googleAccessToken) {
+    headers.set('Authorization', `Bearer ${token},${googleAccessToken}`);
+  } else if (token) {
+    headers.set('Authorization', `Bearer ${token}`);
+  } else if (googleAccessToken) {
+    headers.set('Authorization', `Bearer ${googleAccessToken}`);
+  } else {
+    console.error('No token available');
+  }
+
+  return headers;
+};
+
+// Base query with custom headers
+// const baseQuery = fetchBaseQuery({
+//   baseUrl: baseURL,
+//   prepareHeaders: async (headers, { getState }) => {
+//     const customHeaders = await constructHeaders();
+//     console.log(customHeaders)
+//     customHeaders.forEach((value, key) => {
+//       headers.set(key, value);
+//     });
+//     return headers;
+//   },
+// });
+
+const baseQuery = fetchBaseQuery({
+  baseUrl: baseURL,
+  prepareHeaders: async (headers, { getState }) => {
+    // Remove any existing Authorization header to ensure it's fresh
+    headers.set('Authorization', undefined);
+
+    // Construct headers with the latest token
+    const customHeaders = await constructHeaders();
+    console.log(customHeaders);
+    customHeaders.forEach((value, key) => {
+      // Here, only the latest token value will be set
+      headers.set(key, value);
+    });
+    
+    return headers;
+  },
+});
+
+
+// API service
+export const appointments = createApi({
+  reducerPath: 'appointments',
+  baseQuery: baseQuery,
+  endpoints: (builder) => ({
+    getAppointments: builder.query({
+      query: () => 'api/v1/appointment',
+    }),
+    getAppointmentById: builder.query({
+      query: (id) => `api/v1/appointment/${id}`,
+    }),
+    createNewAppointment: builder.mutation({
+      query: (newAppointment) => ({
+        url: 'api/v1/appointment',
+        method: 'POST',
+        body: newAppointment,
+      }),
+    }),
+    deleteAppointmentById: builder.mutation({
+      query: (id) => ({
+        url: `api/v1/appointment/${id}`,
+        method: 'DELETE',
+      }),
+    }),
+  }),
+});
+
+// Export hooks for usage in functional components
+export const {
+  useGetAppointmentsQuery,
+  useGetAppointmentByIdQuery,
+  useCreateNewAppointmentMutation,
+  useDeleteAppointmentByIdMutation,
+} = appointments;
+
+
+
+
+
+
