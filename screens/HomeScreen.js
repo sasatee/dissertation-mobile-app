@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Alert, Pressable, Image, Text } from "react-native";
+import { View, Alert, Pressable, Image,  } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import useAuth from "../hooks/useGoogle";
 
@@ -9,7 +9,7 @@ import {
   selectCurrentJwtToken,
 } from "../redux/slice/authenticationSlice";
 import { useDispatch, useSelector } from "react-redux";
-import ButtonComponent from "../Components/Button";
+import ButtonComponent from "../components/Button";
 import { useGetAllAppointmentQuery } from "../services/appointment";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -37,7 +37,7 @@ const HomeScreen = () => {
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <ButtonComponent
         title="Open Chat Screen"
-        handleOnPress={() => console.log(data?.appointments[0].reason)}
+        handleOnPress={()=>navigation.navigate("Chat")}
       />
       {isLoggedWithGoogle && user && user.photoURL && (
         <Pressable onPress={logout}>

@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { BASE_URL } from "@env";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
+import { Alert } from "react-native";
 
 import axios from "axios";
 
@@ -19,7 +20,7 @@ export const signUpUser = createAsyncThunk(
 
       return data;
     } catch (error) {
-      rejectWithValue(error.response.data.msg);
+      rejectWithValue(error.response.msg);
     }
   }
 );
@@ -29,8 +30,8 @@ export const googleSigin = createAsyncThunk(
   async (postData, { rejectWithValue }) => {
     try {
       const { data } = await axios.post(
-        // BASE_URL + "api/v1/auth/google-login",
-        "https://cade-102-117-180-90.ngrok-free.app/api/v1/auth/google-login",
+        BASE_URL + "api/v1/auth/google-login",
+        //"https://cade-102-117-180-90.ngrok-free.app/api/v1/auth/google-login",
         postData
       );
       return data;
@@ -104,10 +105,12 @@ const authenticationSlice = createSlice({
         state.token = payload.token;
         state.googleAccessToken = null;
         state.isLogged = true;
-        ReactNativeAsyncStorage.setItem("jwtToken", payload.token)
+        ReactNativeAsyncStorage.setItem("jwtToken", payload.token);
       })
       .addCase(signInUser.rejected, (state, { payload }) => {
         state.loading = false;
+        state.isLogged =false
+        Alert.alert("Authentication Failed","Check your credentials and try again!")
       });
   },
 });

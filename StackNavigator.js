@@ -5,36 +5,34 @@ import LoginScreen from "./screens/LoginScreen";
 import ChatScreen from "./screens/ChatScreen";
 import useAuth from "./hooks/useGoogleSigninHook";
 import { useDispatch, useSelector } from "react-redux";
-
-
+import JWTScreen from "./screens/testScreen";
 
 const Stack = createStackNavigator();
 
-
 const StackNavigator = () => {
- const { user } = useAuth();
+  const { user } = useAuth();
 
-  const isLoggedIn = useSelector((state) => state.auth.token);
+  const reduxState = useSelector((state) => state.auth.token);
   // console.log(user,isLoggedIn)
-  const userIsLoggedWithGoogleOrJwT = isLoggedIn || user
+  const isLoginedIn = reduxState || user;
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {userIsLoggedWithGoogleOrJwT ? (
+      {isLoginedIn ? (
         <>
-      
+          <Stack.Group screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="Chat" component={ChatScreen} />
-             {/* <Stack.Screen name="Login" component={LoginScreen} options={{presentation: 'modal'}} /> */}
-         
-
-      
+            <Stack.Screen name="Check" component={JWTScreen} />
+          </Stack.Group>
+          {/* <Stack.Screen name="Login" component={LoginScreen} options={{presentation: 'modal'}} /> */}
         </>
       ) : (
-        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Group screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Login" component={LoginScreen} />
+        </Stack.Group>
       )}
     </Stack.Navigator>
   );
-
 };
 
 export default StackNavigator;

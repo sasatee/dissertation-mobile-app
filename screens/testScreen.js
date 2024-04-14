@@ -1,72 +1,56 @@
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import Input from "../Components/Input";
+import Input from "../components/Input";
 import useYupValidation from "../hooks/useYupValidation";
-import ButtonComponent from "../Components/Button";
-import * as Yup from "yup";
+import ButtonComponent from "../components/Button";
+import { useGetAllAppointments } from "../hooks/UseAppointment";
+import {
+  emailValidationSchema,
+  passwordValidationSchema,
+} from "../validation/auth";
 
-const initialState = {
-  email: 'sarvam',
-  // password: ''
-};
+// const JWTScreen = () => {
+//   const {
+//     appointments,
+//     loading: appointmentsLoading,
+//     error: appointmentsError,
+//   } = useGetAllAppointments();
 
-const validationSchema = Yup.object().shape({
-  email: Yup.string().email('Invalid email').required('Email is required'),
- // password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
-});
+//   if (appointmentsLoading) {
+//     return (
+//       <View
+//         style={{ flex: 1, justifyContent: "center", flexDirection: "column" }}
+//       >
+//         <Text>Loading... </Text>
+//       </View>
+//     );
+//   }
 
-const JWTScreen = () => {
-  const {
-    value: emailValue,
-    handleInputBlur: handleEmailBlur,
-    handleInputChange: handleEmailOnChange,
-    error: emailError,
-    hasErr: emailHasError,
-  } = useYupValidation(initialState, validationSchema);
+//   if (appointmentsError) {
+//     return (
+//       <View
+//         style={{ flex: 1, justifyContent: "center", flexDirection: "column" }}
+//       >
+//         <Text>Error: {appointmentsError.message}</Text>
+//       </View>
+//     );
+//   }
+//   return (
+//     <View
+//       style={{ flex: 1, justifyContent: "center", flexDirection: "column" }}
+//     >
+//       <Text>{JSON.stringify(appointments)}</Text>
+//     </View>
+//   );
 
-  const {
-    value: passwordValue,
-    handleInputBlur: handlePasswordBlur,
-    handleInputChange: handlePasswordOnChange,
-    error: passwordError,
-    hasErr: passwordHasError,
-  } = useYupValidation("", validationSchema);
 
-  function handleSubmit() {
-    if (emailHasError ) {
-      return;
-    }
-    console.log("http requests");
-    console.log(emailValue, passwordValue);
+// }
+
+
+const JWTScreen =()=>{
+  return {
+    
   }
+}
+ export default JWTScreen;
 
-  return (
-    <SafeAreaView className="my-20 mx-10">
-      <Input
-        placeholder="email"
-        onChangeText={handleEmailOnChange}
-        onBlur={handleEmailBlur}
-      />
-      {emailHasError && <Text style={styles.errorText}>{emailError}</Text>}
-      {/* <Input
-        placeholder="Password"
-        onChangeText={handlePasswordOnChange}
-        onBlur={handlePasswordBlur}
-        secureTextEntry={true}
-      />
-      {passwordHasError && <Text style={styles.errorText}>{passwordError}</Text>} */}
-      <View className="py-2">
-        <ButtonComponent title="login" handleOnPress={handleSubmit} />
-      </View>
-    </SafeAreaView>
-  );
-};
-
-export default JWTScreen;
-
-const styles = StyleSheet.create({
-  errorText: {
-    color: "red",
-    marginTop: 5,
-  },
-});

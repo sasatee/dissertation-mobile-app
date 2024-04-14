@@ -1,28 +1,20 @@
 import { useState } from "react";
-import * as Yup from "yup";
 
 export default function useYupValidation(defaultValue, validationSchema) {
   const [enteredValue, setEnteredValue] = useState(defaultValue);
   const [didEdit, setDidEdit] = useState(false);
   const [error, setError] = useState("");
-  console.log(error)
-  const [hasErr, setHasErr] = useState(false);
-
-  async function validationInput(value) {
-    try {
-      await validationSchema.validate(value, { abortEarly: false });
-      setError("daddad","");
-      setHasErr(false);
-    } catch (err) {
-      setError(err.errors[0]);
-      setHasErr(true);
-    }
-  }
 
   async function handleInputChange(value) {
     setEnteredValue(value);
     setDidEdit(false);
-    await validationInput(value);
+
+    try {
+      await validationSchema.validate(value);
+      setError(""); // No error
+    } catch (err) {
+      setError(err.message);
+    }
   }
 
   function handleInputBlur() {
@@ -33,8 +25,6 @@ export default function useYupValidation(defaultValue, validationSchema) {
     value: enteredValue,
     handleInputChange,
     handleInputBlur,
-    error,
-    hasErr,
-    didEdit,
+    error: didEdit ? error : "",
   };
 }
