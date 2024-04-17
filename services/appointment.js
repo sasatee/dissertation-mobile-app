@@ -1,8 +1,9 @@
-import axios from 'axios';
 import { BASE_URL } from '@env';
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
+import axios from 'axios';
 
 const baseURL = BASE_URL.toString();
+
 
 const axiosInstance = axios.create({
   baseURL,

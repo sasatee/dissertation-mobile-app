@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import {
-  getAppointments,
-  getAppointmentById,
   createNewAppointment,
   deleteAppointmentById,
+  getAppointmentById,
+  getAppointments,
 } from '../services/appointment';
 
 export const useGetAllAppointments = () => {

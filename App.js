@@ -3,15 +3,15 @@ import React from "react";
 
 import { AuthProvider } from "./hooks/useGoogle";
 
-import { store } from "./redux/store";
 import { Provider } from "react-redux";
-import StackNavigator from "./navigation/StackNavigator";
+import MainNavigator from "./navigation/index";
+import { store } from "./redux/store";
 
 const App = () => {
   return (
     <Provider store={store}>
       <AuthProvider>
-        <StackNavigator />
+        <MainNavigator />
       </AuthProvider>
     </Provider>
   );

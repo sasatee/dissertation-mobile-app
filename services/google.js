@@ -1,9 +1,9 @@
-import { useState } from "react";
-import axios from "axios";
 import { BASE_URL } from "@env";
+import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setGoogleAccessToken } from "../redux/slice/authenticationSlice";
-import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 
 export const useGoogleLogin = () => {
   //const [responseData, setResponseData] = useState(null);
@@ -16,7 +16,7 @@ export const useGoogleLogin = () => {
     try {
       const response = await axios.post(
         BASE_URL + "api/v1/auth/google-login",
-        // "https://cade-102-117-180-90.ngrok-free.app/api/v1/auth/google-login",
+        //"https://cc18-102-117-134-154.ngrok-free.app/api/v1/auth/google-login",
         postData
       );
 
@@ -25,9 +25,8 @@ export const useGoogleLogin = () => {
       //setResponseData(result.token);
 
       dispatch(setGoogleAccessToken(result.token));
-      ReactNativeAsyncStorage.setItem("googleAccessToken", result.token);
-      console.log('Google Access Token saved:', result.token);
-
+      await ReactNativeAsyncStorage.setItem("googleAccessToken", result.token);
+      console.log("Google Access Token saved:", result.token);
 
       return response.data;
     } catch (error) {
@@ -37,5 +36,5 @@ export const useGoogleLogin = () => {
     }
   };
 
-  return {  error1, isLoading, googleLogin };
+  return { error1, isLoading, googleLogin };
 };

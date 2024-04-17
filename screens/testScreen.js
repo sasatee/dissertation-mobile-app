@@ -8,6 +8,8 @@ import {
   emailValidationSchema,
   passwordValidationSchema,
 } from "../validation/auth";
+import { checkIsDoctorLogin } from "../redux/slice/authenticationSlice";
+import { useSelector } from "react-redux";
 
 const JWTScreen = () => {
   const {
@@ -15,13 +17,16 @@ const JWTScreen = () => {
     loading: appointmentsLoading,
     error: appointmentsError,
   } = useGetAllAppointments();
+  //const is = useSelector((state) => state.auth.isDoctor);
+  const isDoctor = useSelector(checkIsDoctorLogin);
+  console.log("useSelector", isDoctor);
 
   if (appointmentsLoading) {
     return (
       <View
         style={{ flex: 1, justifyContent: "center", flexDirection: "column" }}
       >
-        <Text>Loading... </Text>
+        {isDoctor === "true" && <Text>loading.....</Text>}
       </View>
     );
   }
@@ -42,15 +47,6 @@ const JWTScreen = () => {
       <Text>{JSON.stringify(appointments)}</Text>
     </View>
   );
+};
 
-
-}
-
-
-// const JWTScreen =()=>{
-//   return {
-
-//   }
-// }
- export default JWTScreen;
-
+export default JWTScreen;

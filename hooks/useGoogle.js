@@ -1,30 +1,29 @@
+import {
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithCredential,
+  signOut,
+} from "@firebase/auth";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import React, {
   createContext,
   useContext,
   useEffect,
-  useState,
   useMemo,
-  useNavigation,
+  useState,
 } from "react";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import {
-  GoogleAuthProvider,
-  signInWithCredential,
-  signOut,
-  onAuthStateChanged,
-} from "@firebase/auth";
 import { auth } from "../firebase";
 
+import { WEB_CLIENT_ID } from "@env";
+import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
 import {
-  logoutJwtToken,
   logoutGoogleAccessToken,
+  logoutJwtToken,
   setGoogleAccessToken,
   setJwtToken,
 } from "../redux/slice/authenticationSlice";
 import { useGoogleLogin } from "../services/google";
-import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
-import { WEB_CLIENT_ID } from "@env";
 
 const AuthContext = createContext({});
 
@@ -60,8 +59,8 @@ export const AuthProvider = ({ children }) => {
       const googleToken = await ReactNativeAsyncStorage.getItem(
         "googleAccessToken"
       );
-      console.log("Retrieved JWT Token:", jwtToken);
-      console.log("Retrieved Google Token:", googleToken);
+      // console.log("Retrieved JWT Token:", jwtToken);
+      // console.log("Retrieved Google Token:", googleToken);
       if (jwtToken) {
         // Dispatch action to update state with JWT token
         dispatch(setJwtToken(jwtToken));
@@ -73,6 +72,7 @@ export const AuthProvider = ({ children }) => {
         // Update state accordingly to reflect logged out state
         // Ensure you have appropriate actions for handling logged-out state in your Redux setup
         dispatch(logoutJwtToken());
+        dispatch(logoutGoogleAccessToken());
       }
     };
 

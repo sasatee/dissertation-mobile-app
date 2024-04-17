@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { View, Alert, Pressable, Image,  } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import React from "react";
+import { Alert, Image, Pressable, View } from "react-native";
 import useAuth from "../hooks/useGoogle";
 
+import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
+import { useDispatch, useSelector } from "react-redux";
+import ButtonComponent from "../components/Button";
 import {
   logoutJwtToken,
   selectCurrentGoogleAccessToken,
   selectCurrentJwtToken,
 } from "../redux/slice/authenticationSlice";
-import { useDispatch, useSelector } from "react-redux";
-import ButtonComponent from "../components/Button";
-import { useGetAllAppointmentQuery } from "../services/appointment";
-import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 
 const HomeScreen = () => {
   const { logout, user } = useAuth();
@@ -19,8 +18,6 @@ const HomeScreen = () => {
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(selectCurrentJwtToken);
   const isLoggedWithGoogle = useSelector(selectCurrentGoogleAccessToken);
-
-
 
   const handleLogout = async () => {
     try {
@@ -35,10 +32,7 @@ const HomeScreen = () => {
 
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <ButtonComponent
-        title="Open Chat Screen"
-        handleOnPress={()=>navigation.navigate("Chat")}
-      />
+     
       {isLoggedWithGoogle && user && user.photoURL && (
         <Pressable onPress={logout}>
           <Image
