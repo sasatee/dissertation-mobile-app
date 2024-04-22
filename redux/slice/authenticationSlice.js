@@ -16,10 +16,14 @@ export const signUpUser = createAsyncThunk(
   "user/register",
   async (body, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post(">>>>>>>>>>>>>>>>>>>>", body);
-
+      const { data } = await axios.post(
+        BASE_URL + "/api/v1/auth/register",
+        body
+      );
+      console.log("sffsffsffs",data);
       return data;
     } catch (error) {
+            console.log("sffsffsffs",data);
       rejectWithValue(error.response.msg);
     }
   }
@@ -67,17 +71,14 @@ const authenticationSlice = createSlice({
     // Register user extra reducer
     builder
       .addCase(signUpUser.pending, (state, { payload }) => {
-        state.message = "Check Again if you correctly entered the input field";
         state.loading = true;
-        state.token = null;
       })
       .addCase(signUpUser.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.message = "register success";
       })
       .addCase(signUpUser.rejected, (state, { payload }) => {
-        state.message = "Verify credential please";
         state.loading = false;
+        state.isLogged = false;
       });
 
     // login extra reducer

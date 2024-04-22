@@ -1,28 +1,26 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ImageBackground,
-  Alert,
-  SafeAreaView,
-  StyleSheet,
-  KeyboardAvoidingView,
-  ScrollView,
-  ActivityIndicator,
-  Platform,
-  Dimensions,
-} from "react-native";
-import React, { useState } from "react";
 import { GoogleSigninButton } from "@react-native-google-signin/google-signin";
-import useAuth from "../hooks/useGoogle";
 import { useNavigation } from "@react-navigation/native";
+import React from "react";
+import {
+  Alert,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  StatusBar,
+  Text,
+  View,
+} from "react-native";
 import { useDispatch } from "react-redux";
+import useAuth from "../hooks/useGoogle";
 import { signInUser } from "../redux/slice/authenticationSlice";
 
+import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
+import ButtonComponent from "../components/Button";
 import Input from "../components/Input";
 import useYupValidation from "../hooks/useYupValidation";
-import ButtonComponent from "../components/Button";
-import { setJwtToken, setIsDoctor } from "../redux/slice/authenticationSlice";
+import { setIsDoctor } from "../redux/slice/authenticationSlice";
 
 import {
   emailValidationSchema,
@@ -66,168 +64,135 @@ const LoginScreen = () => {
 
   const handleUserLogin = async () => {
     const userCredentials = {
-      email: "sarvam@gmail.com",
+      email: "john@gmail.com",
       password: "secretpassword1@",
     };
     try {
-      //const result = await dispatch(signInUser(userCredentials));
+      const result = await dispatch(signInUser(userCredentials));
       //const result = await dispatch(signInUser({ email, password }).unwrap());
-      dispatch(signInUser(userCredentials));
 
-      // if (result.token) {
-      //   dispatch(setIsDoctor({ user: { isDoctor: result.user.isDoctor } }));
-
-      // }
+      if (result.payload.token) {
+        dispatch(
+          setIsDoctor({ user: { isDoctor: result.payload.user.isDoctor } })
+        );
+      }
     } catch (error) {
-      Alert.alert("Invalid Credentials");
+      Alert.alert("Invaid Credentials");
     }
   };
 
   return (
-    <SafeAreaView className="flex-1 my-20 mx-10">
-      <Input
-        placeholder="Email"
-        value={email}
-        onChangeText={handleEmailChange}
-        onBlur={handleEmailBlur}
-      />
-      {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : -500}
+    >
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1, zIndex: 50 }}
+        scrollEnabled={true}
+        showsVerticalScrollIndicator={false}
+      >
+        <View className="bg-white h-full w-full">
+          <StatusBar styles="white" />
 
-      <Input
-        placeholder="Password"
-        value={password}
-        onChangeText={handlePasswordChange}
-        onBlur={handlePasswordBlur}
-        //secureTextEntry
-      />
-      {passwordError ? (
-        <Text style={styles.errorText}>{passwordError}</Text>
-      ) : null}
+          <Animated.Image
+            entering={FadeInUp.delay(200).duration(1000).springify()}
+            className="h-full w-full absolute"
+            source={require("../assets/images/background.jpg")}
+          />
+          {/* light */}
+          <View className="flex-row justify-around w-full absolute">
+            <Animated.Image
+              entering={FadeInUp.delay(200).duration(1000).springify()}
+              className="h-[255] w-[90]"
+              source={require("../assets/images/light.png")}
+            />
 
-      <ButtonComponent title="login" handleOnPress={handleUserLogin} />
+            <Image
+              className="h-[160] w-[65]"
+              source={require("../assets/images/light.png")}
+            />
+          </View>
 
-      <View className="py-2 justify-center items-center">
-        <GoogleSigninButton
-          accessibilityHint="accessibilityHint"
-          size={GoogleSigninButton.Size.Standard}
-          color={GoogleSigninButton.Color.Dark}
-          onPress={signInWithGoogle}
-        />
-        <View className="px-5 align-middle">
-          <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-            <Text>Go to register</Text>
-          </TouchableOpacity>
+          {/* title and form */}
+          <View className="h-full w-full flex justify-around pt-40 pb-10">
+            {/* title */}
+            <View className="flex items-center -pt-10">
+              <Animated.Text
+                entering={FadeInUp.duration(1000).springify().damping(100)}
+                className="text-white/90 text-5xl font-bold tracking-tighter "
+              >
+                Login
+              </Animated.Text>
+            </View>
+            {/* form */}
+
+            <View className="flex items-center mx-4 space-y-6">
+              <Input
+                placeholder="Email"
+                value={email}
+                onChangeText={handleEmailChange}
+                onBlur={handleEmailBlur}
+                error={emailError}
+              />
+
+              <Input
+                placeholder="Password"
+                value={password}
+                onChangeText={handlePasswordChange}
+                onBlur={handlePasswordBlur}
+                //secureTextEntry
+                error={passwordError}
+              />
+
+              {/* Button */}
+              <Animated.View
+                entering={FadeInDown.delay(600).duration(1000).springify()}
+                className="w-full"
+              >
+                <ButtonComponent
+                  className="w-full bg-blue-700/70 p-3 rounded-2xl mb-3"
+                  handleOnPress={handleUserLogin}
+                >
+                  <Text className="text-xl font-mulishsemibold text-white text-center">
+                    Login
+                  </Text>
+                </ButtonComponent>
+              </Animated.View>
+
+              <Animated.View
+                entering={FadeInDown.delay(800).duration(1000).springify()}
+                className="flex-row justify-center p-0"
+              >
+                <Text className="font-mulishextrabold">
+                  Don't have an account ?
+                </Text>
+                <Pressable onPress={() => navigation.push("Register")}>
+                  <Text className="font-extralight text-blue-800/95">
+                    {" "}
+                    Register
+                  </Text>
+                </Pressable>
+              </Animated.View>
+
+              <Animated.View
+                entering={FadeInDown.delay(900).duration(1000).springify()}
+                className="flex flex-row justify-center"
+              >
+                <GoogleSigninButton
+                  style={{ paddingBottom: 15 }}
+                  accessibilityHint="accessibilityHint"
+                  size={GoogleSigninButton.Size.Standard}
+                  color={GoogleSigninButton.Color.Dark}
+                  onPress={signInWithGoogle}
+                />
+              </Animated.View>
+            </View>
+          </View>
         </View>
-      </View>
-    </SafeAreaView>
-    // <ScrollView
-    //   style={{ flex: 1, backgroundColor: "#ffffff" }}
-    //   showsVerticalScrollIndicator={false}
-    // >
-    //   <KeyboardAvoidingView
-    //     behavior={Platform.OS === "ios" ? "padding" : "height"}
-    //     style={styles.container}
-    //   >
-    //     <ImageBackground
-    //       source={require("../assets/background.jpg")}
-    //       style={{ height: Dimensions.get("window").height / 3 }}
-    //     ></ImageBackground>
-
-    //     {/* bottom view */}
-    //     <View style={styles.bottomView}>
-    //       {/* welcome view */}
-
-    //       <View style={{ padding: 40 }}>
-    //         <Text style={{ color: "#4632A1", fontSize: 34 }}>Welcome</Text>
-    //         <Text style={{ color: "red", fontStyle: "normal" }}>
-    //           Admin Login
-    //         </Text>
-
-    //         {/* Form view */}
-    //         <View style={{ marginTop: 10 }}>
-    //           <Input
-    //             style={styles.input}
-    //             placeholder="Email"
-    //             value={email}
-    //             onChangeText={handleEmailChange}
-    //             onBlur={handleEmailBlur}
-    //           />
-    //           {emailError ? (
-    //             <Text style={styles.errorText}>{emailError}</Text>
-    //           ) : null}
-
-    //           <Input
-    //             style={styles.input}
-    //             placeholder="Password"
-    //             value={password}
-    //             onChangeText={handlePasswordChange}
-    //             onBlur={handlePasswordBlur}
-    //             secureTextEntry={true}
-    //           />
-    //           {passwordError ? (
-    //             <Text style={styles.errorText}>{passwordError}</Text>
-    //           ) : null}
-    //           <View style={styles.btnContainer}>
-    //             <ButtonComponent
-    //               title="Login"
-    //               disabled={!showtext}
-    //               color="#841584"
-    //               borderRadius={10}
-    //               onPress={handleUserLogin}
-    //             />
-
-    //             {!showtext && <ActivityIndicator size="small" color="white" />}
-
-    //             <View className="py-2 justify-center items-center">
-    //               <GoogleSigninButton
-    //                 accessibilityHint="accessibilityHint"
-    //                 size={GoogleSigninButton.Size.Standard}
-    //                 color={GoogleSigninButton.Color.Dark}
-    //                 onPress={signInWithGoogle}
-    //               />
-    //             </View>
-    //           </View>
-    //         </View>
-    //       </View>
-    //     </View>
-    //   </KeyboardAvoidingView>
-    // </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
 export default LoginScreen;
-
-const styles = StyleSheet.create({
-  errorText: {
-    color: "red",
-    left: 16,
-    //paddingTop: 0,
-  },
-  brandview: {
-    flex: 1,
-    //flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  bottomView: {
-    flex: 1,
-    backgroundColor: "#ffffff",
-    bottom: 80,
-    borderTopStartRadius: 50,
-    borderTopEndRadius: 50,
-  },
-  input: {
-    height: 30,
-    borderColor: "#000000",
-    borderBottomWidth: 0.3,
-    marginBottom: 36,
-  },
-  container: {
-    flex: 1,
-  },
-  btnContainer: {
-    // backgroundColor: "white",
-    marginTop: 40,
-    borderRadius: 3,
-  },
-});

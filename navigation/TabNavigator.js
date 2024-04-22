@@ -1,6 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "../screens/HomeScreen";
 import testScreen from "../screens/testScreen";
+import ProductGridCard from "../components/ProductCardGridView";
 
 // Icons
 import { Feather } from "@expo/vector-icons";
@@ -32,6 +33,16 @@ export default function BottomTabNavigation() {
       <Tab.Screen
         name="Check"
         component={testScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome5 name="map-marker-alt" size={size} color={color} />
+          ),
+        }}
+      />
+
+     <Tab.Screen
+        name="Product"
+        component={ProductGridCard}
         options={{
           tabBarIcon: ({ color, size }) => (
             <FontAwesome5 name="map-marker-alt" size={size} color={color} />

@@ -1,15 +1,9 @@
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import Input from "../components/Input";
-import useYupValidation from "../hooks/useYupValidation";
-import ButtonComponent from "../components/Button";
+import { Text, View } from "react-native";
 import { useGetAllAppointments } from "../hooks/UseAppointment";
-import {
-  emailValidationSchema,
-  passwordValidationSchema,
-} from "../validation/auth";
-import { checkIsDoctorLogin } from "../redux/slice/authenticationSlice";
+
 import { useSelector } from "react-redux";
+import { checkIsDoctorLogin } from "../redux/slice/authenticationSlice";
 
 const JWTScreen = () => {
   const {

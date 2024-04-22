@@ -9,7 +9,7 @@ const AuthStackNavigation = () => {
   return (
     <Stack.Navigator>
       <Stack.Group screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="OnBoarding" component={OnBoardingScreen} />
+        {/* <Stack.Screen name="OnBoarding" component={OnBoardingScreen} /> */}
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
       </Stack.Group>

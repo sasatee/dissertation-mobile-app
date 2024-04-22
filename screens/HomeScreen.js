@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { Alert, Image, Pressable, View } from "react-native";
+import { Alert, Image, Pressable, View, Text } from "react-native";
 import useAuth from "../hooks/useGoogle";
 
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
@@ -32,7 +32,6 @@ const HomeScreen = () => {
 
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-     
       {isLoggedWithGoogle && user && user.photoURL && (
         <Pressable onPress={logout}>
           <Image
@@ -44,15 +43,23 @@ const HomeScreen = () => {
 
       {isLoggedIn ? (
         <ButtonComponent
-          title={"Logout with JWT"}
+          className="w-full bg-sky-400 p-3 rounded-2xl mb-3"
           handleOnPress={handleLogout}
-        />
+        >
+          <Text className="text-xl font-mulishsemibold text-white text-center">
+        logout
+          </Text>
+        </ButtonComponent>
       ) : null}
       <View>
         <ButtonComponent
-          title="Navigate to jwt cehck"
+          className="w-full bg-sky-400 p-3 rounded-2xl mb-3"
           handleOnPress={() => navigation.navigate("Check")}
-        />
+        >
+          <Text className="text-xl font-mulishsemibold text-white text-center">
+            Check appintment working
+          </Text>
+        </ButtonComponent>
       </View>
     </View>
   );
