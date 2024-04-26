@@ -27,7 +27,7 @@ const dummyData = [
     imageUrl: require("../assets/icon.png"),
     availability: "In stock",
   },
-   {
+  {
     productId: 4,
     title: "Product 4",
     price: 100,
@@ -35,7 +35,7 @@ const dummyData = [
     imageUrl: require("../assets/icon.png"),
     availability: "In stock",
   },
-   {
+  {
     productId: 5,
     title: "Product 5",
     price: 100,
@@ -43,7 +43,7 @@ const dummyData = [
     imageUrl: require("../assets/icon.png"),
     availability: "In stock",
   },
-   {
+  {
     productId: 3,
     title: "Product 3",
     price: 100,
@@ -51,7 +51,7 @@ const dummyData = [
     imageUrl: require("../assets/icon.png"),
     availability: "In stock",
   },
-   {
+  {
     productId: 3,
     title: "Product 3",
     price: 100,
@@ -59,20 +59,20 @@ const dummyData = [
     imageUrl: require("../assets/icon.png"),
     availability: "In stock",
   },
-
 ];
 
-const ProductGridCard = () => {
-  const navigation = useNavigation();
+const ProductGridCard = ({navigation}) => {
+  // const navigation = useNavigation();
   return (
     <>
-      <View className="bg-white-20 mx-1 py-10">
+      <View className="bg-black/20">
         <FlatList
           data={dummyData} // Use the dummy data array here
           renderItem={({ item }) => (
             <TouchableOpacity
-              onPress={() => navigation.navigate("Product", item)}
-              className="bg-white-100  shadow-md rounded-lg my-4 mx-2 "
+              onPress={() => navigation.navigate("Check", item.productId)}
+            
+              className="bg-white  shadow-md rounded-lg my-4 mx-2 "
             >
               <Image
                 source={item.imageUrl}
@@ -80,25 +80,28 @@ const ProductGridCard = () => {
                   width: 150,
                   height: 150,
                   resizeMode: "contain",
-                  borderRadius: 25,
+                  borderRadius: 35,
                 }}
                 className="rounded-lg"
               />
-              <View className="ml-1 flex-1 gap-5">
-                <Text className="text-left px-2 text-xs text-green-300">{item.title}</Text>
-                <View className="flex flex-row-reverse items-center mt-3 top-1">
+              <View className="flex flex-col justify-evenly gap-x-10  space-y-1">
+                <Text className="text-left px-4 py-4 text-xs text-green-300">
+                  {item.title}
+                </Text>
+                <View className="flex flex-row-reverse  mt-3 top-1">
                   <Text className="text-xs text-end">{item.availability}</Text>
-                  
                 </View>
-                <View className="flex flex-row-reverse items-center pt-3">
+                <View className="flex self-end flex-row-reverse py-3 gap-2 -top-4">
                   <Text>${item.price}</Text>
                 </View>
               </View>
             </TouchableOpacity>
           )}
+         // keyExtractor={(item) => item.id}
           numColumns={2}
           columnWrapperStyle={{
-            justifyContent: "space-between",
+            justifyContent: "space-around",
+            flexDirection: "row",
           }}
           showsVerticalScrollIndicator={true}
         />
@@ -106,7 +109,6 @@ const ProductGridCard = () => {
     </>
   );
 };
-
 
 export default ProductGridCard;
 

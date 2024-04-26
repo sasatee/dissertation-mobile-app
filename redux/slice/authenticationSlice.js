@@ -9,7 +9,7 @@ const initialState = {
   isLogged: false,
   loading: true,
   googleAccessToken: null,
-  isDoctor: {},
+  isDoctor: null,
 };
 
 export const signUpUser = createAsyncThunk(

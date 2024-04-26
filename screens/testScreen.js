@@ -5,7 +5,11 @@ import { useGetAllAppointments } from "../hooks/UseAppointment";
 import { useSelector } from "react-redux";
 import { checkIsDoctorLogin } from "../redux/slice/authenticationSlice";
 
-const JWTScreen = () => {
+
+const JWTScreen = ({ route }) => {
+  const id = route.params;
+  console.log(id);
+
   const {
     appointments,
     loading: appointmentsLoading,
