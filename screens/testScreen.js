@@ -8,7 +8,7 @@ import { checkIsDoctorLogin } from "../redux/slice/authenticationSlice";
 
 const JWTScreen = ({ route }) => {
   const id = route.params;
-  console.log(id);
+ console.log('params:',id);
 
   const {
     appointments,

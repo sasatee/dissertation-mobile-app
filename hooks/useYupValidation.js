@@ -4,6 +4,7 @@ export default function useYupValidation(defaultValue, validationSchema) {
   const [enteredValue, setEnteredValue] = useState(defaultValue);
   const [didEdit, setDidEdit] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function handleInputChange(value) {
     setEnteredValue(value);
@@ -26,5 +27,7 @@ export default function useYupValidation(defaultValue, validationSchema) {
     handleInputChange,
     handleInputBlur,
     error: didEdit ? error : "",
+    setLoading,
+    loading,
   };
 }

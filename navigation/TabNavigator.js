@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "../screens/HomeScreen";
 import testScreen from "../screens/testScreen";
-import ProductGridCard from "../components/ProductCardGridView";
+import ProductGridCard from "../components/DoctorGridView";
 
 // Icons
 import { Feather } from "@expo/vector-icons";

@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
+import React, { useState } from "react";
 import {
+  ActivityIndicator,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -8,22 +9,27 @@ import {
   ScrollView,
   StatusBar,
   Text,
+  ToastAndroid,
   View,
-  Alert,
 } from "react-native";
+
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 import { useDispatch } from "react-redux";
 import ButtonComponent from "../components/Button";
+import DropDown from "../components/DropDownGender";
 import Input from "../components/Input";
 import useYupValidation from "../hooks/useYupValidation";
+import { signUpUser } from "../redux/slice/authenticationSlice";
 import {
   emailValidationSchema,
+  //TODO
+  ///passwordConfirmationSchema,
+  firstNameValidationSchema,
+  lastnameValidationSchema,
   passwordValidationSchema,
-  passwordConfirmationSchema,
 } from "../validation/auth";
-import { signUpUser } from "../redux/slice/authenticationSlice";
 
-const RegisterScreen = () => {
+export default function RegisterScreen() {
   const {
     value: email,
     error: emailError,
@@ -31,38 +37,67 @@ const RegisterScreen = () => {
     handleInputBlur: handleEmailBlur,
   } = useYupValidation("", emailValidationSchema);
   const {
+    value: firstName,
+    error: firstnameError,
+    handleInputBlur: handleFirstnameBlur,
+    handleInputChange: handleFirstnameChange,
+  } = useYupValidation("", firstNameValidationSchema);
+
+  const {
+    value: lastName,
+    error: lastnameError,
+    handleInputBlur: handlelastnameBlur,
+    handleInputChange: handlelastnameChange,
+  } = useYupValidation("", lastnameValidationSchema);
+
+  const {
     value: password,
     error: passwordError,
     handleInputChange: handlePasswordChange,
     handleInputBlur: handlePasswordBlur,
+    setLoading,
+    loading,
   } = useYupValidation("", passwordValidationSchema);
-  const {
-    value: confirmPassword,
-    error: confirmPasswordError,
-    handleInputChange: handleConfirmPasswordChange,
-    handleInputBlur: handleConfirmPasswordBlur,
-  } = useYupValidation("", passwordConfirmationSchema);
+  //TODO
+  // const {
+  //   value: confirmPassword,
+  //   error: confirmPasswordError,
+  //   handleInputChange: handleConfirmPasswordChange,
+  //   handleInputBlur: handleConfirmPasswordBlur,
+  // } = useYupValidation("", passwordConfirmationSchema);
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const [gender, setGender] = useState(null);
 
   const handleUserSignup = async () => {
-    const body = {
-      firstName: "john1",
-      lastName: "smith1",
-      email: "john1@gmail.com",
-      password: "secretpassword1@",
-      // isDoctor:true,
-      gender: "male",
-      // profilePicture: "daddadadadadaaavva",
-    };
+    setLoading(true);
     try {
-      await dispatch(signUpUser(body));
+      const result = await dispatch(
+        signUpUser({
+          firstName,
+          lastName,
+          email,
+          password,
+          gender,
+        })
+      );
 
-      //const result = await dispatch(signInUser({ email, password }).unwrap());
+      if (result.payload.token) {
+        navigation.replace("Login");
+      }
+      ToastAndroid.show("Register Succussfully!", ToastAndroid.SHORT);
+
+      // Optionally clear input fields
+      handleEmailChange("");
+      handlePasswordChange("");
+      handleFirstnameChange("");
+      handlelastnameChange("");
+      setGender(null);
     } catch (error) {
-      Alert.alert("Invaid Credentials For Register");
+      ToastAndroid.show("Error! Invalid Credentials", ToastAndroid.TOP);
     }
+    setLoading(false);
   };
 
   return (
@@ -72,7 +107,7 @@ const RegisterScreen = () => {
       keyboardVerticalOffset={Platform.OS === "ios" ? 0 : -500}
     >
       <ScrollView
-        contentContainerStyle={{ flexGrow: 1, zIndex: 50 }}
+        contentContainerStyle={{ flexGrow: 1 }}
         scrollEnabled={true}
         showsVerticalScrollIndicator={false}
       >
@@ -114,13 +149,28 @@ const RegisterScreen = () => {
             <View className="flex items-center mx-4 space-y-4">
               <Input
                 type="text"
-                placeholder="Email"
+                placeholder="Firstname"
+                value={firstName}
+                onChangeText={handleFirstnameChange}
+                onBlur={handleFirstnameBlur}
+                error={firstnameError}
+              />
+              <Input
+                type="text"
+                placeholder="Lastname"
+                value={lastName}
+                onChangeText={handlelastnameChange}
+                onBlur={handlelastnameBlur}
+                error={lastnameError}
+              />
+              <Input
+                placeholder="Email Address"
                 value={email}
                 onChangeText={handleEmailChange}
                 onBlur={handleEmailBlur}
+                //secureTextEntry
                 error={emailError}
               />
-
               <Input
                 placeholder="Password"
                 value={password}
@@ -130,14 +180,7 @@ const RegisterScreen = () => {
                 error={passwordError}
               />
 
-              {/* <Input
-                placeholder="Confirm Password"
-                value={confirmPassword}
-                onChangeText={handleConfirmPasswordChange}
-                onBlur={handleConfirmPasswordBlur}
-                //secureTextEntry
-                error={confirmPasswordError}
-              /> */}
+              <DropDown onGenderChange={setGender} Gender={gender} />
 
               {/* Button */}
               <Animated.View
@@ -147,13 +190,19 @@ const RegisterScreen = () => {
                 <ButtonComponent
                   className="w-full bg-blue-700/70 p-3 rounded-2xl mb-3"
                   handleOnPress={handleUserSignup}
+                  disabled={loading}
                 >
-                  <Text className="text-xl font-mulishsemibold text-white text-center">
-                    Register
-                  </Text>
+                  <View className="flex-1 justify-center items-center">
+                    {loading ? (
+                      <ActivityIndicator size="small" color="white" />
+                    ) : (
+                      <Text className="text-xl font-mulishsemibold text-white text-center">
+                        Register
+                      </Text>
+                    )}
+                  </View>
                 </ButtonComponent>
               </Animated.View>
-
               <Animated.View
                 entering={FadeInDown.delay(800).duration(1000).springify()}
                 className="flex-row justify-center p-0"
@@ -172,6 +221,4 @@ const RegisterScreen = () => {
       </ScrollView>
     </KeyboardAvoidingView>
   );
-};
-
-export default RegisterScreen;
+}

@@ -6,7 +6,6 @@ import { useDispatch } from "react-redux";
 import { setGoogleAccessToken } from "../redux/slice/authenticationSlice";
 
 export const useGoogleLogin = () => {
-  //const [responseData, setResponseData] = useState(null);
   const [error1, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
@@ -22,11 +21,8 @@ export const useGoogleLogin = () => {
 
       const result = await response.data;
 
-      //setResponseData(result.token);
-
       dispatch(setGoogleAccessToken(result.token));
       await ReactNativeAsyncStorage.setItem("googleAccessToken", result.token);
-      console.log("Google Access Token saved:", result.token);
 
       return response.data;
     } catch (error) {

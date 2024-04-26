@@ -2,6 +2,7 @@ import { BASE_URL } from "@env";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+
 import axios from "axios";
 
 const initialState = {
@@ -20,10 +21,9 @@ export const signUpUser = createAsyncThunk(
         BASE_URL + "/api/v1/auth/register",
         body
       );
-      console.log("sffsffsffs",data);
+     // console.log(data);
       return data;
     } catch (error) {
-            console.log("sffsffsffs",data);
       rejectWithValue(error.response.msg);
     }
   }
