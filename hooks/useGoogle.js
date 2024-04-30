@@ -29,6 +29,7 @@ const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
+  console.log(error,"daddadadda");
   const [user, setUser] = useState(null);
   const [loadingInitial, setLoadingInitial] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -59,8 +60,8 @@ export const AuthProvider = ({ children }) => {
       const googleToken = await ReactNativeAsyncStorage.getItem(
         "googleAccessToken"
       );
-      // console.log("Retrieved JWT Token:", jwtToken);
-      // console.log("Retrieved Google Token:", googleToken);
+      console.log("Retrieved JWT Token:", jwtToken);
+      console.log("Retrieved Google Token:", googleToken);
       if (jwtToken) {
         // Dispatch action to update state with JWT token
         dispatch(setJwtToken(jwtToken));
@@ -101,7 +102,7 @@ export const AuthProvider = ({ children }) => {
       
       }
     } catch (error) {
-      console.error("Error signing in with Google:", error);
+      console.log("Error signing in with Google:", error);
       setError(error);
     } finally {
       setLoading(false);

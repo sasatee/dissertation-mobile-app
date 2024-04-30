@@ -1,6 +1,13 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { Alert, Image, Pressable, View, Text } from "react-native";
+import {
+  Alert,
+  Image,
+  Pressable,
+  View,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import useAuth from "../hooks/useGoogle";
 
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
@@ -14,6 +21,7 @@ import {
 
 const HomeScreen = () => {
   const { logout, user } = useAuth();
+
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(selectCurrentJwtToken);
@@ -32,13 +40,13 @@ const HomeScreen = () => {
 
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      {isLoggedWithGoogle && user && user.photoURL && (
-        <Pressable onPress={logout}>
+      {user && user?.photoURL && (
+        <TouchableOpacity onPress={logout}>
           <Image
             className="h-10 w-10 rounded-full"
             source={{ uri: user.photoURL }}
           />
-        </Pressable>
+        </TouchableOpacity>
       )}
 
       {isLoggedIn ? (
@@ -47,7 +55,7 @@ const HomeScreen = () => {
           handleOnPress={handleLogout}
         >
           <Text className="text-xl font-mulishsemibold text-white text-center">
-        logout
+            logout
           </Text>
         </ButtonComponent>
       ) : null}

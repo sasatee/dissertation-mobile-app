@@ -11,7 +11,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { getAllDoctor } from "../../services/doctor";
 
-const ProductGridCard = ({ navigation }) => {
+const ViewAllDoctorDetails = ({ navigation }) => {
   const { data, isError, isLoading, fetchStatus, isFetching, error } = useQuery(
     {
       queryKey: ["doctors"],
@@ -92,4 +92,4 @@ const ProductGridCard = ({ navigation }) => {
   return <>{content}</>;
 };
 
-export default ProductGridCard;
+export default ViewAllDoctorDetails;

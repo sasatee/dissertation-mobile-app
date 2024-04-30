@@ -14,14 +14,15 @@ export const useGoogleLogin = () => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-         BASE_URL + "api/v1/auth/google-login",
-       // "https://bee2-102-117-34-69.ngrok-free.app/api/v1/auth/google-login",
+        BASE_URL + "/api/v1/auth/google-login",
+        //"https://737c-102-117-104-132.ngrok-free.app/api/v1/auth/google-login",
         postData
       );
 
       const result = await response.data;
 
       dispatch(setGoogleAccessToken(result.token));
+
       await ReactNativeAsyncStorage.setItem("googleAccessToken", result.token);
 
       return response.data;
@@ -30,7 +31,7 @@ export const useGoogleLogin = () => {
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   return { error1, isLoading, googleLogin };
 };
