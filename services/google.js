@@ -14,8 +14,8 @@ export const useGoogleLogin = () => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        BASE_URL + "api/v1/auth/google-login",
-        //"https://cc18-102-117-134-154.ngrok-free.app/api/v1/auth/google-login",
+         BASE_URL + "api/v1/auth/google-login",
+       // "https://bee2-102-117-34-69.ngrok-free.app/api/v1/auth/google-login",
         postData
       );
 
@@ -30,7 +30,7 @@ export const useGoogleLogin = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   return { error1, isLoading, googleLogin };
 };

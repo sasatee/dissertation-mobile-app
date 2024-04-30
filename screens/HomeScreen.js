@@ -5,7 +5,7 @@ import useAuth from "../hooks/useGoogle";
 
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
-import ButtonComponent from "../components/Button";
+import ButtonComponent from "../components/CustomComponent/Button";
 import {
   logoutJwtToken,
   selectCurrentGoogleAccessToken,

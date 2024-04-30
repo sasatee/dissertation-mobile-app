@@ -16,7 +16,6 @@ const getHeaders = async () => {
     "googleAccessToken"
   );
 
-
   if (token && googleAccessToken) {
     headers.Authorization = `Bearer ${token},${googleAccessToken}`;
   } else if (token) {
@@ -30,24 +29,43 @@ const getHeaders = async () => {
   return headers;
 };
 
-export async function bookAppointment(appointment) {
+export const getAllDoctor = async () => {
   try {
     const headers = await getHeaders();
-    const response = await axiosInstance.post(
-      `api/v1/appointment`,
-      appointment,
-      {
-        headers: headers,
+    const response = await axiosInstance.get("api/v1/doctor", {
+    // const response = await axios.get(
+    //   "https://bee2-102-117-34-69.ngrok-free.app/api/v1/doctor",
+    //   {
+        headers,
       }
     );
-   
 
+    return response.data.doctors;
+  } catch (error) {
+    // throw new Error(
+    //   JSON.stringify(error.response.data) || "Cannot fetch doctors"
+    // );
+    throw new Error("Cannot fetch all doctors");
+  }
+};
+
+export const getSingleDoctor = async ({ id, signal }) => {
+  try {
+    const headers = await getHeaders();
+    const response = await axiosInstance.get(`api/v1/doctor/${id}`, {
+    // const response = await axios.get(
+    //   `https://bee2-102-117-34-69.ngrok-free.app/api/v1/doctor/${id}`,
+    //   {
+        headers,
+        id,
+        signal,
+      }
+    );
     return response.data;
   } catch (error) {
     // throw new Error(
-    //   JSON.stringify(error.response.data) ||
-    //     "Cannot book appointment with doctor"
+    //   JSON.stringify(error.response.data) || "Cannot fetch doctors"
     // );
-    throw new Error("Cannot book appointment with doctor. Please try Again later!");
+    throw new Error("Cannot fetch doctor");
   }
-}
+};

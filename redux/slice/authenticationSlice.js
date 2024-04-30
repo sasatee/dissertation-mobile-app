@@ -2,7 +2,6 @@ import { BASE_URL } from "@env";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-
 import axios from "axios";
 
 const initialState = {
@@ -19,12 +18,13 @@ export const signUpUser = createAsyncThunk(
     try {
       const { data } = await axios.post(
         BASE_URL + "/api/v1/auth/register",
+         //"https://bee2-102-117-34-69.ngrok-free.app/api/v1/auth/register",
         body
       );
-     // console.log(data);
+      // console.log(data);
       return data;
     } catch (error) {
-      rejectWithValue(error.response.msg);
+      console.log(error.response.data);
     }
   }
 );
@@ -35,13 +35,13 @@ export const signInUser = createAsyncThunk(
     try {
       const { data } = await axios.post(
         BASE_URL + "/api/v1/auth/login",
-        //"https://cc18-102-117-134-154.ngrok-free.app/api/v1/auth/login",
+        //" https://bee2-102-117-34-69.ngrok-free.app/api/v1/auth/login",
         userCredentials
       );
 
       return data;
     } catch (error) {
-      rejectWithValue(error.response.msg);
+      console.log(error.response.data);
     }
   }
 );

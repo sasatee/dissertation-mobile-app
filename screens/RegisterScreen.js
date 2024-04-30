@@ -15,9 +15,9 @@ import {
 
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 import { useDispatch } from "react-redux";
-import ButtonComponent from "../components/Button";
-import DropDown from "../components/DropDownGender";
-import Input from "../components/Input";
+import ButtonComponent from "../components/CustomComponent/Button";
+import DropDown from "../components/CustomComponent/DropDownGender";
+import Input from "../components/CustomComponent/Input";
 import useYupValidation from "../hooks/useYupValidation";
 import { signUpUser } from "../redux/slice/authenticationSlice";
 import {

@@ -1,6 +1,6 @@
 import {Image, StyleSheet, Text, View, useWindowDimensions} from 'react-native';
 import React from 'react';
-import {OnboardingData} from '../data/data';
+import {OnboardingData} from '../../data/data';
 
 type Props = {
   item: OnboardingData;
