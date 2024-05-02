@@ -23,6 +23,7 @@
     "@types/react": "~18.2.45",
     "axios": "^1.6.8",
     "clsx": "^2.1.0",
+    "core-js": "^3.37.0",
     "date-fns": "^3.6.0",
     "expo": "~50.0.17",
     "expo-auth-session": "~5.4.0",

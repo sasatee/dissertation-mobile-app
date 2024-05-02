@@ -18,20 +18,14 @@ import {
   selectCurrentGoogleAccessToken,
   selectCurrentJwtToken,
 } from "../redux/slice/authenticationSlice";
-// import { jwtDecode } from "jwt-decode";
-// import "core-js/stable/atob";
 
-
-function HomeScreen() {
+const HomeScreen = () => {
   const { logout, user } = useAuth();
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(selectCurrentJwtToken);
   const isLoggedWithGoogle = useSelector(selectCurrentGoogleAccessToken);
-
-  // var decode1Google = jwtDecode(isLoggedWithGoogle);
-  // console.log("dadaddadadddadadad", decode1Google);
 
   const handleLogout = async () => {
     try {
@@ -77,6 +71,6 @@ function HomeScreen() {
       </View>
     </View>
   );
-}
+};
 
 export default HomeScreen;
