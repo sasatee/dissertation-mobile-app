@@ -1,6 +1,6 @@
 import { BASE_URL } from "@env";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
+import axios, { Axios } from "axios";
 
 const baseURL = BASE_URL.toString();
 
@@ -15,7 +15,6 @@ const getHeaders = async () => {
   const googleAccessToken = await ReactNativeAsyncStorage.getItem(
     "googleAccessToken"
   );
-
 
   if (token && googleAccessToken) {
     headers.Authorization = `Bearer ${token},${googleAccessToken}`;
@@ -40,7 +39,6 @@ export async function bookAppointment(appointment) {
         headers: headers,
       }
     );
-   
 
     return response.data;
   } catch (error) {
@@ -48,6 +46,25 @@ export async function bookAppointment(appointment) {
     //   JSON.stringify(error.response.data) ||
     //     "Cannot book appointment with doctor"
     // );
-    throw new Error("Cannot book appointment with doctor. Please try Again later!");
+    throw new Error(
+      "Cannot book appointment with doctor. Please try Again later!"
+    );
+  }
+}
+
+export async function getAllAppointment() {
+  try {
+    const headers = await getHeaders();
+    const response = await axiosInstance.get(`api/v1/appointment`, { headers });
+
+    return response.data.appointments;
+  } catch (error) {
+      // throw new Error(
+    //   JSON.stringify(error.response.data) ||
+    //     ""
+    // );
+    throw new Error(
+      "Cannot load all appointment with your respective doctors. Please try Again later!"
+    );
   }
 }

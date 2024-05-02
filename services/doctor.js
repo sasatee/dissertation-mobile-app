@@ -33,12 +33,8 @@ export const getAllDoctor = async () => {
   try {
     const headers = await getHeaders();
     const response = await axiosInstance.get("api/v1/doctor", {
-    // const response = await axios.get(
-    //   "https://bee2-102-117-34-69.ngrok-free.app/api/v1/doctor",
-    //   {
-        headers,
-      }
-    );
+      headers,
+    });
 
     return response.data.doctors;
   } catch (error) {
@@ -53,14 +49,10 @@ export const getSingleDoctor = async ({ id, signal }) => {
   try {
     const headers = await getHeaders();
     const response = await axiosInstance.get(`api/v1/doctor/${id}`, {
-    // const response = await axios.get(
-    //   `https://bee2-102-117-34-69.ngrok-free.app/api/v1/doctor/${id}`,
-    //   {
-        headers,
-        id,
-        signal,
-      }
-    );
+      headers,
+      id,
+      signal,
+    });
     return response.data;
   } catch (error) {
     // throw new Error(

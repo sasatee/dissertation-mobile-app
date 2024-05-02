@@ -1,12 +1,12 @@
 import React from "react";
-import { ActivityIndicator, ScrollView, Text, View } from "react-native";
+import {  ScrollView } from "react-native";
 
 import { useSelector } from "react-redux";
 import { checkIsDoctorLogin } from "../redux/slice/authenticationSlice";
 
 import { useQuery } from "@tanstack/react-query";
 import ViewDoctorDetail from "../components/Doctor/ViewDoctorHisDetail";
-import BookSection from "../components/Appointment/BookAppointmentSection";
+import BookAppointment from "../components/Appointment/BookAppointmentSection";
 const JWTScreen = ({ route }) => {
   const isDoctor = useSelector(checkIsDoctorLogin);
   console.log("isDoctor state set: ", isDoctor);
@@ -27,7 +27,7 @@ const JWTScreen = ({ route }) => {
     <>
       <ScrollView className='p-1 border-blue-900 border-solid'>
         <ViewDoctorDetail route={route} />
-        <BookSection route={route}/>
+        <BookAppointment route={route}/>
       </ScrollView>
     </>
   );

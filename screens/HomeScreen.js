@@ -18,14 +18,20 @@ import {
   selectCurrentGoogleAccessToken,
   selectCurrentJwtToken,
 } from "../redux/slice/authenticationSlice";
+// import { jwtDecode } from "jwt-decode";
+// import "core-js/stable/atob";
 
-const HomeScreen = () => {
+
+function HomeScreen() {
   const { logout, user } = useAuth();
 
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(selectCurrentJwtToken);
   const isLoggedWithGoogle = useSelector(selectCurrentGoogleAccessToken);
+
+  // var decode1Google = jwtDecode(isLoggedWithGoogle);
+  // console.log("dadaddadadddadadad", decode1Google);
 
   const handleLogout = async () => {
     try {
@@ -62,7 +68,7 @@ const HomeScreen = () => {
       <View>
         <ButtonComponent
           className="w-full bg-sky-400 p-3 rounded-2xl mb-3"
-          handleOnPress={() => navigation.navigate("Check")}
+          handleOnPress={() => navigation.navigate("Booking")}
         >
           <Text className="text-xl font-mulishsemibold text-white text-center">
             Check appintment working
@@ -71,6 +77,6 @@ const HomeScreen = () => {
       </View>
     </View>
   );
-};
+}
 
 export default HomeScreen;

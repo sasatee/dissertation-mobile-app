@@ -16,7 +16,7 @@ import { bookAppointment } from "../../services/appointment";
 import { queryClientfn } from "../../services/queryClient";
 import ButtonComponent from "../CustomComponent/Button";
 
-const BookSection = ({ route }) => {
+const BookAppointment = ({ route }) => {
   const [next7Days, setNext7Days] = useState([]);
   const [selectedDate, setSelectedDate] = useState();
   const [selectedTime, setSelectedTime] = useState();
@@ -29,19 +29,22 @@ const BookSection = ({ route }) => {
 
   const { mutate, isPending, error, isError, isSuccess } = useMutation({
     mutationFn: bookAppointment,
+    gcTime:5000,
     onSuccess: () => {
-      //queryClientfn.invalidateQueries({ queryKey: ["doctors"] });
+      queryClientfn.invalidateQueries({ queryKey: ["Appointment"] });
+      ToastAndroid.show("Appointment successfully book", ToastAndroid.SHORT);
+      navigation.navigate("Appointment");
+    },
+    onError: () => {
       navigation.navigate("Home");
     },
   });
 
-  if (isError) {
-    ToastAndroid.show(error.message, ToastAndroid.SHORT);
-  }
 
-  if (isSuccess) {
-    ToastAndroid.show("Appointment successfully book", ToastAndroid.SHORT);
-  }
+    if (isError) {
+      ToastAndroid.show(error.message, ToastAndroid.SHORT);
+    }
+
   function handleMakeAppointment() {
     mutate({
       reason: reason,
@@ -59,7 +62,7 @@ const BookSection = ({ route }) => {
   const getDays = () => {
     const nextSevenDays = [];
 
-    for (let i = 0; i <7; i++) {
+    for (let i = 0; i < 7; i++) {
       const date = moment().add(i, "days");
       nextSevenDays.push({
         date: date,
@@ -207,4 +210,4 @@ const BookSection = ({ route }) => {
   );
 };
 
-export default BookSection;
+export default BookAppointment;

@@ -29,7 +29,7 @@ const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
-  console.log(error,"daddadadda");
+
   const [user, setUser] = useState(null);
   const [loadingInitial, setLoadingInitial] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -98,8 +98,6 @@ export const AuthProvider = ({ children }) => {
         };
 
         await googleLogin(postData);
-
-      
       }
     } catch (error) {
       console.log("Error signing in with Google:", error);

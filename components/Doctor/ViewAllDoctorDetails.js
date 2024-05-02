@@ -43,7 +43,7 @@ const ViewAllDoctorDetails = ({ navigation }) => {
           data={data} // Use the dummy data array here
           renderItem={({ item }) => (
             <TouchableOpacity
-              onPress={() => navigation.navigate("Check", item._id)}
+              onPress={() => navigation.navigate("Booking", item._id)}
               className="bg-white/90 shadow-2xl rounded-lg my-5"
             >
               <Image
