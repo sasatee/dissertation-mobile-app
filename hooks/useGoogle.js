@@ -89,13 +89,14 @@ export const AuthProvider = ({ children }) => {
       if (jwtToken) {
         // Decode JWT token
         const decodedJwt = jwtDecode(jwtToken);
-        //console.log("Decoded JWT Token:", decodedJwt);
+        console.log("Decoded JWT Token:", decodedJwt);
 
         // Dispatch action to update state with JWT token
         dispatch(setJwtToken(jwtToken));
       } else if (googleToken) {
         const decodedGoogle = jwtDecode(googleToken);
-        //console.log("Decoded JWT Token:", decodedGoogle);
+        //
+        console.log("Decoded JWT Token:", decodedGoogle);
         // Dispatch action to update state with Google access token
         dispatch(setGoogleAccessToken(googleToken));
       } else {
