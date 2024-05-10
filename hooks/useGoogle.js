@@ -83,8 +83,8 @@ export const AuthProvider = ({ children }) => {
       const googleToken = await ReactNativeAsyncStorage.getItem(
         "googleAccessToken"
       );
-      console.log("Retrieved JWT Token:", jwtToken);
-      console.log("Retrieved Google Token:", googleToken);
+      // console.log("Retrieved JWT Token:", jwtToken);
+      // console.log("Retrieved Google Token:", googleToken);
 
       if (jwtToken) {
         // Decode JWT token
@@ -96,13 +96,10 @@ export const AuthProvider = ({ children }) => {
       } else if (googleToken) {
         const decodedGoogle = jwtDecode(googleToken);
         //
-        console.log("Decoded JWT Token:", decodedGoogle);
+        console.log("Decoded Google Token:", decodedGoogle);
         // Dispatch action to update state with Google access token
         dispatch(setGoogleAccessToken(googleToken));
       } else {
-        // No token found, user is not logged in
-        // Update state accordingly to reflect logged out state
-        // Ensure you have appropriate actions for handling logged-out state in your Redux setup
         dispatch(logoutJwtToken());
         dispatch(logoutGoogleAccessToken());
       }

@@ -14,7 +14,7 @@ const ViewAllAppointment = () => {
   const navigation = useNavigation();
 
   return (
-    <View className="bg-white px-4 flex-1 pt-9 ">
+    <View className="bg-white/80 px-4 flex-1 pt-9 ">
       <FlatList
         data={data}
         renderItem={({ item }) => (
@@ -22,28 +22,39 @@ const ViewAllAppointment = () => {
             onPress={() => console.log("test")}
             className=" rounded-lg my-4 mx-2 "
           >
-            <View className="bg-gray-300 rounded-lg space-x-3">
-              <View className="flex items-end">
+            <View className="bg-gray-500/5 rounded-lg space-y-2  border-r-2 border-spacing-y-3.5">
+              <View className="flex  flex-row">
                 <Image
                   source={{
-                    uri: `${item.profilePicture}`,
+                    uri: `${item?.profilePicture}`,
                   }}
                   style={{
+                    //margin:3,
                     width: 50,
                     height: 50,
-                    resizeMode: "center",
-                    borderRadius: 25,
+                    resizeMode: "cover",
+                    borderRadius: 20,
                   }}
                   className="rounded-3xl m-3"
                 />
+                <View className="flex-1 flex-col justify-center items-start pl-4">
+                  <Text className="text-xs self-end p-3 text-gray-500">
+                    {format(new Date(item.bookedTime), "MMMM do yyyy")}
+                  </Text>
+
+                  <Text className="text-xs font-light">
+                    Time Booked:
+                    <Text className="font-semibold text-xs items-end text-amber-800">
+                      {item.bookedTimeAMOrPM}
+                    </Text>
+                  </Text>
+
+                  <View className=" my-5">
+                    <Text className="right-20 font-mulishextrabold text-xs">{item.doctorName}</Text>
+                  </View>
+                </View>
               </View>
 
-              <View className="flex flex-col items-start ">
-                <Text>{format(new Date(item.bookedTime), "MMMM do yyyy")}</Text>
-                <Text>{format(new Date(item.bookedTime), "h:mm:ss a")}</Text>
-                <Text>{item.bookedTimeAMOrPM}</Text>
-                <Text>{item.reason}</Text>
-              </View>
             </View>
           </TouchableOpacity>
         )}

@@ -1,5 +1,3 @@
-
-
 import { GoogleSigninButton } from "@react-native-google-signin/google-signin";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
@@ -13,7 +11,9 @@ import {
   StatusBar,
   Text,
   ToastAndroid,
+  TouchableOpacity,
   View,
+  StyleSheet,
 } from "react-native";
 import { useDispatch } from "react-redux";
 import useYupValidation from "../hooks/useYupValidation";
@@ -22,6 +22,8 @@ import {
   emailValidationSchema,
   passwordValidationSchema,
 } from "../validation/auth";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { colors } from "../util/colors";
 
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 import ButtonComponent from "../components/CustomComponent/Button";
@@ -83,6 +85,9 @@ const LoginScreen = () => {
     setLoading(false);
   };
 
+  const handleGoBack = () => {
+    navigation.goBack();
+  };
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -102,6 +107,14 @@ const LoginScreen = () => {
             className="h-full w-full absolute"
             source={require("../assets/images/background.jpg")}
           />
+
+          <TouchableOpacity
+            style={styles.backButtonWrapper}
+            onPress={handleGoBack}
+          >
+            <Ionicons name={"arrow-back-outline"} color="black" size={25} />
+          </TouchableOpacity>
+
           {/* light */}
           <View className="flex-row justify-around w-full absolute">
             <Animated.Image
@@ -185,18 +198,25 @@ const LoginScreen = () => {
                 </Pressable>
               </Animated.View>
 
-              <Animated.View
+              <View className="p-2">
+                <Text className="text-center  text-base font-mulishsemibold text-black">
+                  or continue with
+                </Text>
+                  <Animated.View
                 entering={FadeInDown.delay(900).duration(1000).springify()}
-                className="flex flex-row justify-center"
+                className="flex flex-row justify-center my-2"
               >
                 <GoogleSigninButton
-                  style={{ paddingBottom: 15 }}
+                  style={{ paddingBottom: 30 }}
                   accessibilityHint="accessibilityHint"
-                  size={GoogleSigninButton.Size.Standard}
+                  size={GoogleSigninButton.Size.Icon}
                   color={GoogleSigninButton.Color.Dark}
                   onPress={signInWithGoogle}
                 />
               </Animated.View>
+              </View>
+
+            
             </View>
           </View>
         </View>
@@ -206,3 +226,14 @@ const LoginScreen = () => {
 };
 
 export default LoginScreen;
+const styles = StyleSheet.create({
+  backButtonWrapper: {
+    margin: 10,
+    height: 40,
+    width: 40,
+    backgroundColor: "rgba(0, 0, 0, 0.3)",
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
