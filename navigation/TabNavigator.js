@@ -3,11 +3,13 @@ import HomeScreen from "../screens/HomeScreen";
 import testScreen from "../screens/ViewDoctorAndBook";
 import ProductGridCard from "../components/Doctor/ViewAllDoctorDetails";
 import ViewAllAppointment from "../screens/ViewAllAppointment";
+import { AntDesign } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 // Icons
 import { Feather } from "@expo/vector-icons";
-import { FontAwesome5 } from "@expo/vector-icons";
-
+import { FontAwesome6 } from "@expo/vector-icons";
+import ModalScreen from "../screens/EditProfile";
 
 const Tab = createBottomTabNavigator();
 
@@ -24,43 +26,42 @@ export default function BottomTabNavigation() {
         name="Home"
         component={HomeScreen}
         options={{
-          tabBarBadge: 3,
-          tabBarBadgeStyle: { backgroundColor: "green" },
           tabBarIcon: ({ color, size }) => (
-            <Feather name="home" size={size} color={color} />
+            // <Feather name="home" size={size} color={color} />
+            <AntDesign name="home" size={size} color={color} />
           ),
         }}
       />
-      
-     <Tab.Screen
+
+      <Tab.Screen
         name="Doctors"
         component={ProductGridCard}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <FontAwesome5 name="map-marker-alt" size={size} color={color} />
+            <FontAwesome6 name="user-doctor" size={size} color={color} />
           ),
         }}
       />
-          <Tab.Screen
+      <Tab.Screen
         name="Booking"
         component={testScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome5 name="map-marker-alt" size={size} color={color} />
-          ),
-        }}
+        options={{ tabBarButton: () => null, tabBarVisible: false }}
       />
       <Tab.Screen
         name="Appointment"
         component={ViewAllAppointment}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Feather name="home" size={size} color={color} />
+            <Ionicons name="bookmark-outline" size={size} color={color} />
           ),
         }}
       />
-  
 
+      <Tab.Screen
+        name="Modal"
+        component={ModalScreen}
+        options={{ tabBarButton: () => null, tabBarVisible: false }}
+      />
     </Tab.Navigator>
   );
 }

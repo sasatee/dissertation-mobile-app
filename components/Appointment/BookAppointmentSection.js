@@ -76,7 +76,7 @@ const BookAppointment = ({ route }) => {
 
   const getTime = () => {
     const timeList = [];
-    for (let i = 8; i <= 12; i++) {
+    for (let i = 9; i <= 12; i++) {
       timeList.push({
         time: i + ":00 AM",
       });

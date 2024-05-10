@@ -8,6 +8,7 @@ import MainNavigator from "./navigation/index";
 import { store } from "./redux/store";
 import { queryClientfn } from "./services/queryClient";
 
+
 const App = () => {
 
   return (

@@ -10,12 +10,11 @@ const JWTScreen = ({ route }) => {
   const isDoctor = useSelector(checkIsDoctorLogin);
   console.log("isDoctor state set: ", isDoctor);
 
-
   return (
     <>
-      <ScrollView className='p-1 border-blue-900 border-solid'>
+      <ScrollView className="p-1 border-blue-900 border-solid">
         <ViewDoctorDetail route={route} />
-        <BookAppointment route={route}/>
+        <BookAppointment route={route} />
       </ScrollView>
     </>
   );

@@ -1,4 +1,7 @@
+import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import { useQuery } from "@tanstack/react-query";
+import filter from "lodash.filter";
 import React, { useState } from "react";
 import {
   Alert,
@@ -10,21 +13,25 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import useAuth from "../hooks/useGoogle";
-
-import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
 import ButtonComponent from "../components/CustomComponent/Button";
+import useAuth from "../hooks/useGoogle";
 import {
   logoutJwtToken,
   selectCurrentJwtToken,
 } from "../redux/slice/authenticationSlice";
-import { useQuery } from "@tanstack/react-query";
 import { getAllDoctor } from "../services/doctor";
+import { EvilIcons } from '@expo/vector-icons';
+
+
+
+
+
 
 const HomeScreen = () => {
   const { logout, user } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchData, setSearchData] = useState([]);
 
   const { data, isError, isLoading, fetchStatus, isFetching, error } = useQuery(
     {
@@ -34,8 +41,24 @@ const HomeScreen = () => {
     }
   );
 
+  const contains = ({ firstName, lastName, specialization }, query) => {
+    const formattedQuery = query.toLowerCase();
+    if (
+      firstName.toLowerCase().includes(formattedQuery) ||
+      lastName.toLowerCase().includes(formattedQuery) ||
+      specialization.toLowerCase().includes(formattedQuery)
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   function handleSearch(query) {
     setSearchQuery(query);
+    const formattedQuery = query.toLowerCase();
+    console.log(formattedQuery);
+    const filteredData = filter(data, (item) => contains(item, formattedQuery));
+    setSearchData(filteredData);
   }
 
   const navigation = useNavigation();
@@ -53,36 +76,11 @@ const HomeScreen = () => {
     }
   };
 
-  let contentForFlatlist;
-
-  if (data) {
-    contentForFlatlist = (
-      <FlatList
-        data={data}
-        keyExtractor={(item) => item._id}
-        renderItem={({ item }) => (
-          <View className="flex-row items-center ml-3 mt-3">
-            <Image
-              source={{ uri: item.profilePicture }}
-              className="h-10 w-10 rounded-2xl"
-              style={{ resizeMode: "cover" }}
-            />
-            <View>
-              <Text className="font-sm ml-3 font-mulishsemibold">
-                {item.firstName} {item.lastName}
-              </Text>
-              <Text className="font-xs text-gray-400 font-mulishbold ml-3">
-                {item.specialization}
-              </Text>
-            </View>
-          </View>
-        )}
-      />
-    );
-  }
+  let contentForFlatlist = searchQuery === "" ? data : searchData;
 
   return (
-    <SafeAreaView className="flex-1 my-8">
+    <SafeAreaView className="bg-white/100 flex-1 pt-2">
+   
       <View className="">
         <View className="self-end px-3">
           {user && user?.photoURL && (
@@ -96,6 +94,7 @@ const HomeScreen = () => {
           {isLoggedIn ? (
             <ButtonComponent
               className="w-full bg-sky-400 p-1 rounded-2xl mb-3"
+               //handleOnPress={()=>navigation.navigate("Modal")}
               handleOnPress={handleLogout}
             >
               <Text className="text-xl font-mulishsemibold text-white text-center">
@@ -117,7 +116,31 @@ const HomeScreen = () => {
             />
           </View>
         </View>
-        {contentForFlatlist}
+        <FlatList
+          data={contentForFlatlist}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Booking", item._id)}
+            >
+              <View className="flex-row items-center ml-3 mb-4">
+                <Image
+                  source={{ uri: item.profilePicture }}
+                  className="h-10 w-10 rounded-xl"
+                  style={{ resizeMode: "cover" }}
+                />
+                <View>
+                  <Text className="font-bold ml-3 font-mulishsemibold">
+                    {item.firstName} {item.lastName}
+                  </Text>
+                  <Text className="font-xs text-gray-400 font-mulishbold ml-3">
+                    {item.specialization}
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          )}
+        />
       </View>
     </SafeAreaView>
   );
