@@ -29,7 +29,7 @@ const ChatProvider = ({ children }) => {
     connect();
 
     return ()=>{
-      //clear the connection from stream sdk when unmount the chat provider
+      //clear the connection from stream sdk when  the chat provider component unmount
       client.disconnectUser();
       setIsReady(false)
     }

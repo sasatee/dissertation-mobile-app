@@ -15,14 +15,12 @@ import {
   View,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import ButtonComponent from "../components/CustomComponent/Button";
 import useAuth from "../hooks/useGoogle";
 import {
   logoutJwtToken,
   selectCurrentJwtToken,
 } from "../redux/slice/authenticationSlice";
 import { getAllDoctor } from "../services/doctor";
-import { EvilIcons } from "@expo/vector-icons";
 
 const HomeScreen = () => {
   const { logout, user } = useAuth();
