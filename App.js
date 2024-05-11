@@ -9,22 +9,19 @@ import MainNavigator from "./navigation/index";
 import { store } from "./redux/store";
 import { queryClientfn } from "./services/queryClient";
 import { StripeProvider } from "@stripe/stripe-react-native";
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { useReactQueryDevTools } from "@dev-plugins/react-query";
 
-
-
-const id = merchantIdentifier.toString()
-
+const id = merchantIdentifier.toString();
 
 const App = () => {
+  useReactQueryDevTools(queryClientfn);
   return (
     <Provider store={store}>
-    <StripeProvider publishableKey={id}>
+      <StripeProvider publishableKey={id}>
         <QueryClientProvider client={queryClientfn}>
           <AuthProvider>
             <MainNavigator />
           </AuthProvider>
-          
         </QueryClientProvider>
       </StripeProvider>
     </Provider>
