@@ -1,9 +1,13 @@
-import { View, Text, ActivityIndicator, Button, Touchable, TouchableOpacity } from "react-native";
-import React, { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { useChatContext } from "stream-chat-expo";
-import { Channel, MessageInput, MessageList } from "stream-chat-expo";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { useNavigation } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  SafeAreaView,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Channel, MessageInput, MessageList, useChatContext } from "stream-chat-expo";
 
 const ChatScreen = ({ route }) => {
   const navigation = useNavigation();
@@ -31,13 +35,19 @@ const ChatScreen = ({ route }) => {
   return (
     <>
       <Channel className="flex-1" channel={channel}>
-        <View className="bg-white/75 pb-1 flex">
-        <TouchableOpacity onPress={handleGoBack} className='m-1'>
-           <FontAwesome6 name="arrow-right-to-bracket" size={20} color="black" />
-        </TouchableOpacity>
+        <View className="bg-white/75 pb-1">
+          <TouchableOpacity onPress={handleGoBack} className="m-1">
+            <FontAwesome6
+              name="arrow-right-to-bracket"
+              size={20}
+              color="black"
+            />
+          </TouchableOpacity>
         </View>
         <MessageList />
-        <MessageInput />
+        <SafeAreaView edges={["bottom"]}>
+          <MessageInput />
+        </SafeAreaView>
       </Channel>
     </>
   );
