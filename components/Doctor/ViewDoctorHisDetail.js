@@ -56,7 +56,7 @@ export default function ViewDoctorDetail({ route }) {
                 Dr.{" "}
                 <Text className="text-sky-500 text-sm font-light">
                   {data?.doctor?.firstName}
-                  {""} {data?.doctor?.lastName}
+                  {""} {data?.doctor?.lastName} 
                 </Text>
               </Text>
             </View>

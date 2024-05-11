@@ -5,6 +5,7 @@ import filter from "lodash.filter";
 import React, { useState } from "react";
 import {
   Alert,
+  Button,
   FlatList,
   Image,
   SafeAreaView,
@@ -21,12 +22,7 @@ import {
   selectCurrentJwtToken,
 } from "../redux/slice/authenticationSlice";
 import { getAllDoctor } from "../services/doctor";
-import { EvilIcons } from '@expo/vector-icons';
-
-
-
-
-
+import { EvilIcons } from "@expo/vector-icons";
 
 const HomeScreen = () => {
   const { logout, user } = useAuth();
@@ -80,7 +76,6 @@ const HomeScreen = () => {
 
   return (
     <SafeAreaView className="bg-white/100 flex-1 pt-2">
-   
       <View className="">
         <View className="self-end px-3">
           {user && user?.photoURL && (
@@ -92,15 +87,16 @@ const HomeScreen = () => {
             </TouchableOpacity>
           )}
           {isLoggedIn ? (
-            <ButtonComponent
-              className="w-full bg-sky-400 p-1 rounded-2xl mb-3"
-               //handleOnPress={()=>navigation.navigate("Modal")}
-              handleOnPress={handleLogout}
+            <Button
+              className="h-10 w-10 rounded-3xl"
+              //handleOnPress={()=>navigation.navigate("Modal")}
+              onPress={handleLogout}
+              title="logout"
             >
-              <Text className="text-xl font-mulishsemibold text-white text-center">
+              <Text className="text-xs font-mulishsemibold text-white text-center">
                 logout
               </Text>
-            </ButtonComponent>
+            </Button>
           ) : null}
         </View>
         <View className="px-4 -top-10">

@@ -5,53 +5,111 @@ import {
   FlatList,
   Text,
   TextInput,
+  ToastAndroid,
   TouchableOpacity,
   View,
-  ToastAndroid,
 } from "react-native";
-
-import { useNavigation } from "@react-navigation/native";
-import { useMutation } from "@tanstack/react-query";
-import { bookAppointment } from "../../services/appointment";
-import { queryClientfn } from "../../services/queryClient";
 import ButtonComponent from "../CustomComponent/Button";
 
+import { presentPaymentSheet, useStripe } from "@stripe/stripe-react-native";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { bookAppointment } from "../../services/appointment";
+import { DoctorPaymentPrice } from "../../services/doctor";
+import { PaymentToBookAppointment } from "../../services/payment";
+import { queryClientfn } from "../../services/queryClient";
+
 const BookAppointment = ({ route }) => {
+  //stripe hook
+  const { initPaymentSheet } = useStripe();
+
+  //get day and time
   const [next7Days, setNext7Days] = useState([]);
   const [selectedDate, setSelectedDate] = useState();
   const [selectedTime, setSelectedTime] = useState();
   const [timeList, setTimeList] = useState();
-
   const [reason, setReason] = useState("");
-  const navigation = useNavigation();
+  const [paymentKeyData, setpaymentKeyData] = useState();
 
   const doctorID = route.params;
 
-  const { mutate, isPending, error, isError, isSuccess } = useMutation({
+  //payment for doctor
+
+  const { data: price } = useQuery({
+    queryKey: ["doctor", { id: doctorID }],
+    queryFn: ({ signal }) => DoctorPaymentPrice({ signal, id: doctorID }),
+  }); // get price for doctor by id ===>doctor
+
+  //make appointment endpoint
+  const { mutate, isPending } = useMutation({
     mutationFn: bookAppointment,
-    gcTime:5000,
+    gcTime: 5000,
     onSuccess: () => {
       queryClientfn.invalidateQueries({ queryKey: ["Appointment"] });
       ToastAndroid.show("Appointment successfully book", ToastAndroid.SHORT);
       navigation.navigate("Appointment");
     },
     onError: () => {
-      navigation.navigate("Home");
+      ToastAndroid.show("Please make selection", ToastAndroid.LONG);
     },
   });
 
+  //make payment post request ==>payment intent
+  const { mutate: payment } = useMutation({
+    mutationFn: PaymentToBookAppointment,
+    gcTime: 5000,
+    onSuccess: async (data) => {
+      setpaymentKeyData(data);
+    },
+    onError: (error) => {
+      ToastAndroid.show(`${error}`, ToastAndroid.SHORT);
+    },
+  });
 
-    if (isError) {
-      ToastAndroid.show(error.message, ToastAndroid.SHORT);
+  async function makePayment() {
+    //1.create a payment intent
+    const murTousd = Math.floor(price / 47);
+    payment({
+      amount: price,
+    });
+    // 2. Initialize the Payment sheet
+    const paymentAccept = await initPaymentSheet({
+      merchantDisplayName: "JustDoctor.me",
+      paymentIntentClientSecret: paymentKeyData?.paymentIntent,
+      // defaultBillingDetails: {
+      //   name: "adda",
+      //   address: "addasada",
+      // },
+    });
+    if (paymentAccept.error) {
+      console.log(paymentAccept.error);
+      ToastAndroid.show("Something went wrong", ToastAndroid.SHORT);
+      return;
     }
 
-  function handleMakeAppointment() {
+    //3.present payment sheet from sheet
+    const paymentSheetResponse = await presentPaymentSheet();
+    if (paymentSheetResponse.error) {
+      ToastAndroid.show(
+        `Error code: ${paymentSheetResponse.error.code}`,
+        ToastAndroid.SHORT
+      );
+      ToastAndroid.show(
+        `${paymentSheetResponse.error.message}`,
+        ToastAndroid.BOTTOM
+      );
+      return;
+    }
+
+    //if payment ok ==> create appointment
     mutate({
       reason: reason,
       doctorId: doctorID,
       bookedTimeAMOrPM: selectedTime,
       bookedTime: selectedDate,
     });
+    setReason("");
+    setSelectedDate();
+    setSelectedTime();
   }
 
   useEffect(() => {
@@ -192,7 +250,7 @@ const BookAppointment = ({ route }) => {
           />
           <ButtonComponent
             className="w-full bg-blue-700/70 p-3 rounded-2xl mb-3 border-y-black"
-            handleOnPress={handleMakeAppointment}
+            handleOnPress={makePayment}
           >
             <View className=" justify-center items-center">
               {isPending ? (

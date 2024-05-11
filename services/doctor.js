@@ -53,7 +53,26 @@ export const getSingleDoctor = async ({ id, signal }) => {
       id,
       signal,
     });
+
     return response.data;
+  } catch (error) {
+    // throw new Error(
+    //   JSON.stringify(error.response.data) || "Cannot fetch doctors"
+    // );
+    throw new Error("Cannot fetch doctor");
+  }
+};
+
+export const DoctorPaymentPrice = async ({ id, signal }) => {
+  try {
+    const headers = await getHeaders();
+    const response = await axiosInstance.get(`api/v1/doctor/${id}`, {
+      headers,
+      id,
+      signal,
+    });
+   
+    return response.data.doctor.price;
   } catch (error) {
     // throw new Error(
     //   JSON.stringify(error.response.data) || "Cannot fetch doctors"
