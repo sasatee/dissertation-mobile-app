@@ -11,12 +11,19 @@ export default {
       resizeMode: "contain",
       backgroundColor: "#ffffff",
     },
-    plugins: ["@react-native-google-signin/google-signin"],
+    plugins: [
+      [
+        "expo-av",
+        {
+          microphonePermission: "Allow Chat app to access your microphone.",
+        },
+      ],
+      "@react-native-google-signin/google-signin"
+    ],
     assetBundlePatterns: ["**/*"],
     ios: {
       supportsTablet: true,
       bundleIdentifier: "com.sarvamsetto.Tinder",
-
       infoPlist: {
         CFBundleURlTypes: {
           CFBundleURlSchemes: [
@@ -44,3 +51,5 @@ export default {
     },
   },
 };
+
+

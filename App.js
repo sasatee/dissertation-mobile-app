@@ -1,26 +1,31 @@
+import { merchantIdentifier } from "@env";
 import "expo-dev-client";
 import React from "react";
-import { merchantIdentifier } from "@env";
 
+import { useReactQueryDevTools } from "@dev-plugins/react-query";
+import { StripeProvider } from "@stripe/stripe-react-native";
 import { QueryClientProvider } from "@tanstack/react-query";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Provider } from "react-redux";
 import { AuthProvider } from "./hooks/useGoogle";
 import MainNavigator from "./navigation/index";
 import { store } from "./redux/store";
 import { queryClientfn } from "./services/queryClient";
-import { StripeProvider } from "@stripe/stripe-react-native";
-import { useReactQueryDevTools } from "@dev-plugins/react-query";
 
 const id = merchantIdentifier.toString();
 
 const App = () => {
   useReactQueryDevTools(queryClientfn);
+
+  
   return (
     <Provider store={store}>
       <StripeProvider publishableKey={id}>
         <QueryClientProvider client={queryClientfn}>
           <AuthProvider>
-            <MainNavigator />
+            <GestureHandlerRootView  style={{flex:1}}>
+              <MainNavigator />
+            </GestureHandlerRootView>
           </AuthProvider>
         </QueryClientProvider>
       </StripeProvider>
@@ -29,3 +34,6 @@ const App = () => {
 };
 
 export default App;
+
+
+
