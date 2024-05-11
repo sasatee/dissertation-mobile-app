@@ -21,9 +21,14 @@ import {
   selectCurrentJwtToken,
 } from "../redux/slice/authenticationSlice";
 import { getAllDoctor } from "../services/doctor";
+// import useLoginState from "../hooks/UseLoginState";
+
+//use
+
 
 const HomeScreen = () => {
   const { logout, user } = useAuth();
+    // const decodedToken = useLoginState();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchData, setSearchData] = useState([]);
 

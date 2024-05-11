@@ -13,19 +13,11 @@ import React, {
   useState,
 } from "react";
 import { auth } from "../firebase";
-
 import { WEB_CLIENT_ID } from "@env";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
-import {
-  logoutGoogleAccessToken,
-  logoutJwtToken,
-  setGoogleAccessToken,
-  setJwtToken,
-} from "../redux/slice/authenticationSlice";
+import { logoutGoogleAccessToken } from "../redux/slice/authenticationSlice";
 import { useGoogleLogin } from "../services/google";
-import { jwtDecode } from "jwt-decode";
-import "core-js/stable/atob";
 
 const AuthContext = createContext({});
 
@@ -55,58 +47,6 @@ export const AuthProvider = ({ children }) => {
     });
     return unsubscribe;
   }, []);
-
-  useEffect(() => {
-    // const checkLoginState = async () => {
-    //   const jwtToken = await ReactNativeAsyncStorage.getItem("jwtToken");
-    //   const googleToken = await ReactNativeAsyncStorage.getItem(
-    //     "googleAccessToken"
-    //   );
-    //   console.log("Retrieved JWT Token:", jwtToken);
-    //   console.log("Retrieved Google Token:", googleToken);
-    //   if (jwtToken) {
-    //     // Dispatch action to update state with JWT token
-    //     dispatch(setJwtToken(jwtToken));
-    //   } else if (googleToken) {
-    //     // Dispatch action to update state with Google access token
-    //     dispatch(setGoogleAccessToken(googleToken));
-    //   } else {
-    //     // No token found, user is not logged in
-    //     // Update state accordingly to reflect logged out state
-    //     // Ensure you have appropriate actions for handling logged-out state in your Redux setup
-    //     dispatch(logoutJwtToken());
-    //     dispatch(logoutGoogleAccessToken());
-    //   }
-    // };
-    const checkLoginState = async () => {
-      const jwtToken = await ReactNativeAsyncStorage.getItem("jwtToken");
-      const googleToken = await ReactNativeAsyncStorage.getItem(
-        "googleAccessToken"
-      );
-      // console.log("Retrieved JWT Token:", jwtToken);
-      // console.log("Retrieved Google Token:", googleToken);
-
-      if (jwtToken) {
-        // Decode JWT token
-        const decodedJwt = jwtDecode(jwtToken);
-        console.log("Decoded JWT Token:", decodedJwt);
-
-        // Dispatch action to update state with JWT token
-        dispatch(setJwtToken(jwtToken));
-      } else if (googleToken) {
-        const decodedGoogle = jwtDecode(googleToken);
-        //
-        console.log("Decoded Google Token:", decodedGoogle);
-        // Dispatch action to update state with Google access token
-        dispatch(setGoogleAccessToken(googleToken));
-      } else {
-        dispatch(logoutJwtToken());
-        dispatch(logoutGoogleAccessToken());
-      }
-    };
-
-    checkLoginState();
-  }, [dispatch]);
 
   const signInWithGoogle = async () => {
     try {

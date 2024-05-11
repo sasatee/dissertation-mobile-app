@@ -4,36 +4,40 @@ import { StreamChat } from "stream-chat";
 import React, { useEffect, useState } from "react";
 import { STREAM_PUBLIC } from "@env";
 import { ActivityIndicator, View } from "react-native";
+import useLoginState from "../hooks/UseLoginState";
 
 const client = StreamChat.getInstance(STREAM_PUBLIC);
 
 const ChatProvider = ({ children }) => {
+  const decodedToken = useLoginState();
   const [isReady, setIsReady] = useState(false);
   useEffect(() => {
+    console.log("USE EFFECT:",decodedToken?.profilePicture)
+    if (!decodedToken) {
+      return;
+    }
     const connect = async () => {
-      //   const googleAccessToken = await ReactNativeAsyncStorage.getItem(
-      //     "googleAccessToken"
-      //   );
-      //   const token = await ReactNativeAsyncStorage.getItem("jwtToken");
-
       await client.connectUser(
         {
-          id: "jlahey",
-          name: "Jim Lahey",
-          image: "https://i.imgur.com/fR9Jz14.png",
+          id: decodedToken?.userId,
+          name: `${decodedToken?.firstname} ${decodedToken?.lastname}`,
+          image: decodedToken?.profilePicture,
         },
-        client.devToken("jlahey")
+        client.devToken(decodedToken?.userId)
       );
       setIsReady(true);
     };
     connect();
 
-    return ()=>{
+    return () => {
       //clear the connection from stream sdk when  the chat provider component unmount
-      client.disconnectUser();
-      setIsReady(false)
-    }
-  }, []);
+      if (isReady) {
+        client.disconnectUser();
+       
+      }
+       setIsReady(false);
+    };
+  }, [decodedToken?.userId]);
 
   if (!isReady) {
     return (
