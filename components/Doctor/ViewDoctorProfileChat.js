@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   FlatList,
   Text,
@@ -7,20 +7,28 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import { getAllDoctor } from "../../services/doctor";
+import { useChatContext } from "stream-chat-expo";
+import useLoginState from "../../hooks/UseLoginState";
 
 // Dummy data for doctors
-const dummyData = Array.from({ length: 20 }, (_, index) => ({
-  id: index + 1,
-  firstName: `Doctor${index + 1}`,
-  lastName: `Doe${index + 1}`,
-  profilePicture: `https://via.placeholder.com/150/FFFFFF/CCBBFFCC/?text=Doctor${
-    index + 1
-  }`,
-}));
+// const dummyData = Array.from({ length: 20 }, (_, index) => ({
+//   id: index + 1,
+//   firstName: `Doctor${index + 1}`,
+//   lastName: `Doe${index + 1}`,
+//   profilePicture: `https://via.placeholder.com/150/FFFFFF/CCBBFFCC/?text=Doctor${
+//     index + 1
+//   }`,
+// }));
 
-const ViewProfileChat = ({ navigation }) => {
+const ViewProfileChat = () => {
+  const { client } = useChatContext();
+  const decodedToken = useLoginState();
+
+  const navigation = useNavigation();
+
   const { data, isError, isLoading, fetchStatus, isFetching, error } = useQuery(
     {
       queryKey: ["doctors"],
@@ -30,6 +38,17 @@ const ViewProfileChat = ({ navigation }) => {
     }
   );
 
+
+
+ 
+  const beginToChat = async (doctorId) => {
+  //start a chat with him
+  const channel = client.channel("messaging", {
+    members: [decodedToken?.userId, doctorId],
+  });
+  await channel.watch();
+  navigation.navigate("Channel", channel.id);
+};
   // const data = dummyData;
   let content;
 
@@ -62,7 +81,7 @@ const ViewProfileChat = ({ navigation }) => {
               data={data}
               renderItem={({ item }) => (
                 <TouchableOpacity
-                  // onPress={() => navigation.navigate("Booking", item.id)}
+                  onPress={() => beginToChat(item.doctorId)}
                   className=" shadow-2xl rounded-lg mx-2"
                 >
                   <Image

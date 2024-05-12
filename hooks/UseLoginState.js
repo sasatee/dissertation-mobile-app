@@ -53,9 +53,7 @@ const useLoginState = () => {
       }
     };
 
-    setTimeout(() => {
-      checkLoginState();
-    });
+    checkLoginState();
   }, []);
 
   return decodedToken;

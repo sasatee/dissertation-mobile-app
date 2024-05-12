@@ -6,7 +6,7 @@ import { STREAM_PUBLIC } from "@env";
 import { ActivityIndicator, View } from "react-native";
 import useLoginState from "../hooks/UseLoginState";
 
-const client = StreamChat.getInstance(STREAM_PUBLIC);
+const client = StreamChat.getInstance("7b3w3mt8j27p");
 
 const ChatProvider = ({ children }) => {
   const decodedToken = useLoginState();

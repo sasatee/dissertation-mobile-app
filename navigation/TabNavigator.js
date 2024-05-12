@@ -7,14 +7,13 @@ import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 
 // Icons
-import Entypo from '@expo/vector-icons/Entypo';
+import Entypo from "@expo/vector-icons/Entypo";
 import { FontAwesome6 } from "@expo/vector-icons";
 import ModalScreen from "../screens/EditProfile";
 import ChatScreen from "../screens/ChatScreen";
 
 import ChannelScreen from "../screens/ChannelScreen";
 import ProfileChatScreen from "../screens/ProfileChat";
-
 
 const Tab = createBottomTabNavigator();
 
@@ -62,7 +61,7 @@ export default function BottomTabNavigation() {
         }}
       />
 
-       {/* <Tab.Screen
+      {/* <Tab.Screen
         name="Profile"
         component={ProfileChatScreen}
          options={{
@@ -74,6 +73,15 @@ export default function BottomTabNavigation() {
       /> */}
 
       <Tab.Screen
+        name="Channel"
+        component={ChannelScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Entypo name="chat" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
         name="Chat"
         component={ChatScreen}
         //   options={{
@@ -82,18 +90,6 @@ export default function BottomTabNavigation() {
         //   ),
         // }}
         options={{ tabBarButton: () => null, tabBarVisible: false }}
-    
-      />
-
-      <Tab.Screen
-        name="Channel"
-        component={ChannelScreen}
-         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Entypo name="chat" size={size} color={color} />
-          ),
-        }}
-    
       />
     </Tab.Navigator>
   );

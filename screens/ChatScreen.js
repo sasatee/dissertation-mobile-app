@@ -16,27 +16,46 @@ import {
 
 const ChatScreen = ({ route }) => {
   const navigation = useNavigation();
-  const cid = route.params;
-  const { client } = useChatContext();
-  const [channel, setChannel] = useState();
+  const initialCid = route.params;
 
+  const { client } = useChatContext();
+
+  const [cid, setCid] = useState(initialCid);
+  console.log(cid)
+
+  const [channel, setChannel] = useState(null);
   const handleGoBack = () => {
     navigation.goBack();
   };
 
   useEffect(() => {
     const fetchChannel = async () => {
-      const channel = await client.queryChannels({ cid });
-      if (channel && channel.length > 0) {
-        setChannel(channel[0]);
-        // console.log("CID from Retrieved Array:", channel[0].cid);
+      try {
+        // Correctly formatted query using filters
+        const filter = {
+          type: "messaging", // Replace 'messaging' with your channel type
+          id: cid, // Use the cid from state
+          members: { $in: [client.user.id] }, // Ensure the user is a member of the channel
+        };
+        const channels = await client.queryChannels(filter);
+
+        if (channels.length > 0) {
+          setChannel(channels[0]);
+        } else {
+          console.error("Channel not found");
+        }
+      } catch (error) {
+        console.error("Error fetching channel", error);
       }
     };
+
     fetchChannel();
-  }, [cid]);
+  }, []);
+
   if (!channel) {
-    return <ActivityIndicator />;
+    return <ActivityIndicator color="blue" />;
   }
+
   return (
     <>
       <Channel className="flex-1" channel={channel}>
