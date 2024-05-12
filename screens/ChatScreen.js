@@ -7,7 +7,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Channel, MessageInput, MessageList, useChatContext } from "stream-chat-expo";
+import {
+  Channel,
+  MessageInput,
+  MessageList,
+  useChatContext,
+} from "stream-chat-expo";
 
 const ChatScreen = ({ route }) => {
   const navigation = useNavigation();

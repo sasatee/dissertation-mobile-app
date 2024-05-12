@@ -15,20 +15,17 @@ import {
   View,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import ButtonComponent from "../components/CustomComponent/Button";
 import useAuth from "../hooks/useGoogle";
 import {
   logoutJwtToken,
   selectCurrentJwtToken,
 } from "../redux/slice/authenticationSlice";
 import { getAllDoctor } from "../services/doctor";
-// import useLoginState from "../hooks/UseLoginState";
-
-//use
-
+import { EvilIcons } from "@expo/vector-icons";
 
 const HomeScreen = () => {
   const { logout, user } = useAuth();
-    // const decodedToken = useLoginState();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchData, setSearchData] = useState([]);
 

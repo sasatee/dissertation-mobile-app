@@ -12,7 +12,7 @@ const ChatProvider = ({ children }) => {
   const decodedToken = useLoginState();
   const [isReady, setIsReady] = useState(false);
   useEffect(() => {
-    console.log("USE EFFECT:",decodedToken?.profilePicture)
+     console.log("USE EFFECT:",decodedToken)
     if (!decodedToken) {
       return;
     }

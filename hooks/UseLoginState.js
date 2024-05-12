@@ -14,38 +14,49 @@ const useLoginState = () => {
   const dispatch = useDispatch();
   const [decodedToken, setDecodedToken] = useState(null);
 
+  // console.log(
+  //   "decodedTokendecodedTokendecodedTokendecodedToken:",
+  //   decodedToken
+  // );
+
   useEffect(() => {
     const checkLoginState = async () => {
-      const jwtToken = await ReactNativeAsyncStorage.getItem("jwtToken");
-      const googleToken = await ReactNativeAsyncStorage.getItem(
-        "googleAccessToken"
-      );
+      try {
+        const jwtToken = await ReactNativeAsyncStorage.getItem("jwtToken");
+        const googleToken = await ReactNativeAsyncStorage.getItem(
+          "googleAccessToken"
+        );
 
-      if (jwtToken) {
-        // Decode JWT token
-        const decodedJwt = jwtDecode(jwtToken);
-        //console.log("Decoded JWT Token:", decodedJwt);
+        if (jwtToken) {
+          // Decode JWT token
+          const decodedJwt = jwtDecode(jwtToken);
+          // console.log("Decoded JWT Token:", decodedJwt);
 
-        // Dispatch action to update state with JWT token
-        dispatch(setJwtToken(jwtToken));
-        setDecodedToken(decodedJwt);
-      } else if (googleToken) {
-        const decodedGoogle = jwtDecode(googleToken);
-       // console.log("Decoded Google Token:", decodedGoogle);
+          // Dispatch action to update state with JWT token
+          dispatch(setJwtToken(jwtToken));
+          setDecodedToken(decodedJwt);
+        } else if (googleToken) {
+          const decodedGoogle = jwtDecode(googleToken);
+          // console.log("Decoded Google Token:", decodedGoogle);
 
-        // Dispatch action to update state with Google access token
-        dispatch(setGoogleAccessToken(googleToken));
-        setDecodedToken(decodedGoogle);
-      } else {
-        // If neither token exists, logout
-        dispatch(logoutJwtToken());
-        dispatch(logoutGoogleAccessToken());
-        setDecodedToken(null);
+          // Dispatch action to update state with Google access token
+          dispatch(setGoogleAccessToken(googleToken));
+          setDecodedToken(decodedGoogle);
+        } else {
+          // If neither token exists, logout
+          dispatch(logoutJwtToken());
+          dispatch(logoutGoogleAccessToken());
+          setDecodedToken(null);
+        }
+      } catch (error) {
+        console.error("Error:", error);
       }
     };
 
-    checkLoginState();
-  }, [dispatch,decodedToken]);
+    setTimeout(() => {
+      checkLoginState();
+    });
+  }, []);
 
   return decodedToken;
 };
