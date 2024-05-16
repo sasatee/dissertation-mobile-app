@@ -8,9 +8,7 @@ import AuthStackNavigation from "./AuthStackNavigator";
 import BottomTabNavigation from "./TabNavigator";
 
 import ChatProvider from "../provider/ChatProvider";
-
-
-
+import { StatusBar } from "react-native";
 
 const MainNavigator = () => {
   const userLoginWithJWT = useSelector((state) => state.auth.token);
@@ -24,6 +22,7 @@ const MainNavigator = () => {
       {isLoggedIn ? (
         <ChatProvider>
           <BottomTabNavigation />
+          <StatusBar />
         </ChatProvider>
       ) : (
         <AuthStackNavigation />

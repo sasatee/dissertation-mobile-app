@@ -1,45 +1,36 @@
 
-import "core-js/stable/atob";
-import {
-  logoutJwtToken,
-  logoutGoogleAccessToken,
-  setJwtToken,
-  setGoogleAccessToken,
-} from "../redux/slice/authenticationSlice";
-import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import "core-js/stable/atob";
+import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 
+// Function to store authentication token
+const storeAuthToken = async (token, authType) => {
+  try {
+    // Store token based on authentication type
+    await ReactNativeAsyncStorage.setItem(`@${authType}_auth_token`, token);
+  } catch (error) {
+    console.error('Error storing auth token:', error);
+  }
+};
 
-useEffect(() => {
-  const checkLoginState = async () => {
-    const jwtToken = await ReactNativeAsyncStorage.getItem("jwtToken");
-    const googleToken = await ReactNativeAsyncStorage.getItem(
-      "googleAccessToken"
-    );
-    console.log("Retrieved JWT Token:", jwtToken);
-    console.log("Retrieved Google Token:", googleToken);
+// Function to retrieve authentication token
+const getAuthToken = async (authType) => {
+  try {
+    // Retrieve token based on authentication type
+    const token = await ReactNativeAsyncStorage.getItem(`@${authType}_auth_token`);
+    return token;
+  } catch (error) {
+    console.error('Error retrieving auth token:', error);
+    return null;
+  }
+};
 
-    if (jwtToken) {
-      // Decode JWT token
-      const decodedJwt = jwtDecode(jwtToken);
-      console.log("Decoded JWT Token:", decodedJwt);
-
-      // Dispatch action to update state with JWT token
-      dispatch(setJwtToken(jwtToken));
-    } else if (googleToken) {
-      // Dispatch action to update state with Google access token
-      dispatch(setGoogleAccessToken(googleToken));
-    } else {
-      // No token found, user is not logged in
-      // Update state accordingly to reflect logged out state
-      // Ensure you have appropriate actions for handling logged-out state in your Redux setup
-      dispatch(logoutJwtToken());
-      dispatch(logoutGoogleAccessToken());
-    }
-  };
-}, []);
-
-export default function checkAuthtoken() {
-  return checkLoginState;
-}
+// Function to remove authentication token
+const removeAuthToken = async (authType) => {
+  try {
+    // Remove token based on authentication type
+    await ReactNativeAsyncStorage.removeItem(`@${authType}_auth_token`);
+  } catch (error) {
+    console.error('Error removing auth token:', error);
+  }
+};

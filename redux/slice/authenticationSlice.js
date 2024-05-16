@@ -18,7 +18,7 @@ export const signUpUser = createAsyncThunk(
     try {
       const { data } = await axios.post(
         BASE_URL + "/api/v1/auth/register",
-         //"https://bee2-102-117-34-69.ngrok-free.app/api/v1/auth/register",
+        //"https://bee2-102-117-34-69.ngrok-free.app/api/v1/auth/register",
         body
       );
       // console.log(data);
@@ -91,7 +91,7 @@ const authenticationSlice = createSlice({
         state.token = payload.token;
         state.googleAccessToken = null;
         state.isLogged = true;
-        state.isDoctor = payload.isDoctor;
+        state.isDoctor = payload.user.isDoctor;
         ReactNativeAsyncStorage.setItem("jwtToken", payload.token);
       })
       .addCase(signInUser.rejected, (state, { payload }) => {

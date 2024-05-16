@@ -38,17 +38,14 @@ const ViewProfileChat = () => {
     }
   );
 
-
-
- 
   const beginToChat = async (doctorId) => {
-  //start a chat with him
-  const channel = client.channel("messaging", {
-    members: [decodedToken?.userId, doctorId],
-  });
-  await channel.watch();
-  navigation.navigate("Channel", channel.id);
-};
+    //start a chat with him/doctor
+    const channel = client.channel("messaging", {
+      members: [decodedToken?.userId, doctorId],
+    });
+    await channel.watch();
+    navigation.navigate("Chat", channel.id);
+  };
   // const data = dummyData;
   let content;
 
@@ -75,42 +72,38 @@ const ViewProfileChat = () => {
           borderColor: "white",
         }}
       >
-        <View className="">
-          <View className="">
-            <FlatList
-              data={data}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  onPress={() => beginToChat(item.doctorId)}
-                  className=" shadow-2xl rounded-lg mx-2"
-                >
-                  <Image
-                    source={{ uri: `${item.profilePicture}` }}
-                    style={{
-                      width: 50,
-                      height: 50,
-                      resizeMode: "cover",
-                    }}
-                    className="rounded-3xl"
-                  />
+        <FlatList
+          data={data}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() => beginToChat(item.doctorId)}
+              className=" shadow-2xl rounded-lg mx-2"
+            >
+              <Image
+                source={{ uri: `${item.profilePicture}` }}
+                style={{
+                  width: 50,
+                  height: 50,
+                  resizeMode: "cover",
+                }}
+                className="rounded-3xl"
+              />
 
-                  <View className="">
-                    <Text className="text-center text-md  text-gray-300 font-mulishextrabold ">
-                      {item.firstName}
-                    </Text>
-                    <Text className="text-center text-xs text-gray-400 font-mono ">
-                      {item.lastName}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              )}
-              keyExtractor={(item) => item._id.toString()}
-              horizontal={true} // Set to true for horizontal scroll
-              showsHorizontalScrollIndicator={false} // Hide horizontal scroll indicator
-              contentContainerStyle={{ paddingHorizontal: 15 }} // Add horizontal padding
-            />
-          </View>
-        </View>
+              <View className="">
+                <Text className="text-center text-md  text-gray-300 font-mulishextrabold ">
+                  {item.firstName}
+                </Text>
+                <Text className="text-center text-xs text-gray-400 font-mono ">
+                  {item.lastName}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          )}
+          keyExtractor={(item) => item._id.toString()}
+          horizontal={true} // Set to true for horizontal scroll
+          showsHorizontalScrollIndicator={false} // Hide horizontal scroll indicator
+          contentContainerStyle={{ paddingHorizontal: 15 }} // Add horizontal padding
+        />
       </View>
     );
   }

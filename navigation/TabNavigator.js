@@ -10,7 +10,6 @@ import { Ionicons } from "@expo/vector-icons";
 import Entypo from "@expo/vector-icons/Entypo";
 import { FontAwesome6 } from "@expo/vector-icons";
 import ModalScreen from "../screens/EditProfile";
-import ChatScreen from "../screens/ChatScreen";
 
 import ChannelScreen from "../screens/ChannelScreen";
 import ProfileChatScreen from "../screens/ProfileChat";
@@ -73,23 +72,13 @@ export default function BottomTabNavigation() {
       /> */}
 
       <Tab.Screen
-        name="Channel"
+        name="Chat"
         component={ChannelScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Entypo name="chat" size={size} color={color} />
           ),
         }}
-      />
-      <Tab.Screen
-        name="Chat"
-        component={ChatScreen}
-        //   options={{
-        //   tabBarIcon: ({ color, size }) => (
-        //     <Entypo name="chat" size={size} color={color} />
-        //   ),
-        // }}
-        options={{ tabBarButton: () => null, tabBarVisible: false }}
       />
     </Tab.Navigator>
   );

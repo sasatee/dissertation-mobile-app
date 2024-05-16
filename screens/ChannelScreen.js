@@ -1,20 +1,68 @@
-import { View, Text } from "react-native";
+import {
+  ActivityIndicator,
+  Text,
+  SafeAreaView,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useState } from "react";
-import { ChannelList } from "stream-chat-expo";
+import {
+  ChannelList,
+  Channel,
+  MessageList,
+  MessageInput,
+} from "stream-chat-expo";
 import useLoginState from "../hooks/UseLoginState";
 import { useNavigation } from "@react-navigation/native";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
 export default function ChannelScreen({ route }) {
-  // console.log("ROUTE CHANNEL ID CHANNEL LIST SCREEEEN,", route.params);
+  // console.log("ROUTE CHANNEL ID CHANNEL LIST SCREEN,", route.params);
+
   const navigation = useNavigation();
   const decodedToken = useLoginState();
+  const [selectChannel, setSelectChannel] = useState(null); // Corrected variable name
 
-  
+  const onChannelPressed = (channel) => {
+    setSelectChannel(channel); // Corrected function name
+  };
+
+  const goBack = () => {
+    setSelectChannel(null);
+    navigation.navigate("Chat");
+  };
 
   return (
-    <ChannelList
-      filters={{ members: { $in: [decodedToken?.userId] } }}
-      onSelect={() => navigation.navigate("Chat", route.params)}
-    />
+    <>
+      {selectChannel ? (
+        <Channel
+          className="flex-1"
+          channel={selectChannel}
+          // Message={(message) => {
+          //   console.log(message);
+          //   return <Text className="text-left">{message.message.text}</Text>;
+          // }}
+        >
+          <View className="bg-white/75 pb-1">
+            <TouchableOpacity onPress={goBack} className="m-1">
+              <FontAwesome6
+                name="arrow-right-to-bracket"
+                size={20}
+                color="black"
+              />
+            </TouchableOpacity>
+          </View>
+          <MessageList />
+          <SafeAreaView edges={["bottom"]}>
+            <MessageInput />
+          </SafeAreaView>
+        </Channel>
+      ) : (
+        <ChannelList
+          filters={{ members: { $in: [decodedToken?.userId] } }}
+          onSelect={onChannelPressed}
+        />
+      )}
+    </>
   );
 }

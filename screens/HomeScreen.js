@@ -24,6 +24,7 @@ import {
 import { getAllDoctor } from "../services/doctor";
 import { EvilIcons } from "@expo/vector-icons";
 
+
 const HomeScreen = () => {
   const { logout, user } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");

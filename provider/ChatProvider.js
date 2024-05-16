@@ -1,51 +1,78 @@
 import { Chat, OverlayProvider } from "stream-chat-expo";
 import { StreamChat } from "stream-chat";
-
 import React, { useEffect, useState } from "react";
 import { STREAM_PUBLIC } from "@env";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, View, Text } from "react-native";
 import useLoginState from "../hooks/UseLoginState";
 
-const client = StreamChat.getInstance("7b3w3mt8j27p");
+const client = StreamChat.getInstance(STREAM_PUBLIC);
 
 const ChatProvider = ({ children }) => {
   const decodedToken = useLoginState();
   const [isReady, setIsReady] = useState(false);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-     console.log("USE EFFECT:",decodedToken)
     if (!decodedToken) {
+      setIsLoading(true);
       return;
     }
+
     const connect = async () => {
-      await client.connectUser(
-        {
-          id: decodedToken?.userId,
-          name: `${decodedToken?.firstname} ${decodedToken?.lastname}`,
-          image: decodedToken?.profilePicture,
-        },
-        client.devToken(decodedToken?.userId)
-      );
-      setIsReady(true);
+      try {
+        // Disconnect the previous user if already connected
+        if (client.user) {
+          await client.disconnectUser();
+        }
+
+        // Connect as the new user
+        await client.connectUser(
+          {
+            id: decodedToken?.userId,
+            name: `${decodedToken?.firstname} ${decodedToken?.lastname}`,
+            image: decodedToken?.profilePicture,
+          },
+          client.devToken(decodedToken?.userId)
+        );
+        setIsReady(true);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setIsLoading(false);
+      }
     };
+
     connect();
 
     return () => {
-      //clear the connection from stream sdk when  the chat provider component unmount
       if (isReady) {
         client.disconnectUser();
-       
       }
-       setIsReady(false);
+      setIsReady(false);
     };
   }, [decodedToken?.userId]);
 
-  if (!isReady) {
+  if (error) {
     return (
-      <View classname="flex-1 items-center">
-        <ActivityIndicator />
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <Text>{error}</Text>
       </View>
     );
   }
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <ActivityIndicator size={"large"} color="blue" />
+      </View>
+    );
+  }
+
+  if (!isReady) {
+    return null;
+  }
+
   return (
     <OverlayProvider>
       <Chat client={client}>{children}</Chat>
@@ -54,3 +81,4 @@ const ChatProvider = ({ children }) => {
 };
 
 export default ChatProvider;
+
