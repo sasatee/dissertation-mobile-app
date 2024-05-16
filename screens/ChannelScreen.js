@@ -21,10 +21,10 @@ export default function ChannelScreen({ route }) {
 
   const navigation = useNavigation();
   const decodedToken = useLoginState();
-  const [selectChannel, setSelectChannel] = useState(null); // Corrected variable name
+  const [selectChannel, setSelectChannel] = useState(null);
 
   const onChannelPressed = (channel) => {
-    setSelectChannel(channel); // Corrected function name
+    setSelectChannel(channel);
   };
 
   const goBack = () => {
@@ -53,9 +53,7 @@ export default function ChannelScreen({ route }) {
             </TouchableOpacity>
           </View>
           <MessageList />
-          <SafeAreaView edges={["bottom"]}>
-            <MessageInput />
-          </SafeAreaView>
+          <MessageInput />
         </Channel>
       ) : (
         <ChannelList
