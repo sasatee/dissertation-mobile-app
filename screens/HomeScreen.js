@@ -104,7 +104,7 @@ const HomeScreen = () => {
               <TouchableOpacity onPress={logout}>
                 <Image
                   className="h-10 w-10 rounded-full"
-                  source={{ uri: decodedToken?.profilePicture  }}
+                  source={{ uri: decodedToken?.profilePicture }}
                 />
               </TouchableOpacity>
             )}
@@ -171,7 +171,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingBottom: 16,
     borderBottomWidth: 1,
-
     borderColor: "#efefef",
   },
   searchIcon: {
@@ -189,7 +188,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingLeft: 34,
     width: "100%",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "500",
   },
   searchContent: {
