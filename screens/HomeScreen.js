@@ -9,23 +9,26 @@ import {
   FlatList,
   Image,
   SafeAreaView,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import ButtonComponent from "../components/CustomComponent/Button";
+
 import useAuth from "../hooks/useGoogle";
+
+import FeatherIcon from "react-native-vector-icons/Feather";
 import {
   logoutJwtToken,
   selectCurrentJwtToken,
 } from "../redux/slice/authenticationSlice";
 import { getAllDoctor } from "../services/doctor";
-import { EvilIcons } from "@expo/vector-icons";
-
+import useLoginState from "../hooks/UseLoginState";
 
 const HomeScreen = () => {
+  const decodedToken = useLoginState();
   const { logout, user } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchData, setSearchData] = useState([]);
@@ -76,43 +79,47 @@ const HomeScreen = () => {
   let contentForFlatlist = searchQuery === "" ? data : searchData;
 
   return (
-    <SafeAreaView className="bg-white/100 flex-1 pt-2">
-      <View className="">
-        <View className="self-end px-3">
-          {user && user?.photoURL && (
-            <TouchableOpacity onPress={logout}>
-              <Image
-                className="h-10 w-10 rounded-full"
-                source={{ uri: user.photoURL }}
-              />
-            </TouchableOpacity>
-          )}
-          {isLoggedIn ? (
-            <Button
-              className="h-10 w-10 rounded-3xl"
-              //handleOnPress={()=>navigation.navigate("Modal")}
-              onPress={handleLogout}
-              title="logout"
-            >
-              <Text className="text-xs font-mulishsemibold text-white text-center">
-                logout
-              </Text>
-            </Button>
-          ) : null}
-        </View>
-        <View className="px-4 -top-10">
-          <View className="pr-10">
+    <SafeAreaView className="bg-white/100 flex-1 pt-3">
+      <View className="pr-8">
+        <View style={styles.searchWrapper} className="flex-row">
+          <View style={styles.search}>
+            <View style={styles.searchIcon}>
+              <FeatherIcon color="#848484" name="search" size={23} />
+            </View>
+
             <TextInput
-              placeholder="search"
-              clearButtonMode="always"
               autoCapitalize="none"
               autoCorrect={false}
-              value={searchQuery}
+              clearButtonMode="while-editing"
               onChangeText={(query) => handleSearch(query)}
-              className="border border-[#ccc] p-3 rounded-lg"
+              placeholder="Searching doctors.."
+              placeholderTextColor="#848484"
+              returnKeyType="done"
+              style={styles.searchControl}
+              value={searchQuery}
             />
           </View>
+          <View className=" m-1">
+            {user && decodedToken && (
+              <TouchableOpacity onPress={logout}>
+                <Image
+                  className="h-10 w-10 rounded-full"
+                  source={{ uri: decodedToken?.profilePicture  }}
+                />
+              </TouchableOpacity>
+            )}
+            {isLoggedIn && decodedToken ? (
+              <TouchableOpacity onPress={handleLogout}>
+                <Image
+                  className="h-10 w-10 rounded-full"
+                  source={{ uri: decodedToken?.profilePicture }}
+                />
+              </TouchableOpacity>
+            ) : null}
+          </View>
         </View>
+      </View>
+      <View className="mt-4">
         <FlatList
           data={contentForFlatlist}
           keyExtractor={(item) => item._id}
@@ -120,7 +127,7 @@ const HomeScreen = () => {
             <TouchableOpacity
               onPress={() => navigation.navigate("Booking", item._id)}
             >
-              <View className="flex-row items-center ml-3 mb-4">
+              <View className="flex-row ml-5 mb-4 ">
                 <Image
                   source={{ uri: item.profilePicture }}
                   className="h-10 w-10 rounded-xl"
@@ -142,5 +149,59 @@ const HomeScreen = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    paddingBottom: 24,
+    flexGrow: 1,
+    flexShrink: 1,
+    flexBasis: 0,
+  },
+  /** Search */
+  search: {
+    position: "relative",
+    backgroundColor: "#efefef",
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+  },
+  searchWrapper: {
+    paddingTop: 8,
+    paddingHorizontal: 16,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+
+    borderColor: "#efefef",
+  },
+  searchIcon: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    width: 34,
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 2,
+  },
+  searchControl: {
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    paddingLeft: 34,
+    width: "100%",
+    fontSize: 16,
+    fontWeight: "500",
+  },
+  searchContent: {
+    paddingLeft: 24,
+  },
+  searchEmpty: {
+    textAlign: "center",
+    paddingTop: 16,
+    fontWeight: "500",
+    fontSize: 15,
+    color: "#9ca1ac",
+  },
+});
 
 export default HomeScreen;

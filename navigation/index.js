@@ -9,9 +9,12 @@ import BottomTabNavigation from "./TabNavigator";
 
 import ChatProvider from "../provider/ChatProvider";
 import { StatusBar } from "react-native";
+import useLoginState from "../hooks/UseLoginState";
 
 const MainNavigator = () => {
   const userLoginWithJWT = useSelector((state) => state.auth.token);
+
+  const check = useLoginState();
 
   const { user: userLoginWithGoogle } = useAuth();
 
@@ -19,7 +22,7 @@ const MainNavigator = () => {
 
   return (
     <NavigationContainer>
-      {isLoggedIn ? (
+      {isLoggedIn && check ? (
         <ChatProvider>
           <BottomTabNavigation />
           <StatusBar />

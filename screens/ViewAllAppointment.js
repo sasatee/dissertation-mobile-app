@@ -22,7 +22,7 @@ const ViewAllAppointment = () => {
         style={{
           borderTopStartRadius: 30,
           borderTopEndRadius: 30,
-           top: 10,
+          top: 10,
           borderWidth: 1,
           borderColor: "white",
         }}
@@ -30,8 +30,11 @@ const ViewAllAppointment = () => {
         <FlatList
           data={data}
           renderItem={({ item }) => (
-            <TouchableOpacity className=" rounded-lg my-4 mx-2 ">
-              <View className="bg-gray-500/5 rounded-lg space-y-2  border-r-2 border-spacing-y-3.5">
+            <TouchableOpacity className="my-3 px-5 ">
+              <View
+                className="bg-gray-200/40 rounded-3xl  border-r-2"
+                
+              >
                 <View className="flex  flex-row">
                   <Image
                     source={{
