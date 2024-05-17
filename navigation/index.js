@@ -25,11 +25,11 @@ const MainNavigator = () => {
       {isLoggedIn && check ? (
         <ChatProvider>
           <BottomTabNavigation />
-          <StatusBar />
         </ChatProvider>
       ) : (
         <AuthStackNavigation />
       )}
+      <StatusBar />
     </NavigationContainer>
   );
 };
