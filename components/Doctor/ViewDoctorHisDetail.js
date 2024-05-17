@@ -1,23 +1,43 @@
+import { useQuery } from "@tanstack/react-query";
+import React from "react";
 import {
-  TouchableOpacity,
+  ActivityIndicator,
   Image,
   Text,
+  TouchableOpacity,
   View,
-  ActivityIndicator,
-  ScrollView,
-  FlatList,
 } from "react-native";
-import React from "react";
 import { getSingleDoctor } from "../../services/doctor";
-import { useQuery } from "@tanstack/react-query";
+import { AntDesign } from "@expo/vector-icons";
+import { useChatContext } from "stream-chat-expo";
+import useLoginState from "../../hooks/UseLoginState";
+import { useNavigation } from "@react-navigation/native";
 
 export default function ViewDoctorDetail({ route }) {
   const paramsId = route.params;
+  const { client } = useChatContext();
+  const decodedToken = useLoginState();
+  const navigation = useNavigation();
 
   const { data, isLoading } = useQuery({
     queryKey: ["doctors", { id: paramsId }],
     queryFn: ({ signal }) => getSingleDoctor({ signal, id: paramsId }),
   });
+
+  const doctorId = data?.doctor?.doctorId;
+
+  const beginToChat = async () => {
+    //start a chat with him/doctor
+    const channel = client.channel("messaging", {
+      members: [decodedToken?.userId, doctorId],
+    });
+    await channel.watch();
+
+     // Extract essential channel information
+
+
+     navigation.navigate("ModalScreen", channel);
+  };
   let content;
 
   if (isLoading) {
@@ -31,11 +51,13 @@ export default function ViewDoctorDetail({ route }) {
       </View>
     );
   }
-{/* <Text className= ></Text> */}
+  {
+    /* <Text className= ></Text> */
+  }
   if (data) {
     content = (
-      <View className="bg-white/100 flex-1 py-6 ">
-        <TouchableOpacity className="m-5 py-4">
+      <View className="bg-white/100 flex-1 py-1 ">
+        <TouchableOpacity className="m-5 pt-2">
           {data && (
             <Image
               source={{ uri: `${data?.doctor?.profilePicture}` }}
@@ -44,8 +66,16 @@ export default function ViewDoctorDetail({ route }) {
           )}
         </TouchableOpacity>
 
+        <TouchableOpacity
+          onPress={beginToChat}
+          className="flex-row justify-center"
+        >
+          <AntDesign name="message1" size={30} color="black" />
+          <Text className="p-2">Start Chat</Text>
+        </TouchableOpacity>
+
         <View className="px-6">
-          <TouchableOpacity>
+          <TouchableOpacity className="py-3">
             <Text className="text-lg font-semibold text-black">
               Find your personal{" "}
               <Text className="text-sky-500 text-xl text-clip">Doctor</Text>{" "}
@@ -56,7 +86,7 @@ export default function ViewDoctorDetail({ route }) {
                 Dr.{" "}
                 <Text className="text-sky-500 text-sm font-light">
                   {data?.doctor?.firstName}
-                  {""} {data?.doctor?.lastName} 
+                  {""} {data?.doctor?.lastName}
                 </Text>
               </Text>
             </View>
