@@ -9,7 +9,7 @@ import { Ionicons } from "@expo/vector-icons";
 // Icons
 import Entypo from "@expo/vector-icons/Entypo";
 import { FontAwesome6 } from "@expo/vector-icons";
-import ModalScreen from "../screens/EditProfile";
+import ModalScreen from "../screens/SchedukeScreen";
 
 import ChannelScreen from "../screens/ChannelAndChatScreen";
 

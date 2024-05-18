@@ -9,6 +9,7 @@ const client = StreamChat.getInstance(STREAM_PUBLIC);
 
 const ChatProvider = ({ children }) => {
   const decodedToken = useLoginState();
+
   const [isReady, setIsReady] = useState(false);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -81,4 +82,3 @@ const ChatProvider = ({ children }) => {
 };
 
 export default ChatProvider;
-

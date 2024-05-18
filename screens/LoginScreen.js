@@ -53,7 +53,7 @@ const LoginScreen = () => {
 
   const handleUserLogin = async () => {
     const userCredentials = {
-      email: "Ahmad@gmail.com",
+      email: "Sasha@gmail.com",
       password: "secretpassword1@",
     };
     setLoading(true);

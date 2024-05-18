@@ -59,12 +59,35 @@ export async function getAllAppointment() {
 
     return response.data.appointments;
   } catch (error) {
-      // throw new Error(
+    // throw new Error(
     //   JSON.stringify(error.response.data) ||
     //     ""
     // );
     throw new Error(
       "Cannot load all appointment with your respective doctors. Please try Again later!"
     );
+  }
+}
+
+export async function getAppointmentSchedule({ date, userId }) {
+  try {
+    const headers = await getHeaders();
+
+    const response = await axiosInstance(
+      `api/v1/appointment/${userId}?bookedDate=${date}`,
+
+      { headers }
+    );
+
+    const appointmentData = (await response.data.appointment) || [];
+    return Array.isArray(appointmentData) ? appointmentData : [appointmentData];
+  } catch (error) {
+    // throw new Error(
+    //   JSON.stringify(error.response.data) ||
+    //     ""
+    // );
+    //console.error(`Failed to fetch client appointments by its ${date}`)
+
+    throw new Error(`Failed to fetch client appointments by its ${date}`);
   }
 }
