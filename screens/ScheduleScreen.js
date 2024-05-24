@@ -27,7 +27,7 @@ export default function ModalScreen() {
   const token = useLoginState();
   const userId = token?.userId;
   const [queryParams, setQueryParams] = useState({ date: null, userId: null });
-  console.log(queryParams)
+  console.log(queryParams);
 
   //function
   function getDateAndUserId(value) {
@@ -46,16 +46,16 @@ export default function ModalScreen() {
   }, [value, userId]);
 
   const {
-    data = [],
+    data,
     isSuccess,
     error: errorQUERY,
   } = useQuery({
     queryKey: ["Appointment", queryParams],
-    queryFn: () => getAppointmentSchedule(queryParams),
+    queryFn: ({signal}) => getAppointmentSchedule(queryParams,signal),
     staleTime: 5000,
     onSuccess: () => {},
   });
- console.log("APPOINTMENT", data, "ISSUCCESS", isSuccess);
+  console.log("APPOINTMENT", data, "ISSUCCESS", isSuccess, "ERROR", errorQUERY);
 
   const weeks = useMemo(() => {
     const start = moment().add(week, "weeks").startOf("week");
@@ -145,66 +145,78 @@ export default function ModalScreen() {
         <View style={{ flex: 1, paddingHorizontal: 16, paddingVertical: 24 }}>
           <Text style={styles.subtitle}>{value.toDateString()}</Text>
 
-          <FlatList
-            data={data}
-            renderItem={({ item }) => (
-              <TouchableOpacity className="my-3 px-5 ">
-                <View className="bg-gray-200/40 rounded-3xl  border-r-2">
-                  <View className="flex  flex-row">
-                    <Image
-                      source={{
-                        uri: `${item?.profilePicture}`,
-                      }}
-                      style={{
-                        //margin:3,
-                        width: 50,
-                        height: 50,
-                        resizeMode: "cover",
-                        borderRadius: 20,
-                      }}
-                      className="rounded-3xl m-3"
-                    />
-                    <View className="flex-1 flex-col justify-center items-start pl-4">
-                      <Text className="text-xs self-end p-3 text-gray-500">
-                        {format(new Date(item.bookedTime), "MMMM do yyyy")}
-                      </Text>
+          {!isSuccess && (
+            <View className="justify-center my-12 flex-row">
+              <Text className="font-mulishbold text-end text-md text-slate-400">
+                No Schedule for <Text className='bottom-1 text-gray-500'>{value.toDateString()}</Text>
+              </Text>
+            </View>
+          )}
 
-                      <Text className="text-xs font-light">
-                        Time Booked:
-                        <Text className="font-semibold text-xs items-end text-amber-800">
-                          {item.bookedTimeAMOrPM}
+          {isSuccess && (
+            <FlatList
+              data={data}
+              renderItem={({ item }) => (
+                <TouchableOpacity className="my-3 px-5 ">
+                  <View className="bg-gray-200/40 rounded-3xl  border-r-2">
+                    <View className="flex  flex-row">
+                      <Image
+                        source={{
+                          uri: `${item?.profilePicture}`,
+                        }}
+                        style={{
+                          //margin:3,
+                          width: 50,
+                          height: 50,
+                          resizeMode: "cover",
+                          borderRadius: 20,
+                        }}
+                        className="rounded-3xl m-3"
+                      />
+                      <View className="flex-1 flex-col justify-center items-start pl-4">
+                        <Text className="text-xs self-end p-3 text-gray-500">
+                          {format(new Date(item.bookedTime), "MMMM do yyyy")}
                         </Text>
-                      </Text>
 
-                      <View className=" my-5">
-                        <Text className="right-20 font-mulishextrabold text-xs">
-                          {item.doctorName}
+                        <Text className="text-xs font-light">
+                          Time Booked:
+                          <Text className="font-semibold text-xs items-end text-amber-800">
+                            {item.bookedTimeAMOrPM}
+                          </Text>
                         </Text>
+
+                        <View className=" my-5">
+                          <Text className="right-20 font-mulishextrabold text-xs">
+                            {item.doctorName}
+                          </Text>
+                        </View>
                       </View>
                     </View>
                   </View>
-                </View>
-              </TouchableOpacity>
-            )}
-            showsVerticalScrollIndicator={false}
-          />
+                </TouchableOpacity>
+              )}
+              showsVerticalScrollIndicator={false}
+            />
+          )}
         </View>
 
-        <View style={styles.footer}>
+      
+      </View>
+    </SafeAreaView>
+  );
+}
+
+  {/* <View style={styles.footer}>
           <TouchableOpacity
             onPress={() => {
               // handle onPress
             }}
           >
             <View style={styles.btn}>
-              <Text style={styles.btnText}>Schedule</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </SafeAreaView>
-  );
-}
+              {/* <Text style={styles.btnText}>Schedule</Text> */}
+        //     </View>
+        //   </TouchableOpacity>
+        // </View>  */}
 
 const styles = StyleSheet.create({
   container: {

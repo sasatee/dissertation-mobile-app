@@ -53,13 +53,13 @@ const LoginScreen = () => {
 
   const handleUserLogin = async () => {
     const userCredentials = {
-      email: "Sasha@gmail.com",
+      email: "paul@gmail.com",
       password: "secretpassword1@",
     };
     setLoading(true);
     try {
       const result = await dispatch(signInUser(userCredentials));
-      //const result = await dispatch(signInUser({ email, password }));
+   // const result = await dispatch(signInUser({ email, password }));
 
       if (result.payload.token) {
         dispatch(
@@ -80,7 +80,7 @@ const LoginScreen = () => {
       }
     } catch (error) {
       ToastAndroid.show("Error! Invalid Credentials", ToastAndroid.TOP);
-      //Alert.alert("Invalid Credentials", error.message);
+      Alert.alert("Invalid Credentials", error.message);
     }
     setLoading(false);
   };
@@ -168,7 +168,7 @@ const LoginScreen = () => {
                 <ButtonComponent
                   className="w-full bg-blue-700/70 p-3 rounded-2xl mb-3"
                   handleOnPress={handleUserLogin}
-                  disabled={loading}
+                  //disabled={loading}
                 >
                   {/* activity loading  for button*/}
                   <View className=" justify-center items-center">

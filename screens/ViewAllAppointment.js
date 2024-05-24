@@ -30,8 +30,7 @@ const ViewAllAppointment = () => {
         <FlatList
           data={data}
           renderItem={({ item }) => {
-            console.log(item.bookedTime,item.bookedTimeAMOrPM);
-
+            //console.log(item.bookedTime,item.bookedTimeAMOrPM);
             return (
               <TouchableOpacity className="my-3 px-5 ">
                 <View className="bg-gray-200/40 rounded-3xl  border-r-2">

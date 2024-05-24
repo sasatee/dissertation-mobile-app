@@ -69,18 +69,17 @@ export async function getAllAppointment() {
   }
 }
 
-export async function getAppointmentSchedule({ date, userId }) {
+export async function getAppointmentSchedule({ date, userId,signal }) {
   try {
     const headers = await getHeaders();
 
     const response = await axiosInstance(
       `api/v1/appointment/${userId}?bookedDate=${date}`,
 
-      { headers }
+      { headers,signal }
     );
 
-    const appointmentData = (await response.data.appointment) || [];
-    return Array.isArray(appointmentData) ? appointmentData : [appointmentData];
+    return response?.data?.appointments;
   } catch (error) {
     // throw new Error(
     //   JSON.stringify(error.response.data) ||

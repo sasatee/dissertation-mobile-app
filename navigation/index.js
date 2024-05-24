@@ -29,7 +29,7 @@ const MainNavigator = () => {
       ) : (
         <AuthStackNavigation />
       )}
-      <StatusBar />
+      <StatusBar backgroundColor={"purple"}/>
     </NavigationContainer>
   );
 };

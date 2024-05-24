@@ -110,9 +110,17 @@ const HomeScreen = () => {
             )}
             {isLoggedIn && decodedToken ? (
               <TouchableOpacity onPress={handleLogout}>
+                {console.log(
+                  "Profile Picture URL:",
+                  decodedToken.profilePicture = null
+                )}
                 <Image
                   className="h-10 w-10 rounded-full"
-                  source={{ uri: decodedToken?.profilePicture }}
+                  source={
+                    decodedToken.profilePicture
+                      ? { uri: decodedToken.profilePicture }
+                      : require("../assets/images/blank-head-profile-pic-for-a-man.jpg")
+                  }
                 />
               </TouchableOpacity>
             ) : null}

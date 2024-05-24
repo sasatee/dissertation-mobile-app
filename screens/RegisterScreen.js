@@ -69,6 +69,8 @@ export default function RegisterScreen() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [gender, setGender] = useState(null);
+  const [error,setError] = useState()
+  console.log("ERORRR",error)
 
   const handleUserSignup = async () => {
     setLoading(true);
@@ -83,7 +85,7 @@ export default function RegisterScreen() {
         })
       );
 
-      if (result.payload.token) {
+      if (result?.payload?.token) {
         navigation.replace("Login");
       }
       ToastAndroid.show("Register Succussfully!", ToastAndroid.SHORT);
@@ -95,7 +97,8 @@ export default function RegisterScreen() {
       handlelastnameChange("");
       setGender(null);
     } catch (error) {
-      ToastAndroid.show("Error! Invalid Credentials", ToastAndroid.TOP);
+      ToastAndroid.show("Error! Make sure fill the field ", ToastAndroid.TOP);
+      setError(error)
     }
     setLoading(false);
   };
