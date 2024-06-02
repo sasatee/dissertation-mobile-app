@@ -9,12 +9,13 @@ import {
   Pressable,
   ScrollView,
   StatusBar,
+  StyleSheet,
   Text,
   ToastAndroid,
   TouchableOpacity,
   View,
-  StyleSheet,
 } from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import { useDispatch } from "react-redux";
 import useYupValidation from "../hooks/useYupValidation";
 import { setIsDoctor, signInUser } from "../redux/slice/authenticationSlice";
@@ -22,8 +23,6 @@ import {
   emailValidationSchema,
   passwordValidationSchema,
 } from "../validation/auth";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { colors } from "../util/colors";
 
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 import ButtonComponent from "../components/CustomComponent/Button";
@@ -53,7 +52,7 @@ const LoginScreen = () => {
 
   const handleUserLogin = async () => {
     const userCredentials = {
-      email: "paul@gmail.com",
+      email: "Ahmad@gmail.com",
       password: "secretpassword1@",
     };
     setLoading(true);

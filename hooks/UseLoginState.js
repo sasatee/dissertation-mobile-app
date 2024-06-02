@@ -14,11 +14,6 @@ const useLoginState = () => {
   const dispatch = useDispatch();
   const [decodedToken, setDecodedToken] = useState(null);
 
-  // console.log(
-  //   "decodedTokendecodedTokendecodedTokendecodedToken:",
-  //   decodedToken
-  // );
-
   useEffect(() => {
     const checkLoginState = async () => {
       try {

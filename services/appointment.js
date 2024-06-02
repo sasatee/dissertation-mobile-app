@@ -81,12 +81,12 @@ export async function getAppointmentSchedule({ date, userId,signal }) {
 
     return response?.data?.appointments;
   } catch (error) {
-    // throw new Error(
-    //   JSON.stringify(error.response.data) ||
-    //     ""
-    // );
+    throw new Error(
+      JSON.stringify(error.response.data) ||
+        `Failed to fetch client appointments by its ${date}`
+    );
     //console.error(`Failed to fetch client appointments by its ${date}`)
 
-    throw new Error(`Failed to fetch client appointments by its ${date}`);
+    //throw new Error(`Failed to fetch client appointments by its ${date}`);
   }
 }
