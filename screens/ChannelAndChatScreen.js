@@ -17,12 +17,10 @@ import { useNavigation } from "@react-navigation/native";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
 export default function ChannelScreen({ route }) {
-   console.log("ROUTE CHANNEL ID CHANNEL LIST SCREEN,", route.params);
-
   const navigation = useNavigation();
   const decodedToken = useLoginState();
   const [selectChannel, setSelectChannel] = useState(null);
-  console.log(selectChannel)
+  console.log(selectChannel);
 
   const onChannelPressed = (channel) => {
     setSelectChannel(channel);

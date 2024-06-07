@@ -69,8 +69,6 @@ export default function RegisterScreen() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [gender, setGender] = useState(null);
-  const [error,setError] = useState()
-  console.log("ERORRR",error)
 
   const handleUserSignup = async () => {
     setLoading(true);
@@ -84,11 +82,12 @@ export default function RegisterScreen() {
           gender,
         })
       );
-
+  
       if (result?.payload?.token) {
         navigation.replace("Login");
+        ToastAndroid.show("Register Succussfully!", ToastAndroid.SHORT);
       }
-      ToastAndroid.show("Register Succussfully!", ToastAndroid.SHORT);
+      
 
       // Optionally clear input fields
       handleEmailChange("");
@@ -97,10 +96,11 @@ export default function RegisterScreen() {
       handlelastnameChange("");
       setGender(null);
     } catch (error) {
-      ToastAndroid.show("Error! Make sure fill the field ", ToastAndroid.TOP);
-      setError(error)
+    } finally {
+      ToastAndroid.show("Make sure to enter all the input field correctly ", ToastAndroid.TOP);
+
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
@@ -120,7 +120,7 @@ export default function RegisterScreen() {
           <Animated.Image
             entering={FadeInUp.delay(200).duration(1000).springify()}
             className="h-full w-full absolute"
-            source={require("../assets/images/background.jpg")}
+            source={require("../assets/images/unslash.png")}
           />
           {/* light */}
           <View className="flex-row justify-around w-full absolute">

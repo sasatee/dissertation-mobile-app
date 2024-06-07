@@ -23,7 +23,7 @@ const getHeaders = async () => {
   } else if (googleAccessToken) {
     headers.Authorization = `Bearer ${googleAccessToken}`;
   } else {
-    console.error("No token available");
+    //console.error("No token available");
   }
 
   return headers;

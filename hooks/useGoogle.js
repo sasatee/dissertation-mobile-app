@@ -89,7 +89,7 @@ export const AuthProvider = ({ children }) => {
 
       setUser(null);
     } catch (error) {
-      console.error("Error signing out:", error);
+      //console.error("Error signing out:", error);
       setError(error);
     }
   };

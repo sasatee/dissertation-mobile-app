@@ -24,20 +24,15 @@ export default function ViewDoctorDetail({ route }) {
     queryFn: ({ signal }) => getSingleDoctor({ signal, id: paramsId }),
   });
 
-  const doctorId = data?.doctor?.doctorId;
-
-  const beginToChat = async () => {
+  const beginToChat = async (doctorId) => {
     //start a chat with him/doctor
     const channel = client.channel("messaging", {
-      members: [decodedToken?.userId, doctorId],
+      members: [data?.doctor?.doctorId],
     });
     await channel.watch();
-
-     // Extract essential channel information
-
-
-     navigation.navigate("ModalScreen", channel);
+    navigation.navigate("Chat", channel.id);
   };
+  // co
   let content;
 
   if (isLoading) {
@@ -71,7 +66,7 @@ export default function ViewDoctorDetail({ route }) {
           className="flex-row justify-center"
         >
           <AntDesign name="message1" size={30} color="black" />
-          <Text className="p-2">Start Chat</Text>
+          <Text className="p-2">Start Chats</Text>
         </TouchableOpacity>
 
         <View className="px-6">

@@ -71,7 +71,7 @@ const HomeScreen = () => {
       console.log("JWT Token removed");
       dispatch(logoutJwtToken());
     } catch (error) {
-      console.error("Logout failed", error);
+      //console.error("Logout failed", error);
       Alert.alert("Logout Failed", "Please try again.");
     }
   };
@@ -111,11 +111,11 @@ const HomeScreen = () => {
             {isLoggedIn && decodedToken ? (
               <TouchableOpacity onPress={handleLogout}>
                 <Image
-                  className="h-10 w-10 rounded-full"
+                  className="h-10 w-10 rounded-3xl"
                   source={
-                    decodedToken.profilePicture
-                      ? require("../assets/images/blank-head-profile-pic-for-a-man.jpg")
-                      : { uri: decodedToken.profilePicture }
+                    decodedToken?.profilePicture
+                      ?require("../assets/images/blank-head-profile-pic-for-a-man.jpg")
+                      : { uri: decodedToken?.profilePicture }
                   }
                 />
               </TouchableOpacity>

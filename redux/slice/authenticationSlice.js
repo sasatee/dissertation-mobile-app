@@ -41,6 +41,7 @@ export const signInUser = createAsyncThunk(
 
       return data;
     } catch (error) {
+      //throw new Error(error.response.data)
       console.log(error.response.data);
     }
   }

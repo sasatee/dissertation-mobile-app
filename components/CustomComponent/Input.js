@@ -11,14 +11,18 @@ export default function Input({ placeholder, error, ...props }) {
         borderRadius: 12,
         marginBottom: 14,
         width: "100%",
-       // borderColor: "blue",
+        // borderColor: "blue",
       }}
     >
       <TextInput
         placeholder={placeholder}
         {...props}
-        placeholderTextColor="black"
-        style={{ height: 40, }} // Adjust height as needed
+        placeholderTextColor="white"
+        style={{
+          height: 40,
+          color: "white", // Ensure text color is white
+          paddingHorizontal: 10,
+        }} // Adjust height as needed
       />
       {error && (
         <Text style={{ fontSize: 12, color: "red", top: 8 }}>{error}</Text>

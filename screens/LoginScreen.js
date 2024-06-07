@@ -9,13 +9,12 @@ import {
   Pressable,
   ScrollView,
   StatusBar,
-  StyleSheet,
   Text,
   ToastAndroid,
   TouchableOpacity,
   View,
+  StyleSheet,
 } from "react-native";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import { useDispatch } from "react-redux";
 import useYupValidation from "../hooks/useYupValidation";
 import { setIsDoctor, signInUser } from "../redux/slice/authenticationSlice";
@@ -23,6 +22,8 @@ import {
   emailValidationSchema,
   passwordValidationSchema,
 } from "../validation/auth";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { colors } from "../util/colors";
 
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 import ButtonComponent from "../components/CustomComponent/Button";
@@ -52,13 +53,13 @@ const LoginScreen = () => {
 
   const handleUserLogin = async () => {
     const userCredentials = {
-      email: "Ahmad@gmail.com",
+      email: "paul@gmail.com",
       password: "secretpassword1@",
     };
     setLoading(true);
     try {
       const result = await dispatch(signInUser(userCredentials));
-   // const result = await dispatch(signInUser({ email, password }));
+      // const result = await dispatch(signInUser({ email, password }));
 
       if (result.payload.token) {
         dispatch(
@@ -69,23 +70,19 @@ const LoginScreen = () => {
         // Optionally clear input fields
         handleEmailChange("");
         handlePasswordChange("");
-      } else {
-        // Alert.alert("Login failed", "Invalid credentials");
-        ToastAndroid.show(
-          "Login failed",
-          "Check the input field again",
-          ToastAndroid.TOP
-        );
       }
     } catch (error) {
-      ToastAndroid.show("Error! Invalid Credentials", ToastAndroid.TOP);
-      Alert.alert("Invalid Credentials", error.message);
+      ToastAndroid.show(
+        "Please verify if correct enter password or email",
+        ToastAndroid.TOP
+      );
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleGoBack = () => {
-    navigation.goBack();
+    navigation.navigate("RequestEmail");
   };
   return (
     <KeyboardAvoidingView
@@ -104,7 +101,7 @@ const LoginScreen = () => {
           <Animated.Image
             entering={FadeInUp.delay(200).duration(1000).springify()}
             className="h-full w-full absolute"
-            source={require("../assets/images/background.jpg")}
+            source={require("../assets/images/unslash.png")}
           />
 
           <TouchableOpacity
@@ -201,21 +198,19 @@ const LoginScreen = () => {
                 <Text className="text-center  text-base font-mulishsemibold text-black">
                   or continue with
                 </Text>
-                  <Animated.View
-                entering={FadeInDown.delay(900).duration(1000).springify()}
-                className="flex flex-row justify-center my-2"
-              >
-                <GoogleSigninButton
-                  style={{ paddingBottom: 30 }}
-                  accessibilityHint="accessibilityHint"
-                  size={GoogleSigninButton.Size.Icon}
-                  color={GoogleSigninButton.Color.Dark}
-                  onPress={signInWithGoogle}
-                />
-              </Animated.View>
+                <Animated.View
+                  entering={FadeInDown.delay(900).duration(1000).springify()}
+                  className="flex flex-row justify-center my-2"
+                >
+                  <GoogleSigninButton
+                    style={{ paddingBottom: 30 }}
+                    accessibilityHint="accessibilityHint"
+                    size={GoogleSigninButton.Size.Icon}
+                    color={GoogleSigninButton.Color.Dark}
+                    onPress={signInWithGoogle}
+                  />
+                </Animated.View>
               </View>
-
-            
             </View>
           </View>
         </View>

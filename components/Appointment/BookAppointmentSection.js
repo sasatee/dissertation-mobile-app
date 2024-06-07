@@ -46,7 +46,7 @@ const BookAppointment = ({ route }) => {
     onSuccess: () => {
       queryClientfn.invalidateQueries({ queryKey: ["Appointment"] });
       ToastAndroid.show("Appointment successfully book", ToastAndroid.SHORT);
-      navigation.navigate("Appointment");
+  
     },
     onError: () => {
       ToastAndroid.show("Please make selection", ToastAndroid.LONG);

@@ -44,7 +44,7 @@ const useLoginState = () => {
           setDecodedToken(null);
         }
       } catch (error) {
-        console.error("Error:", error);
+        //console.error("Error:", error);
       }
     };
 
