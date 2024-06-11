@@ -16,6 +16,8 @@ import { sendResetEmail } from "../services/password";
 import { emailValidationSchema } from "../validation/auth";
 import { useNavigation } from "@react-navigation/native";
 
+import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
+
 const RequestEmailScreen = () => {
   const {
     value: email,
@@ -31,7 +33,7 @@ const RequestEmailScreen = () => {
   const handlePasswordResetRequest = () => {
     try {
       mutate(
-       // { email: "Ahmad@gmail.com" }
+        // { email: "Ahmad@gmail.com" }
         { email: email }
       );
       navigation.navigate("ResetPassword");
@@ -70,7 +72,10 @@ const RequestEmailScreen = () => {
               //disabled={loading}
             >
               {/* activity loading  for button*/}
-              <View className=" justify-center items-center">
+              <Animated.View
+                entering={FadeInDown.delay(900).duration(1000).springify()}
+                className=" justify-center items-center"
+              >
                 {isPending ? (
                   <ActivityIndicator size="small" color="white" />
                 ) : (
@@ -78,7 +83,7 @@ const RequestEmailScreen = () => {
                     send email
                   </Text>
                 )}
-              </View>
+              </Animated.View>
             </ButtonComponent>
           </View>
         </View>

@@ -16,6 +16,8 @@ import Input from "../components/CustomComponent/Input";
 import useYupValidation from "../hooks/useYupValidation";
 import { api } from "../services/password";
 
+import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
+
 export default function VerifyEmailPassword() {
   const navigation = useNavigation();
   const { value: confirmationCode, handleInputChange: handleConfirmationCode } =
@@ -24,15 +26,16 @@ export default function VerifyEmailPassword() {
   const { data, isFetching, refetch, error } = useQuery({
     queryFn: () => api.get(`/api/v1/auth/verifyemail/${confirmationCode}`),
     queryKey: ["verifyemail", confirmationCode],
-    enabled: false, 
+    enabled: false,
     onSuccess: () => {
       Alert.alert("Success", "Email has been verified successfully");
+      navigation.navigate("Login");
     },
     onError: (error) => {
       Alert.alert("Please verify your email before expiration");
+     // navigation.navigate("Login");
     },
   });
-  console.log("ERROR:::", error, data);
 
   const handleActionToResetPassword = async () => {
     if (!confirmationCode) {
@@ -41,15 +44,6 @@ export default function VerifyEmailPassword() {
     }
     // Refetch query manually
     await refetch();
-
-    // Handle the data after fetching
-    if (data) {
-      // Use `data` as per your application's logic
-      console.log(data);
-      navigation.navigate("Login");
-
-      // Additional logic here
-    }
   };
   return (
     <KeyboardAvoidingView
@@ -82,7 +76,10 @@ export default function VerifyEmailPassword() {
               //disabled={loading}
             >
               {/* activity loading  for button*/}
-              <View className=" justify-center items-center">
+              <Animated.View
+                entering={FadeInDown.delay(900).duration(1000).springify()}
+                className=" justify-center items-center"
+              >
                 {isFetching ? (
                   <ActivityIndicator size="small" color="white" />
                 ) : (
@@ -90,7 +87,7 @@ export default function VerifyEmailPassword() {
                     Verify Email
                   </Text>
                 )}
-              </View>
+              </Animated.View>
             </ButtonComponent>
           </View>
         </View>

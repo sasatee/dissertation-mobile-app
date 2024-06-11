@@ -16,6 +16,8 @@ import { passwordValidationSchema } from "../validation/auth";
 import { api } from "../services/password";
 import { useMutation } from "@tanstack/react-query";
 
+import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
+
 const ResetPassword = () => {
   const [responseData, setResponseData] = useState(null);
 
@@ -111,7 +113,8 @@ const ResetPassword = () => {
               //disabled={loading}
             >
               {/* activity loading  for button*/}
-              <View className=" justify-center items-center">
+              <Animated.View
+                entering={FadeInDown.delay(900).duration(1000).springify()} className=" justify-center items-center">
                 {resetPasswordMutation.isPending ? (
                   <ActivityIndicator size="small" color="white" />
                 ) : (
@@ -119,7 +122,7 @@ const ResetPassword = () => {
                     Reset Password
                   </Text>
                 )}
-              </View>
+              </Animated.View>
             </ButtonComponent>
           </View>
         </View>
