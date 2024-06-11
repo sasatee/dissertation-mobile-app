@@ -1,5 +1,6 @@
-import { useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
+import { useNavigation } from "@react-navigation/native";
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -8,38 +9,48 @@ import {
   StatusBar,
   Text,
   View,
+  Alert,
 } from "react-native";
 import ButtonComponent from "../components/CustomComponent/Button";
 import Input from "../components/CustomComponent/Input";
 import useYupValidation from "../hooks/useYupValidation";
-import { sendResetEmail } from "../services/password";
-import { emailValidationSchema } from "../validation/auth";
-import { useNavigation } from "@react-navigation/native";
+import { api } from "../services/password";
 
-const RequestEmailScreen = () => {
-  const {
-    value: email,
-    error: emailError,
-    handleInputChange: handleEmailChange,
-    handleInputBlur: handleEmailBlur,
-  } = useYupValidation("", emailValidationSchema);
+export default function VerifyEmailPassword() {
   const navigation = useNavigation();
-  const { mutate, error, data, isPending } = useMutation({
-    mutationFn: sendResetEmail,
+  const { value: confirmationCode, handleInputChange: handleConfirmationCode } =
+    useYupValidation("");
+
+  const { data, isFetching, refetch, error } = useQuery({
+    queryFn: () => api.get(`/api/v1/auth/verifyemail/${confirmationCode}`),
+    queryKey: ["verifyemail", confirmationCode],
+    enabled: false, 
+    onSuccess: () => {
+      Alert.alert("Success", "Email has been verified successfully");
+    },
+    onError: (error) => {
+      Alert.alert("Please verify your email before expiration");
+    },
   });
-  console.log(error, data);
-  const handlePasswordResetRequest = () => {
-    try {
-      mutate(
-       // { email: "Ahmad@gmail.com" }
-        { email: email }
-      );
-      navigation.navigate("ResetPassword");
-    } catch (error) {
-      console.log("Error sending reset email:", error);
+  console.log("ERROR:::", error, data);
+
+  const handleActionToResetPassword = async () => {
+    if (!confirmationCode) {
+      Alert.alert("Error", "Verification code is required");
+      return;
+    }
+    // Refetch query manually
+    await refetch();
+
+    // Handle the data after fetching
+    if (data) {
+      // Use `data` as per your application's logic
+      console.log(data);
+      navigation.navigate("Login");
+
+      // Additional logic here
     }
   };
-
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -58,24 +69,25 @@ const RequestEmailScreen = () => {
 
           <View className="flex items-center mx-6 space-y-3 py-40">
             <Input
-              placeholder="Email"
-              value={email}
-              onChangeText={handleEmailChange}
-              onBlur={handleEmailBlur}
-              error={emailError}
+              placeholder="Verification Code"
+              value={confirmationCode}
+              onChangeText={handleConfirmationCode}
+              //onBlur={handlePasswordBlur}
+              //error={passwordError}
             />
+
             <ButtonComponent
               className="w-full bg-blue-700/70 p-3 rounded-2xl mb-3"
-              handleOnPress={handlePasswordResetRequest}
+              handleOnPress={handleActionToResetPassword}
               //disabled={loading}
             >
               {/* activity loading  for button*/}
               <View className=" justify-center items-center">
-                {isPending ? (
+                {isFetching ? (
                   <ActivityIndicator size="small" color="white" />
                 ) : (
                   <Text className="text-lg font-mulishsemibold text-white text-center">
-                    send email
+                    Verify Email
                   </Text>
                 )}
               </View>
@@ -85,6 +97,4 @@ const RequestEmailScreen = () => {
       </ScrollView>
     </KeyboardAvoidingView>
   );
-};
-
-export default RequestEmailScreen;
+}

@@ -84,7 +84,7 @@ export default function RegisterScreen() {
       );
   
       if (result?.payload?.token) {
-        navigation.replace("Login");
+        navigation.replace("VerifyEmail");
         ToastAndroid.show("Register Succussfully!", ToastAndroid.SHORT);
       }
       

@@ -114,8 +114,9 @@ const HomeScreen = () => {
                   className="h-10 w-10 rounded-3xl"
                   source={
                     decodedToken?.profilePicture
-                      ?require("../assets/images/blank-head-profile-pic-for-a-man.jpg")
-                      : { uri: decodedToken?.profilePicture }
+                      ?{ uri: decodedToken?.profilePicture }
+                      :require("../assets/images/blank-head-profile-pic-for-a-man.jpg")
+                      
                   }
                 />
               </TouchableOpacity>

@@ -53,13 +53,13 @@ const LoginScreen = () => {
 
   const handleUserLogin = async () => {
     const userCredentials = {
-      email: "paul@gmail.com",
-      password: "secretpassword1@",
+      email: "User132@gmail.com",
+      password: "Azerty1@",
     };
     setLoading(true);
     try {
-      const result = await dispatch(signInUser(userCredentials));
-      // const result = await dispatch(signInUser({ email, password }));
+      //const result = await dispatch(signInUser(userCredentials));
+      const result = await dispatch(signInUser({ email, password }));
 
       if (result.payload.token) {
         dispatch(
@@ -73,7 +73,7 @@ const LoginScreen = () => {
       }
     } catch (error) {
       ToastAndroid.show(
-        "Please verify if correct enter password or email",
+        "Please verify if correctly enter password or email",
         ToastAndroid.TOP
       );
     } finally {
@@ -82,7 +82,7 @@ const LoginScreen = () => {
   };
 
   const handleGoBack = () => {
-    navigation.navigate("RequestEmail");
+    navigation.navigate("VerifyEmail");
   };
   return (
     <KeyboardAvoidingView
@@ -155,11 +155,18 @@ const LoginScreen = () => {
                 //secureTextEntry
                 error={passwordError}
               />
+              <View className='-top-9 left-16'>
+                <Pressable onPress={() => navigation.push("RequestEmail")}>
+                  <Text className="font-mono text-blue-800/95">
+                    Forgot password?
+                  </Text>
+                </Pressable>
+              </View>
 
               {/* Button */}
               <Animated.View
                 entering={FadeInDown.delay(600).duration(1000).springify()}
-                className="w-full"
+                className="w-full -top-5"
               >
                 <ButtonComponent
                   className="w-full bg-blue-700/70 p-3 rounded-2xl mb-3"

@@ -21,23 +21,14 @@ export const sendResetEmail = async (email) => {
   }
 };
 
-export const resetPassword = async (code) => {
-try {
-    const response = await axios.patch(
-      `${BASE_URL}/api/v1/auth/resetpassword/${code}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    return response.data;
-  } catch (error) {
-    throw new Error(
-      "Could not send reset password. Please your enter correctly the verification code" || error.response.data
-    );
-  }
 
 
-};
+
+export const api = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+

@@ -20,7 +20,7 @@ export default function ChannelScreen({ route }) {
   const navigation = useNavigation();
   const decodedToken = useLoginState();
   const [selectChannel, setSelectChannel] = useState(null);
-  console.log(selectChannel);
+
 
   const onChannelPressed = (channel) => {
     setSelectChannel(channel);
