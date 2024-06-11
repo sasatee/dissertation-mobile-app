@@ -8,7 +8,7 @@ import BookAppointment from "../../components/Appointment/BookAppointmentSection
 import ViewDoctorDetail from "../../components/Doctor/ViewDoctorHisDetail";
 const JWTScreen = ({ route }) => {
   const isDoctor = useSelector(checkIsDoctorLogin);
-  //console.log("isDoctor state set: ", isDoctor);
+  console.log("isDoctor state set: ", isDoctor);
 
   return (
     <>

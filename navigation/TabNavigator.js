@@ -1,18 +1,17 @@
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import HomeScreen from "../screens/HomeScreen";
-import testScreen from "../screens/Doctor/ViewDoctorAndBook";
 import ProductGridCard from "../components/Doctor/ViewAllDoctorDetails";
 import ViewAllAppointment from "../screens/Appointment/ViewAllAppointmentScreen";
-import { AntDesign } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
+import testScreen from "../screens/Doctor/ViewDoctorAndBook";
+import HomeScreen from "../screens/HomeScreen";
 
 // Icons
-import Entypo from "@expo/vector-icons/Entypo";
 import { FontAwesome6 } from "@expo/vector-icons";
+import Entypo from "@expo/vector-icons/Entypo";
 import ModalScreen from "../screens/Appointment/ScheduleAppointmentScreen";
 
+import CallScreen from "../screens/ChatAndCall/CallScreen";
 import ChannelScreen from "../screens/ChatAndCall/ChannelAndChatScreen";
-import Layouttest from "../screens/layouttest";
 
 const Tab = createBottomTabNavigator();
 
@@ -60,16 +59,6 @@ export default function BottomTabNavigation() {
         }}
       />
 
-       <Tab.Screen
-        name="layouttest"
-        component={Layouttest}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="bookmark-outline" size={size} color={color} />
-          ),
-        }}
-      />
-
       <Tab.Screen
         name="Chat"
         component={ChannelScreen}
@@ -78,6 +67,12 @@ export default function BottomTabNavigation() {
             <Entypo name="chat" size={size} color={color} />
           ),
         }}
+      />
+
+      <Tab.Screen
+        name="Call"
+        component={CallScreen}
+        options={{ tabBarButton: () => null, tabBarVisible: false }}
       />
 
       <Tab.Screen name="ModalScreen" component={ModalScreen} />

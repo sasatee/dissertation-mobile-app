@@ -24,7 +24,7 @@ export const useGoogleLogin = () => {
       dispatch(setGoogleAccessToken(result.token));
 
       await ReactNativeAsyncStorage.setItem("googleAccessToken", result.token);
-      console.log(response.data.user);
+
       return response.data;
     } catch (error) {
       setError(error);
