@@ -1,10 +1,10 @@
 import { createStackNavigator } from "@react-navigation/stack";
 
-import LoginScreen from "../screens/LoginScreen";
-import RegisterScreen from "../screens/RegisterScreen";
-import ResetPassword from "../screens/ResetPasswordScreen";
-import RequestEmailScreen from "../screens/RequestEmailScreen";
-import VerifyEmailPassword from "../screens/VerifyPasswordScreen";
+import LoginScreen from "../screens/Authentication/LoginScreen";
+import RegisterScreen from "../screens/Authentication/RegisterScreen";
+import ResetPassword from "../screens/Authentication/ResetPasswordScreen";
+import RequestEmailScreen from "../screens/Authentication/RequestEmailScreen";
+import VerifyEmailPassword from "../screens/Authentication/VerifyPasswordScreen";
 
 const Stack = createStackNavigator();
 const AuthStackNavigation = () => {

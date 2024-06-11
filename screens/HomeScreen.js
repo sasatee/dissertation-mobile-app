@@ -17,7 +17,7 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
-import useAuth from "../hooks/useGoogle";
+import useAuth from "../provider/GoogleProvider";
 
 import FeatherIcon from "react-native-vector-icons/Feather";
 import {

@@ -61,14 +61,6 @@ export default function ViewDoctorDetail({ route }) {
           )}
         </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={beginToChat}
-          className="flex-row justify-center"
-        >
-          <AntDesign name="message1" size={30} color="black" />
-          <Text className="p-2">Start Chats</Text>
-        </TouchableOpacity>
-
         <View className="px-6">
           <TouchableOpacity className="py-3">
             <Text className="text-lg font-semibold text-black">

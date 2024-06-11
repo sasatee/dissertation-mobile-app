@@ -18,7 +18,30 @@ export default {
           microphonePermission: "Allow Chat app to access your microphone.",
         },
       ],
-      "@react-native-google-signin/google-signin"
+      "@react-native-google-signin/google-signin",
+      [
+        "expo-build-properties",
+        {
+          android: {
+            minSdkVersion: 24,
+            compileSdkVersion: 34,
+            targetSdkVersion: 33,
+            extraMavenRepos: [
+              "../../node_modules/@notifee/react-native/android/libs",
+            ],
+          },
+        },
+      ],
+      "@stream-io/video-react-native-sdk",
+      [
+        "@config-plugins/react-native-webrtc",
+        {
+          // optionally you can add your own explanations for permissions on iOS
+          cameraPermission: "Allow $(PRODUCT_NAME) to access your camera",
+          microphonePermission:
+            "Allow $(PRODUCT_NAME) to access your microphone",
+        },
+      ],
     ],
     assetBundlePatterns: ["**/*"],
     ios: {
@@ -51,5 +74,3 @@ export default {
     },
   },
 };
-
-

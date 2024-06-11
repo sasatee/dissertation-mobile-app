@@ -2,7 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 
 import React from "react";
 import { useSelector } from "react-redux";
-import useAuth from "../hooks/useGoogle";
+import useAuth from "../provider/GoogleProvider";
 
 import AuthStackNavigation from "./AuthStackNavigator";
 import BottomTabNavigation from "./TabNavigator";

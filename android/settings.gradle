@@ -1,4 +1,4 @@
-rootProject.name = 'Tinder'
+rootProject.name = 'Chat app'
 
 dependencyResolutionManagement {
   versionCatalogs {

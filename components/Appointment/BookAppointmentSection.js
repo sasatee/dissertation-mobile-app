@@ -20,7 +20,7 @@ import { queryClientfn } from "../../services/queryClient";
 
 const BookAppointment = ({ route }) => {
   //stripe hook
-  const { initPaymentSheet } = useStripe();
+  const { initPaymentSheet } = useStripe()
 
   //get day and time
   const [next7Days, setNext7Days] = useState([]);
@@ -49,7 +49,7 @@ const BookAppointment = ({ route }) => {
   
     },
     onError: () => {
-      ToastAndroid.show("Please make selection", ToastAndroid.LONG);
+     // ToastAndroid.show("Please make selection", ToastAndroid.LONG);
     },
   });
 
@@ -81,7 +81,7 @@ const BookAppointment = ({ route }) => {
       // },
     });
     if (paymentAccept.error) {
-      console.log(paymentAccept.error);
+      //console.log(paymentAccept.error);
       ToastAndroid.show("Something went wrong", ToastAndroid.SHORT);
       return;
     }
@@ -90,7 +90,7 @@ const BookAppointment = ({ route }) => {
     const paymentSheetResponse = await presentPaymentSheet();
     if (paymentSheetResponse.error) {
       ToastAndroid.show(
-        `Error code: ${paymentSheetResponse.error.code}`,
+        `${paymentSheetResponse.error.code}`,
         ToastAndroid.SHORT
       );
       ToastAndroid.show(
