@@ -14,7 +14,7 @@ import useLoginState from "../hooks/UseLoginState";
 const MainNavigator = () => {
   const userLoginWithJWT = useSelector((state) => state.auth.token);
 
-  const check = useLoginState();
+  //const check = useLoginState();
 
   const { user: userLoginWithGoogle } = useAuth();
 
@@ -22,14 +22,14 @@ const MainNavigator = () => {
 
   return (
     <NavigationContainer>
-      {isLoggedIn && check ? (
+      {isLoggedIn ? (
         <ChatProvider>
           <BottomTabNavigation />
         </ChatProvider>
       ) : (
         <AuthStackNavigation />
       )}
-      <StatusBar backgroundColor={"purple"}/>
+      <StatusBar backgroundColor={"purple"} />
     </NavigationContainer>
   );
 };

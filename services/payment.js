@@ -1,6 +1,6 @@
 import { BASE_URL } from "@env";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
-import axios, { Axios } from "axios";
+import axios from "axios";
 
 const baseURL = BASE_URL.toString();
 

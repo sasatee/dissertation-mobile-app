@@ -42,6 +42,12 @@ export default {
             "Allow $(PRODUCT_NAME) to access your microphone",
         },
       ],
+      [
+        "expo-document-picker",
+        {
+          iCloudContainerEnvironment: "Production",
+        },
+      ],
     ],
     assetBundlePatterns: ["**/*"],
     ios: {
