@@ -3,19 +3,39 @@ import { StreamChat } from "stream-chat";
 import React, { useEffect, useState } from "react";
 import { STREAM_PUBLIC } from "@env";
 import { ActivityIndicator, View, Text } from "react-native";
-import useLoginState from "../hooks/UseLoginState";
+import useLoginState, { useToken } from "../hooks/UseLoginState";
+import { useSelector } from "react-redux";
+import {
+  selectCurrentGoogleAccessToken,
+  selectCurrentJwtToken,
+} from "../redux/slice/authenticationSlice";
+import { useQuery } from "@tanstack/react-query";
+import { getUserProfileById } from "../services/profile";
 
 const client = StreamChat.getInstance(STREAM_PUBLIC);
 
 const ChatProvider = ({ children }) => {
   const decodedToken = useLoginState();
 
+  const { data } = useQuery({
+    queryKey: ["profile", { id: decodedToken?.userId }],
+
+    queryFn: ({ signal }) =>
+      getUserProfileById({ signal, id: decodedToken?.userId }),
+  });
+
+  //console.log(data)
+ 
+
+  const jwt = useSelector(selectCurrentJwtToken);
+  const google = useSelector(selectCurrentGoogleAccessToken);
+
   const [isReady, setIsReady] = useState(false);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!decodedToken) {
+    if (!data) {
       setIsLoading(true);
       return;
     }
@@ -30,11 +50,11 @@ const ChatProvider = ({ children }) => {
         // Connect as the new user
         await client.connectUser(
           {
-            id: decodedToken?.userId,
-            name: `${decodedToken?.firstname} ${decodedToken?.lastname}`,
-            image: decodedToken?.profilePicture,
+            id: data?._id,
+            name: `${data?.firstName} ${data?.lastName}`,
+            image: data?.profilePicture,
           },
-          client.devToken(decodedToken?.userId)
+          client.devToken(data?._id)
         );
         setIsReady(true);
       } catch (error) {
@@ -52,7 +72,7 @@ const ChatProvider = ({ children }) => {
       }
       setIsReady(false);
     };
-  }, [decodedToken?.userId]);
+  }, [data]);
 
   if (error) {
     return (

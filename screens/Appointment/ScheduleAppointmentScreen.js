@@ -27,8 +27,6 @@ export default function ModalScreen() {
   const token = useLoginState();
   const userId = token?.userId;
   const [queryParams, setQueryParams] = useState({ date: null, userId: null });
-  console.log(queryParams);
-
   //function
   function getDateAndUserId(value) {
     const date = moment(value).format("YYYY-MM-DD");
@@ -51,11 +49,10 @@ export default function ModalScreen() {
     error: errorQUERY,
   } = useQuery({
     queryKey: ["Appointment", queryParams],
-    queryFn: ({signal}) => getAppointmentSchedule(queryParams,signal),
+    queryFn: ({ signal }) => getAppointmentSchedule(queryParams, signal),
     staleTime: 5000,
     onSuccess: () => {},
   });
-  console.log("APPOINTMENT", data, "ISSUCCESS", isSuccess, "ERROR", errorQUERY);
 
   const weeks = useMemo(() => {
     const start = moment().add(week, "weeks").startOf("week");
@@ -148,7 +145,10 @@ export default function ModalScreen() {
           {!isSuccess && (
             <View className="justify-center my-12 flex-row">
               <Text className="font-mulishbold text-end text-md text-slate-400">
-                No Schedule for <Text className='bottom-1 text-gray-500'>{value.toDateString()}</Text>
+                No Schedule for{" "}
+                <Text className="bottom-1 text-gray-500">
+                  {value.toDateString()}
+                </Text>
               </Text>
             </View>
           )}
@@ -199,24 +199,24 @@ export default function ModalScreen() {
             />
           )}
         </View>
-
-      
       </View>
     </SafeAreaView>
   );
 }
 
-  {/* <View style={styles.footer}>
+{
+  /* <View style={styles.footer}>
           <TouchableOpacity
             onPress={() => {
               // handle onPress
             }}
           >
             <View style={styles.btn}>
-              {/* <Text style={styles.btnText}>Schedule</Text> */}
-        //     </View>
-        //   </TouchableOpacity>
-        // </View>  */}
+              {/* <Text style={styles.btnText}>Schedule</Text> */
+}
+//     </View>
+//   </TouchableOpacity>
+// </View>  */}
 
 const styles = StyleSheet.create({
   container: {
