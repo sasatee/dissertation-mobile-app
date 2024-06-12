@@ -10,6 +10,7 @@ import BottomTabNavigation from "./TabNavigator";
 import ChatProvider from "../provider/ChatProvider";
 import { StatusBar } from "react-native";
 import useLoginState from "../hooks/UseLoginState";
+import VideoProvider from "../provider/VideoProvider";
 
 const MainNavigator = () => {
   const userLoginWithJWT = useSelector((state) => state.auth.token);
@@ -24,7 +25,9 @@ const MainNavigator = () => {
     <NavigationContainer>
       {isLoggedIn ? (
         <ChatProvider>
-          <BottomTabNavigation />
+          <VideoProvider>
+            <BottomTabNavigation />
+          </VideoProvider>
         </ChatProvider>
       ) : (
         <AuthStackNavigation />
