@@ -1,15 +1,10 @@
-import { Chat, OverlayProvider } from "stream-chat-expo";
-import { StreamChat } from "stream-chat";
-import React, { useEffect, useState } from "react";
 import { STREAM_PUBLIC } from "@env";
-import { ActivityIndicator, View, Text } from "react-native";
-import useLoginState, { useToken } from "../hooks/UseLoginState";
-import { useSelector } from "react-redux";
-import {
-  selectCurrentGoogleAccessToken,
-  selectCurrentJwtToken,
-} from "../redux/slice/authenticationSlice";
 import { useQuery } from "@tanstack/react-query";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, Text, View } from "react-native";
+import { StreamChat } from "stream-chat";
+import { Chat, OverlayProvider } from "stream-chat-expo";
+import useLoginState from "../hooks/UseLoginState";
 import { getUserProfileById } from "../services/profile";
 
 const client = StreamChat.getInstance(STREAM_PUBLIC);
@@ -26,9 +21,6 @@ const ChatProvider = ({ children }) => {
 
   //console.log(data)
  
-
-  const jwt = useSelector(selectCurrentJwtToken);
-  const google = useSelector(selectCurrentGoogleAccessToken);
 
   const [isReady, setIsReady] = useState(false);
   const [error, setError] = useState(null);

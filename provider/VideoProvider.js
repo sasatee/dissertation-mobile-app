@@ -1,10 +1,10 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-const VideoProvider = () => {
+const VideoProvider = ({children}) => {
   return (
     <View>
-      <Text>VideoProvider</Text>
+      <>{children}</>
     </View>
   )
 }
