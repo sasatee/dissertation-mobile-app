@@ -47,7 +47,7 @@ const VideoProvider = ({ children }) => {
           user,
           token,
         });
-        //console.log(client)
+
         setVideoClient(client);
       } catch (error) {
         console.error("Failed to initialize StreamVideoClient:", error);
