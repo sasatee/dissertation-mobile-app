@@ -31,13 +31,13 @@ export default function ChannelScreen({ route }) {
     navigation.navigate("Chat");
   };
 
-  const joincall = async (channel) => {
+  const joincall = async () => {
     const members = Object.values(selectChannel.state.members).map(
       (member) => ({
         user_id: member.user_id,
       })
     );
-   
+
     //create a call using the channel members
     const call = VideoClient.call("default", Crypto.randomUUID());
     await call.getOrCreate({
@@ -45,8 +45,10 @@ export default function ChannelScreen({ route }) {
         members,
       },
     });
+    await call.join();
+    // console.log("CALLID",call.id)
 
-    navigation.navigate("Call");
+    navigation.navigate("Call", call.id);
   };
 
   return (

@@ -11,6 +11,8 @@ import ChatProvider from "../provider/ChatProvider";
 import { StatusBar } from "react-native";
 import useLoginState from "../hooks/UseLoginState";
 import VideoProvider from "../provider/VideoProvider";
+import CallProvider from "../provider/CallProvider";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const MainNavigator = () => {
   const userLoginWithJWT = useSelector((state) => state.auth.token);
@@ -24,11 +26,15 @@ const MainNavigator = () => {
   return (
     <NavigationContainer>
       {isLoggedIn ? (
-        <ChatProvider>
-          <VideoProvider>
-            <BottomTabNavigation />
-          </VideoProvider>
-        </ChatProvider>
+        <SafeAreaProvider>
+          <ChatProvider>
+            <VideoProvider>
+              <CallProvider>
+                <BottomTabNavigation />
+              </CallProvider>
+            </VideoProvider>
+          </ChatProvider>
+        </SafeAreaProvider>
       ) : (
         <AuthStackNavigation />
       )}

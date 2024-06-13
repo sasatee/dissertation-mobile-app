@@ -114,9 +114,8 @@ const HomeScreen = () => {
                   className="h-10 w-10 rounded-3xl"
                   source={
                     decodedToken?.profilePicture
-                      ?{ uri: decodedToken?.profilePicture }
-                      :require("../assets/images/blank-head-profile-pic-for-a-man.jpg")
-                      
+                      ? { uri: decodedToken?.profilePicture }
+                      : require("../assets/images/blank-head-profile-pic-for-a-man.jpg")
                   }
                 />
               </TouchableOpacity>
@@ -150,6 +149,11 @@ const HomeScreen = () => {
             </TouchableOpacity>
           )}
         />
+      </View>
+      <View>
+        <TouchableOpacity onPress={() => navigation.navigate("Layout")}>
+          <Text>dfsfsfs</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );

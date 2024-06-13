@@ -2,7 +2,7 @@ import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import ProductGridCard from "../components/Doctor/ViewAllDoctorDetails";
 import ViewAllAppointment from "../screens/Appointment/ViewAllAppointmentScreen";
-import testScreen from "../screens/Doctor/ViewDoctorAndBook";
+import PaymentScreen from "../screens/Doctor/ViewDoctorAndBook";
 import HomeScreen from "../screens/HomeScreen";
 
 // Icons
@@ -12,6 +12,7 @@ import Schedule from "../screens/Appointment/ScheduleAppointmentScreen";
 
 import CallScreen from "../screens/ChatAndCall/CallScreen";
 import ChannelScreen from "../screens/ChatAndCall/ChannelAndChatScreen";
+import NormalStackNavigator from "./NormalStackNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -46,7 +47,7 @@ export default function BottomTabNavigation() {
       />
       <Tab.Screen
         name="Booking"
-        component={testScreen}
+        component={PaymentScreen}
         options={{ tabBarButton: () => null, tabBarVisible: false }}
       />
       <Tab.Screen
@@ -76,6 +77,14 @@ export default function BottomTabNavigation() {
       />
 
       <Tab.Screen name="Schedule" component={Schedule} />
+
+
+{/* /stack screen */}
+      <Tab.Screen
+        name="Layout"
+        component={NormalStackNavigator}
+        options={{ tabBarButton: () => null, tabBarVisible: false }}
+      />
     </Tab.Navigator>
   );
 }
