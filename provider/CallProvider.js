@@ -25,7 +25,11 @@ const CallProvider = ({ children }) => {
     if (!call) {
       return;
     }
-  }, [call]);
+    if(!routeCall && call.state.callingState === 'ringing'){
+      // navigation.navigate("Call",call.id)
+    }
+  
+  }, [call,routeName]);
 
   return (
     <>
@@ -43,7 +47,7 @@ const CallProvider = ({ children }) => {
           onPress={() => navigation.navigate("Call", call.id)}
         >
           <Text>
-            Active Call: {call.id}' '{call.state.callingState}
+             Call: {call?.streamClient?.user?.name} ({call.state.callingState})
           </Text>
         </TouchableOpacity>
       )}

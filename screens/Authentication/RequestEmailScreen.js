@@ -29,7 +29,7 @@ const RequestEmailScreen = () => {
   const { mutate, error, data, isPending } = useMutation({
     mutationFn: sendResetEmail,
   });
-  console.log(error, data);
+
   const handlePasswordResetRequest = () => {
     try {
       mutate(

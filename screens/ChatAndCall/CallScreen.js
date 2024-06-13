@@ -6,18 +6,20 @@ import {
   useCalls,
   useStreamVideoClient,
 } from "@stream-io/video-react-native-sdk";
-import { ActivityIndicator } from "react-native";
+
+import { useNavigation } from "@react-navigation/native";
 
 const CallScreen = ({ route }) => {
-  const client = useStreamVideoClient();
-  const callId = route.params;
+  const navigation = useNavigation();
+  //const client = useStreamVideoClient();
+  // const callId = route.params;
 
-  //const [call, setCall] = useState(null);
+  // const [call, setCall] = useState(null);
   // useEffect(() => {
   //   const fetchCall = async () => {
   //     try {
   //       const call = client.call("default", callId);
-  //       await call.join();
+  //       await call.get();
   //       setCall(call);
   //     } catch (err) {
   //       console.log(err.message);
@@ -34,8 +36,16 @@ const CallScreen = ({ route }) => {
 
   const calls = useCalls();
   const call = calls[0];
+
   if (!call) {
-    return <ActivityIndicator />;
+    if (navigation.goBack()) {
+      navigation.goBack();
+      console.log("true");
+    } else {
+      navigation.navigate("Chat");
+      console.log("false");
+    }
+    return null;
   }
 
   return (
