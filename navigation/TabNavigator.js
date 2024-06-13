@@ -8,7 +8,7 @@ import HomeScreen from "../screens/HomeScreen";
 // Icons
 import { FontAwesome6 } from "@expo/vector-icons";
 import Entypo from "@expo/vector-icons/Entypo";
-import ModalScreen from "../screens/Appointment/ScheduleAppointmentScreen";
+import Schedule from "../screens/Appointment/ScheduleAppointmentScreen";
 
 import CallScreen from "../screens/ChatAndCall/CallScreen";
 import ChannelScreen from "../screens/ChatAndCall/ChannelAndChatScreen";
@@ -75,7 +75,7 @@ export default function BottomTabNavigation() {
         options={{ tabBarButton: () => null, tabBarVisible: false }}
       />
 
-      <Tab.Screen name="ModalScreen" component={ModalScreen} />
+      <Tab.Screen name="Schedule" component={Schedule} />
     </Tab.Navigator>
   );
 }

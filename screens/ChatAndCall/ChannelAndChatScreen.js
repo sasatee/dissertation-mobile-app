@@ -11,11 +11,15 @@ import {
 } from "stream-chat-expo";
 import useLoginState from "../../hooks/UseLoginState";
 import { useStreamVideoClient } from "@stream-io/video-react-native-sdk";
+import * as Crypto from "expo-crypto";
 
 export default function ChannelScreen({ route }) {
   const navigation = useNavigation();
   const decodedToken = useLoginState();
   const [selectChannel, setSelectChannel] = useState(null);
+  // console.log(
+  //   JSON.stringify(Object.values(selectChannel.state.members), null, 2)
+  // );
   const VideoClient = useStreamVideoClient();
 
   const onChannelPressed = (channel) => {
@@ -27,11 +31,20 @@ export default function ChannelScreen({ route }) {
     navigation.navigate("Chat");
   };
 
-  const joincall = async () => {
+  const joincall = async (channel) => {
+    const members = Object.values(selectChannel.state.members).map(
+      (member) => ({
+        user_id: member.user_id,
+      })
+    );
+   
     //create a call using the channel members
-    const call = VideoClient.call("default", "123");
-    await call.getOrCreate();
-    console.log(call)
+    const call = VideoClient.call("default", Crypto.randomUUID());
+    await call.getOrCreate({
+      data: {
+        members,
+      },
+    });
 
     navigation.navigate("Call");
   };

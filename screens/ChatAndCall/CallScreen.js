@@ -16,7 +16,7 @@ const CallScreen = () => {
 
   return (
     <StreamCall call={call}>
-      <CallContent />
+      {/* <CallContent /> */}
     </StreamCall>
   );
 };

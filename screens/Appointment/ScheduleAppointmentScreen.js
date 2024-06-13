@@ -20,7 +20,7 @@ import { getAppointmentSchedule } from "../../services/appointment";
 
 const { width } = Dimensions.get("window");
 
-export default function ModalScreen() {
+export default function Schedule() {
   const swiper = useRef();
   const [value, setValue] = useState(new Date());
   const [week, setWeek] = useState(0);
