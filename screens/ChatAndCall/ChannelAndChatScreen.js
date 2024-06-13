@@ -2,10 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import {
-  TouchableOpacity,
-  View
-} from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import {
   Channel,
   ChannelList,
@@ -13,11 +10,13 @@ import {
   MessageList,
 } from "stream-chat-expo";
 import useLoginState from "../../hooks/UseLoginState";
+import { useStreamVideoClient } from "@stream-io/video-react-native-sdk";
 
 export default function ChannelScreen({ route }) {
   const navigation = useNavigation();
   const decodedToken = useLoginState();
   const [selectChannel, setSelectChannel] = useState(null);
+  const VideoClient = useStreamVideoClient();
 
   const onChannelPressed = (channel) => {
     setSelectChannel(channel);
@@ -28,8 +27,12 @@ export default function ChannelScreen({ route }) {
     navigation.navigate("Chat");
   };
 
-  const call = () => {
-    setSelectChannel(null);
+  const joincall = async () => {
+    //create a call using the channel members
+    const call = VideoClient.call("default", "123");
+    await call.getOrCreate();
+    console.log(call)
+
     navigation.navigate("Call");
   };
 
@@ -43,6 +46,7 @@ export default function ChannelScreen({ route }) {
           //   console.log(message);
           //   return <Text className="text-left">{message.message.text}</Text>;
           // }}
+          audioRecordingEnabled
         >
           <View className="bg-white/75 pb-1  flex-row justify-between">
             <View>
@@ -56,7 +60,7 @@ export default function ChannelScreen({ route }) {
             </View>
 
             <View>
-              <TouchableOpacity onPress={call} className="m-2">
+              <TouchableOpacity onPress={joincall} className="m-2">
                 <Ionicons name="call" size={22} color="black" />
               </TouchableOpacity>
             </View>

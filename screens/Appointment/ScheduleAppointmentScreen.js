@@ -32,7 +32,7 @@ export default function ModalScreen() {
     const date = moment(value).format("YYYY-MM-DD");
     const userId = token?.userId;
     const data = { date, userId };
-    //retunrn date and userId
+    //return date and userId
     return data;
   }
 

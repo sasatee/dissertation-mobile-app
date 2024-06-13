@@ -6,28 +6,34 @@ import { StreamChat } from "stream-chat";
 import { Chat, OverlayProvider } from "stream-chat-expo";
 import useLoginState from "../hooks/UseLoginState";
 import { getUserProfileById } from "../services/profile";
+import { getStreamToken } from "../services/stream";
 
 const client = StreamChat.getInstance(STREAM_PUBLIC);
 
 const ChatProvider = ({ children }) => {
   const decodedToken = useLoginState();
 
-  const { data } = useQuery({
+  const { data: profile } = useQuery({
     queryKey: ["profile", { id: decodedToken?.userId }],
 
     queryFn: ({ signal }) =>
       getUserProfileById({ signal, id: decodedToken?.userId }),
+    enabled: !!decodedToken?.userId,
   });
 
-  //console.log(data)
- 
+  const { data: streamToken } = useQuery({
+    queryFn: getStreamToken,
+    queryKey: ["Stream"],
+
+    // enabled: !!streamToken
+  });
 
   const [isReady, setIsReady] = useState(false);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!data) {
+    if (!profile) {
       setIsLoading(true);
       return;
     }
@@ -42,15 +48,17 @@ const ChatProvider = ({ children }) => {
         // Connect as the new user
         await client.connectUser(
           {
-            id: data?._id,
-            name: `${data?.firstName} ${data?.lastName}`,
-            image: data?.profilePicture,
+            id: profile?._id,
+            name: `${profile?.firstName} ${profile?.lastName}`,
+            image: profile?.profilePicture,
           },
-          client.devToken(data?._id)
+          streamToken
         );
+        //console.log(client.devToken(profile?._id));
         setIsReady(true);
       } catch (error) {
         setError(error.message);
+        console.log(error);
       } finally {
         setIsLoading(false);
       }
@@ -64,7 +72,7 @@ const ChatProvider = ({ children }) => {
       }
       setIsReady(false);
     };
-  }, [data]);
+  }, [profile?._id]);
 
   if (error) {
     return (
