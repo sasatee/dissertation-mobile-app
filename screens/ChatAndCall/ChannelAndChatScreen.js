@@ -41,15 +41,14 @@ export default function ChannelScreen({ route }) {
     //create a call using the channel members
     const call = VideoClient.call("default", Crypto.randomUUID());
     await call.getOrCreate({
-      ring:true,
+      ring: true,
       data: {
         members,
       },
     });
     //await call.join();
-    // console.log("CALLID",call.id)
 
-     navigation.navigate("Call", call.id);
+    navigation.navigate("Call", call.id);
   };
 
   return (
