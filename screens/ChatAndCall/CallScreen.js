@@ -41,10 +41,10 @@ const CallScreen = ({ route }) => {
   if (!call) {
     if (navigation.canGoBack()) {
       navigation.goBack();
-      console.log("true");
+    
     } else {
       navigation.navigate("Chat");
-      console.log("false");
+    
     }
     return null;
   }
