@@ -152,7 +152,7 @@ const HomeScreen = () => {
       </View>
       <View>
         <TouchableOpacity onPress={() => navigation.navigate("Layout")}>
-          <Text>dfsfsfs</Text>
+          <Text>View profile</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
