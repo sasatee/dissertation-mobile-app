@@ -13,11 +13,13 @@ import useLoginState from "../hooks/UseLoginState";
 import VideoProvider from "../provider/VideoProvider";
 import CallProvider from "../provider/CallProvider";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { StripeProvider } from "@stripe/stripe-react-native";
+import { merchantIdentifier } from "@env";
 
 const MainNavigator = () => {
   const userLoginWithJWT = useSelector((state) => state.auth.token);
 
-  //const check = useLoginState();
+  const id = merchantIdentifier.toString();
 
   const { user: userLoginWithGoogle } = useAuth();
 
@@ -27,13 +29,15 @@ const MainNavigator = () => {
     <NavigationContainer>
       {isLoggedIn ? (
         <SafeAreaProvider>
-          <ChatProvider>
-            <VideoProvider>
-              <CallProvider>
-                <BottomTabNavigation />
-              </CallProvider>
-            </VideoProvider>
-          </ChatProvider>
+          <StripeProvider publishableKey={id}>
+            <ChatProvider>
+              <VideoProvider>
+                <CallProvider>
+                  <BottomTabNavigation />
+                </CallProvider>
+              </VideoProvider>
+            </ChatProvider>
+          </StripeProvider>
         </SafeAreaProvider>
       ) : (
         <AuthStackNavigation />
