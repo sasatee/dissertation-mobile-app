@@ -26,7 +26,6 @@ import useLoginState from "../../hooks/UseLoginState";
 const ViewProfileChat = () => {
   const { client } = useChatContext();
   const decodedToken = useLoginState();
-
   const navigation = useNavigation();
 
   const { data, isError, isLoading, fetchStatus, isFetching, error } = useQuery(

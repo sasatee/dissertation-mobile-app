@@ -53,13 +53,13 @@ const LoginScreen = () => {
 
   const handleUserLogin = async () => {
     const userCredentials = {
-      email: "Sasha@gmail.com",
-      password: "secretpassword1@",
+      email: "kuzamahitaro@gmail.com",
+      password: "secretpassword@1",
     };
     setLoading(true);
     try {
       const result = await dispatch(signInUser(userCredentials));
-      //const result = await dispatch(signInUser({ email, password }));
+      //const result =  dispatch(signInUser({ email, password }));
 
       if (result.payload.token) {
         dispatch(
@@ -81,9 +81,6 @@ const LoginScreen = () => {
     }
   };
 
-  const handleGoBack = () => {
-    navigation.navigate("VerifyEmail");
-  };
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -103,13 +100,6 @@ const LoginScreen = () => {
             className="h-full w-full absolute"
             source={require("../../assets/images/unslash.png")}
           />
-
-          <TouchableOpacity
-            style={styles.backButtonWrapper}
-            onPress={handleGoBack}
-          >
-            <Ionicons name={"arrow-back-outline"} color="black" size={25} />
-          </TouchableOpacity>
 
           {/* light */}
           <View className="flex-row justify-around w-full absolute">
@@ -155,7 +145,7 @@ const LoginScreen = () => {
                 //secureTextEntry
                 error={passwordError}
               />
-              <View className='-top-9 left-16'>
+              <View className="-top-9 left-16">
                 <Pressable onPress={() => navigation.push("RequestEmail")}>
                   <Text className="font-mono text-blue-800/95">
                     Forgot password?

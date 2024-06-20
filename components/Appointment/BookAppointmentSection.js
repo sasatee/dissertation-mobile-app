@@ -20,7 +20,7 @@ import { queryClientfn } from "../../services/queryClient";
 
 const BookAppointment = ({ route }) => {
   //stripe hook
-  const { initPaymentSheet } = useStripe()
+  const { initPaymentSheet } = useStripe();
 
   //get day and time
   const [next7Days, setNext7Days] = useState([]);
@@ -46,10 +46,10 @@ const BookAppointment = ({ route }) => {
     onSuccess: () => {
       queryClientfn.invalidateQueries({ queryKey: ["Appointment"] });
       ToastAndroid.show("Appointment successfully book", ToastAndroid.SHORT);
-  
     },
-    onError: () => {
-     // ToastAndroid.show("Please make selection", ToastAndroid.LONG);
+    onError: (data) => {
+      //ToastAndroid.show("Please make selection", ToastAndroid.LONG);
+      console.log(data);
     },
   });
 
@@ -68,6 +68,7 @@ const BookAppointment = ({ route }) => {
   async function makePayment() {
     //1.create a payment intent
     const murTousd = Math.floor(price / 47);
+    console.log(murTousd)
     payment({
       amount: price,
     });
@@ -100,16 +101,20 @@ const BookAppointment = ({ route }) => {
       return;
     }
 
+     const bookedTime = getUpdatedBookedTime(selectedDate, selectedTime);
+     console.log(bookedTime)
+
     //if payment ok ==> create appointment
     mutate({
       reason: reason,
       doctorId: doctorID,
       bookedTimeAMOrPM: selectedTime,
-      bookedTime: selectedDate,
+      bookedTime,
+      durationMinutes: 30,
     });
-    setReason("");
-    setSelectedDate();
-    setSelectedTime();
+    // setReason("");
+    // setSelectedDate();
+    // setSelectedTime();
   }
 
   useEffect(() => {
@@ -153,6 +158,18 @@ const BookAppointment = ({ route }) => {
     }
     setTimeList(timeList);
     //console.log(timeList)
+  };
+
+   const getUpdatedBookedTime = (date, time) => {
+    if (!date || !time) return null;
+    const [timePart, meridiem] = time.split(' ');
+    const [hour, minute] = timePart.split(':');
+    let hour24 = parseInt(hour);
+    if (meridiem === 'PM' && hour24 !== 12) hour24 += 12;
+    if (meridiem === 'AM' && hour24 === 12) hour24 = 0;
+    const dateMoment = moment(date);
+    dateMoment.hours(hour24).minutes(minute);
+    return dateMoment.toISOString();
   };
   return (
     <>

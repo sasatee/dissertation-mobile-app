@@ -36,15 +36,12 @@ const CallScreen = ({ route }) => {
 
   const calls = useCalls();
   const call = calls[0];
-  
 
   if (!call) {
     if (navigation.canGoBack()) {
       navigation.goBack();
-    
     } else {
       navigation.navigate("Chat");
-    
     }
     return null;
   }

@@ -42,13 +42,13 @@ export async function bookAppointment(appointment) {
 
     return response.data;
   } catch (error) {
-    // throw new Error(
-    //   JSON.stringify(error.response.data) ||
-    //     "Cannot book appointment with doctor"
-    // );
     throw new Error(
-      "Cannot book appointment with doctor. Please try Again later!"
+      JSON.stringify(error.response.data) ||
+        "Cannot book appointment with doctor"
     );
+    // throw new Error(
+    //   "Cannot book appointment with doctor. Please try Again later!"
+    // );
   }
 }
 

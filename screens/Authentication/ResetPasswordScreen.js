@@ -15,11 +15,13 @@ import useYupValidation from "../../hooks/useYupValidation";
 import { passwordValidationSchema } from "../../validation/auth";
 import { api } from "../../services/password";
 import { useMutation } from "@tanstack/react-query";
+import { useNavigation } from "@react-navigation/native";
 
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 
 const ResetPassword = () => {
   const [responseData, setResponseData] = useState(null);
+  const navigation = useNavigation();
 
   const {
     value: password,
@@ -45,6 +47,7 @@ const ResetPassword = () => {
       Alert.alert("Success", "Password has been reset");
       setResponseData(data);
       // Optionally, navigate to login or other screen
+      navigation.navigate("Login")
     },
     onError: (error) => {
       Alert.alert("Error", "Failed to reset password");
@@ -114,7 +117,9 @@ const ResetPassword = () => {
             >
               {/* activity loading  for button*/}
               <Animated.View
-                entering={FadeInDown.delay(900).duration(1000).springify()} className=" justify-center items-center">
+                entering={FadeInDown.delay(900).duration(1000).springify()}
+                className=" justify-center items-center"
+              >
                 {resetPasswordMutation.isPending ? (
                   <ActivityIndicator size="small" color="white" />
                 ) : (

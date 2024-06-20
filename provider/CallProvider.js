@@ -10,9 +10,11 @@ const CallProvider = ({ children }) => {
     if (!state || !state.routes || state.index === undefined) {
       return null;
     }
+    //console.log(state.routes[state.index].name)
     return state.routes[state.index].name;
   });
   const routeCall = routeName === "Call";
+
 
 
   // Get calls and navigation
@@ -30,6 +32,7 @@ const CallProvider = ({ children }) => {
     }
   
   }, [call,routeName]);
+  //console.log(call?.id)
 
   return (
     <>
@@ -44,7 +47,7 @@ const CallProvider = ({ children }) => {
             right: 0,
             padding: 5,
           }}
-          onPress={() => navigation.navigate("Call", call.id)}
+          onPress={() => navigation.navigate("Call", call?.id)}
         >
           <Text>
              Call: {call?.streamClient?.user?.name} ({call.state.callingState})
