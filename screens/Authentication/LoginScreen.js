@@ -1,6 +1,6 @@
 import { GoogleSigninButton } from "@react-native-google-signin/google-signin";
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
+import React, { useState } from "react";
 import {
   ActivityIndicator,
   Image,
@@ -18,6 +18,7 @@ import {
 import { useDispatch } from "react-redux";
 import useYupValidation from "../../hooks/useYupValidation";
 import { setIsDoctor, signInUser } from "../../redux/slice/authenticationSlice";
+
 import {
   emailValidationSchema,
   passwordValidationSchema,
@@ -29,6 +30,7 @@ import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 import ButtonComponent from "../../components/CustomComponent/Button";
 import Input from "../../components/CustomComponent/Input";
 import useAuth from "../../provider/GoogleProvider";
+import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 
 const LoginScreen = () => {
   const { signInWithGoogle } = useAuth();
@@ -51,9 +53,17 @@ const LoginScreen = () => {
     loading,
   } = useYupValidation("", passwordValidationSchema);
 
+   // State variable to track password visibility 
+    const [showPassword, setShowPassword] = useState(false); 
+  
+    // Function to toggle the password visibility state 
+    const toggleShowPassword = () => { 
+        setShowPassword(!showPassword); 
+    }; 
+
   const handleUserLogin = async () => {
     const userCredentials = {
-      email: "kuzamahitaro@gmail.com",
+      email: "Sasha@gmail.com",
       password: "secretpassword@1",
     };
     setLoading(true);
@@ -142,12 +152,20 @@ const LoginScreen = () => {
                 value={password}
                 onChangeText={handlePasswordChange}
                 onBlur={handlePasswordBlur}
-                //secureTextEntry
+                secureTextEntry={!showPassword}
                 error={passwordError}
               />
-              <View className="-top-9 left-16">
+               <MaterialCommunityIcons 
+                    name={showPassword ? 'eye-off' : 'eye'} 
+                    size={26} 
+                    color="#aaa"
+                    style={styles.icon}
+                    
+                    onPress={toggleShowPassword} 
+                /> 
+              <View className="-top-16 left-16">
                 <Pressable onPress={() => navigation.push("RequestEmail")}>
-                  <Text className="font-mono text-blue-800/95">
+                  <Text className="font-mono text-blue-800/95 -top-6">
                     Forgot password?
                   </Text>
                 </Pressable>
@@ -227,4 +245,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  icon: { 
+        left:120,
+        top:-85
+    },
 });
