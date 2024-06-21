@@ -1,30 +1,28 @@
 // import React, { useState, useEffect } from "react";
+import { Feather } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
+  Alert,
   Button,
   Image,
-  View,
   StyleSheet,
   Text,
-  Alert,
-  TouchableOpacity,
   TextInput,
-  ActivityIndicator,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import * as ImagePicker from "expo-image-picker";
-import { Feather } from "@expo/vector-icons";
-import useLoginState from "../../hooks/UseLoginState";
 import { useSelector } from "react-redux";
-import { ref, getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
 import { app } from "../../firebase"; // Import your Firebase app configuration
-import { useEffect, useState } from "react";
+import useLoginState from "../../hooks/UseLoginState";
 import { checkIsDoctorLogin } from "../../redux/slice/authenticationSlice";
-
-
 
 export default function ImagePickerExample() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-   const isDoctor = useSelector(checkIsDoctorLogin)
+  const isDoctor = useSelector(checkIsDoctorLogin);
   const [gender, setGender] = useState("");
   const [image, setImage] = useState(null);
   const [hasPermission, setHasPermission] = useState(null);
@@ -50,10 +48,12 @@ export default function ImagePickerExample() {
       setUploading(true);
       const response = await fetch(uri);
       const blob = await response.blob();
-    
 
       const storage = getStorage(app);
-      const storageRef = ref(storage, `images/${Date.now()}-${blob?._data?.name}`);
+      const storageRef = ref(
+        storage,
+        `images/${Date.now()}-${blob?._data?.name}`
+      );
 
       await uploadBytes(storageRef, blob);
       const downloadURL = await getDownloadURL(storageRef);

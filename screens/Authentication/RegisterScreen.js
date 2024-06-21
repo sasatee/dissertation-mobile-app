@@ -1,3 +1,4 @@
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import {
@@ -8,12 +9,11 @@ import {
   Pressable,
   ScrollView,
   StatusBar,
+  StyleSheet,
   Text,
   ToastAndroid,
   View,
-  StyleSheet,
 } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 import { useDispatch } from "react-redux";

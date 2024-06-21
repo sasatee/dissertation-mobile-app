@@ -1,25 +1,25 @@
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { useMutation } from "@tanstack/react-query";
 import React, { useState } from "react";
 import {
+  ActivityIndicator,
+  Alert,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   StatusBar,
+  StyleSheet,
   Text,
   View,
-  Alert,
-  ActivityIndicator,
-  StyleSheet,
 } from "react-native";
 import ButtonComponent from "../../components/CustomComponent/Button";
 import Input from "../../components/CustomComponent/Input";
 import useYupValidation from "../../hooks/useYupValidation";
-import { passwordValidationSchema } from "../../validation/auth";
 import { api } from "../../services/password";
-import { useMutation } from "@tanstack/react-query";
-import { useNavigation } from "@react-navigation/native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { passwordValidationSchema } from "../../validation/auth";
 
-import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
+import Animated, { FadeInDown } from "react-native-reanimated";
 import PINInput from "../../components/CustomComponent/PINInput";
 
 const ResetPassword = () => {

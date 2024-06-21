@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import { useMutation } from "@tanstack/react-query";
 import React from "react";
 import {
@@ -14,9 +15,8 @@ import Input from "../../components/CustomComponent/Input";
 import useYupValidation from "../../hooks/useYupValidation";
 import { sendResetEmail } from "../../services/password";
 import { emailValidationSchema } from "../../validation/auth";
-import { useNavigation } from "@react-navigation/native";
 
-import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
+import Animated, { FadeInDown } from "react-native-reanimated";
 
 const RequestEmailScreen = () => {
   const {
