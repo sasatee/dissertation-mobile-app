@@ -9,11 +9,10 @@ import {
   Pressable,
   ScrollView,
   StatusBar,
+  StyleSheet,
   Text,
   ToastAndroid,
-  TouchableOpacity,
   View,
-  StyleSheet,
 } from "react-native";
 import { useDispatch } from "react-redux";
 import useYupValidation from "../../hooks/useYupValidation";
@@ -23,14 +22,12 @@ import {
   emailValidationSchema,
   passwordValidationSchema,
 } from "../../validation/auth";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { colors } from "../../util/colors";
 
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 import ButtonComponent from "../../components/CustomComponent/Button";
 import Input from "../../components/CustomComponent/Input";
 import useAuth from "../../provider/GoogleProvider";
-import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 
 const LoginScreen = () => {
   const { signInWithGoogle } = useAuth();
@@ -53,17 +50,17 @@ const LoginScreen = () => {
     loading,
   } = useYupValidation("", passwordValidationSchema);
 
-   // State variable to track password visibility 
-    const [showPassword, setShowPassword] = useState(false); 
-  
-    // Function to toggle the password visibility state 
-    const toggleShowPassword = () => { 
-        setShowPassword(!showPassword); 
-    }; 
+  // State variable to track password visibility
+  const [showPassword, setShowPassword] = useState(false);
+
+  // Function to toggle the password visibility state
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleUserLogin = async () => {
     const userCredentials = {
-      email: "Sasha@gmail.com",
+      email: "kuzamahitaro@gmail.com",
       password: "secretpassword@1",
     };
     setLoading(true);
@@ -155,14 +152,13 @@ const LoginScreen = () => {
                 secureTextEntry={!showPassword}
                 error={passwordError}
               />
-               <MaterialCommunityIcons 
-                    name={showPassword ? 'eye-off' : 'eye'} 
-                    size={26} 
-                    color="#aaa"
-                    style={styles.icon}
-                    
-                    onPress={toggleShowPassword} 
-                /> 
+              <MaterialCommunityIcons
+                name={showPassword ? "eye-off" : "eye"}
+                size={26}
+                color="#aaa"
+                style={styles.icon}
+                onPress={toggleShowPassword}
+              />
               <View className="-top-16 left-16">
                 <Pressable onPress={() => navigation.push("RequestEmail")}>
                   <Text className="font-mono text-blue-800/95 -top-6">
@@ -182,7 +178,7 @@ const LoginScreen = () => {
                   //disabled={loading}
                 >
                   {/* activity loading  for button*/}
-                  <View className=" justify-center items-center">
+                  <View className=" flex justify-center items-center">
                     {loading ? (
                       <ActivityIndicator size="small" color="white" />
                     ) : (
@@ -245,8 +241,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  icon: { 
-        left:120,
-        top:-85
-    },
+  icon: {
+    left: 120,
+    top: -85,
+    color: "white",
+  },
 });

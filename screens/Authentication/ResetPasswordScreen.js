@@ -8,6 +8,7 @@ import {
   View,
   Alert,
   ActivityIndicator,
+  StyleSheet,
 } from "react-native";
 import ButtonComponent from "../../components/CustomComponent/Button";
 import Input from "../../components/CustomComponent/Input";
@@ -16,11 +17,15 @@ import { passwordValidationSchema } from "../../validation/auth";
 import { api } from "../../services/password";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigation } from "@react-navigation/native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
+import PINInput from "../../components/CustomComponent/PINInput";
 
 const ResetPassword = () => {
   const [responseData, setResponseData] = useState(null);
+  const [pin, setPin] = useState("");
+
   const navigation = useNavigation();
 
   const {
@@ -37,25 +42,33 @@ const ResetPassword = () => {
     handleInputBlur: hanldeConfirmPasswordBlur,
   } = useYupValidation("", passwordValidationSchema);
 
-  const { value: confirmationCode, handleInputChange: handleConfirmationCode } =
-    useYupValidation("");
+  // State variable to track password visibility
+  const [showPassword, setShowPassword] = useState(false);
+
+  // Function to toggle the password visibility state
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   const resetPasswordMutation = useMutation({
-    mutationFn: (data) =>
-      api.patch(`/api/v1/auth/resetpassword/${confirmationCode}`, data),
+    mutationFn: (data) => api.patch(`/api/v1/auth/resetpassword/${pin}`, data),
     onSuccess: (data) => {
       Alert.alert("Success", "Password has been reset");
       setResponseData(data);
       // Optionally, navigate to login or other screen
-      navigation.navigate("Login")
+      navigation.navigate("Login");
     },
     onError: (error) => {
       Alert.alert("Error", "Failed to reset password");
     },
   });
 
+  const handlePINChange = (newPIN) => {
+    setPin(newPIN);
+  };
+
   const handleActionToResetPassword = () => {
-    if (!confirmationCode) {
+    if (!pin) {
       Alert.alert("Error", "Verification code is required");
       return;
     }
@@ -88,20 +101,18 @@ const ResetPassword = () => {
           {/* title and form */}
 
           <View className="flex items-center mx-6 space-y-3 py-40">
-            <Input
-              placeholder="Verification Code"
-              value={confirmationCode}
-              onChangeText={handleConfirmationCode}
-              //onBlur={handlePasswordBlur}
-              //error={passwordError}
-            />
+            <View className=" py-4">
+              <PINInput onPINChange={handlePINChange} />
+            </View>
             <Input
               placeholder="Password"
               value={password}
               onChangeText={handlePasswordChange}
               onBlur={handlePasswordBlur}
               error={passwordError}
+              secureTextEntry={!showPassword}
             />
+            
 
             <Input
               placeholder="Confirm password"
@@ -109,7 +120,16 @@ const ResetPassword = () => {
               onChangeText={handleConfirmPasswordChange}
               onBlur={hanldeConfirmPasswordBlur}
               error={confirmPasswordError}
+              secureTextEntry={!showPassword}
             />
+            <MaterialCommunityIcons
+              name={showPassword ? "eye-off" : "eye"}
+              size={26}
+              color="#aaa"
+              style={styles.icon}
+              onPress={toggleShowPassword}
+            />
+
             <ButtonComponent
               className="w-full bg-blue-700/70 p-3 rounded-2xl mb-3"
               handleOnPress={handleActionToResetPassword}
@@ -137,3 +157,11 @@ const ResetPassword = () => {
 };
 
 export default ResetPassword;
+
+const styles = StyleSheet.create({
+  icon: {
+    left: 120,
+    top: -75,
+    color: "white",
+  },
+});

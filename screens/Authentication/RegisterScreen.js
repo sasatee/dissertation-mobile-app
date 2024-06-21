@@ -11,7 +11,9 @@ import {
   Text,
   ToastAndroid,
   View,
+  StyleSheet,
 } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 import { useDispatch } from "react-redux";
@@ -70,6 +72,14 @@ export default function RegisterScreen() {
   const dispatch = useDispatch();
   const [gender, setGender] = useState(null);
 
+  // State variable to track password visibility
+  const [showPassword, setShowPassword] = useState(false);
+
+  // Function to toggle the password visibility state
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   const handleUserSignup = async () => {
     setLoading(true);
     try {
@@ -82,12 +92,11 @@ export default function RegisterScreen() {
           gender,
         })
       );
-  
+
       if (result?.payload?.token) {
         navigation.replace("VerifyEmail");
         ToastAndroid.show("Register Succussfully!", ToastAndroid.SHORT);
       }
-      
 
       // Optionally clear input fields
       handleEmailChange("");
@@ -96,9 +105,11 @@ export default function RegisterScreen() {
       handlelastnameChange("");
       setGender(null);
     } catch (error) {
+      ToastAndroid.show(
+        "Make sure to enter all the input field correctly ",
+        ToastAndroid.TOP
+      );
     } finally {
-      ToastAndroid.show("Make sure to enter all the input field correctly ", ToastAndroid.TOP);
-
       setLoading(false);
     }
   };
@@ -137,7 +148,7 @@ export default function RegisterScreen() {
           </View>
 
           {/* title and form */}
-          <View className="h-full w-full flex justify-around pt-40 pb-10">
+          <View className="h-full w-full flex justify-around pt-36 pb-10">
             {/* title */}
             <View className="flex items-center -pt-10">
               <Animated.Text
@@ -149,7 +160,7 @@ export default function RegisterScreen() {
             </View>
             {/* form */}
 
-            <View className="flex items-center mx-4 space-y-4">
+            <View className="flex items-center  mx-4 space-y-6">
               <Input
                 type="text"
                 placeholder="Firstname"
@@ -166,12 +177,13 @@ export default function RegisterScreen() {
                 onBlur={handlelastnameBlur}
                 error={lastnameError}
               />
+              {/* <Text style={{color:'white',marginBottom:-10}}>Selected Gender: {gender}</Text> */}
+              <DropDown onGenderChange={setGender} Gender={gender}  /> 
               <Input
                 placeholder="Email Address"
                 value={email}
                 onChangeText={handleEmailChange}
                 onBlur={handleEmailBlur}
-                //secureTextEntry
                 error={emailError}
               />
               <Input
@@ -179,11 +191,16 @@ export default function RegisterScreen() {
                 value={password}
                 onChangeText={handlePasswordChange}
                 onBlur={handlePasswordBlur}
-                //secureTextEntry
+                secureTextEntry={!showPassword}
                 error={passwordError}
               />
-
-              <DropDown onGenderChange={setGender} Gender={gender} />
+              <MaterialCommunityIcons
+                name={showPassword ? "eye-off" : "eye"}
+                size={26}
+                color="#aaa"
+                style={styles.icon}
+                onPress={toggleShowPassword}
+              />
 
               {/* Button */}
               <Animated.View
@@ -193,9 +210,9 @@ export default function RegisterScreen() {
                 <ButtonComponent
                   className="w-full bg-blue-700/70 p-3 rounded-2xl mb-3"
                   handleOnPress={handleUserSignup}
-                  disabled={loading}
+                  // disabled={loading}
                 >
-                  <View className="flex-1 justify-center items-center">
+                  <View className="flex justify-center items-center">
                     {loading ? (
                       <ActivityIndicator size="small" color="white" />
                     ) : (
@@ -225,3 +242,10 @@ export default function RegisterScreen() {
     </KeyboardAvoidingView>
   );
 }
+const styles = StyleSheet.create({
+  icon: {
+    left: 120,
+    top: -85,
+    color: "white",
+  },
+});

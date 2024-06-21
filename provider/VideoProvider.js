@@ -41,7 +41,7 @@ const VideoProvider = ({ children }) => {
         image: profile?.profilePicture,
       };
 
-      try {
+      
         const client = new StreamVideoClient({
           apiKey,
           user,
@@ -49,9 +49,7 @@ const VideoProvider = ({ children }) => {
         });
 
         setVideoClient(client);
-      } catch (error) {
-        console.error("Failed to initialize StreamVideoClient:", error);
-      }
+      
     };
 
     initVideoClient();

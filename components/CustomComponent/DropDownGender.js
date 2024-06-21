@@ -14,13 +14,16 @@ export default function DropDown({ onGenderChange, Gender }) {
       placeholderStyle={{
         color: "white",
       }}
+      placeholderTextColor="white"
       options={options}
       dropdownIcon={<AntDesign name="down" size={20} color="white" />}
       optionLabel={"name"}
       optionValue={"id"}
-      selectedValue={Gender}
+      selectedValue={Gender ? Gender : undefined}
       onValueChange={(itemValue) => {
-        const selectedOption = options.find((option) => option.id === itemValue);
+        const selectedOption = options.find(
+          (option) => option.id === itemValue
+        );
         onGenderChange(selectedOption ? selectedOption.name : null);
       }}
       dropdownTextStyle={{ color: "black" }}
@@ -33,9 +36,11 @@ export default function DropDown({ onGenderChange, Gender }) {
         color: "red",
         paddingLeft: 10,
       }}
-      // error={Gender ? "" : "Gender is required"}
       primaryColor={"green"}
       hideModal={true}
+      defaultTextStyle={{
+        color: "white", // Sets the text color of the selected value to white
+      }}
     />
   );
 }

@@ -1,23 +1,31 @@
-import React from 'react';
-import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useState } from "react";
+import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
+import PINInput from "../components/CustomComponent/PINInput";
 
 const ProfileView = () => {
+  const handleEditPress = () => {};
 
-  const handleEditPress = () => {
+  const [pin, setPin] = useState("");
 
-  }
+  const handlePINChange = (newPIN) => {
+    setPin(newPIN);
+  };
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.headerContainer}>
         <Image
           style={styles.coverPhoto}
-          source={{uri: 'https://www.bootdey.com/image/280x280/1E90FF/1E90FF'}}
+          source={{
+            uri: "https://www.bootdey.com/image/280x280/1E90FF/1E90FF",
+          }}
         />
         <View style={styles.profileContainer}>
           <Image
             style={styles.profilePhoto}
-            source={{uri: 'https://www.bootdey.com/img/Content/avatar/avatar1.png'}}
+            source={{
+              uri: "https://www.bootdey.com/img/Content/avatar/avatar1.png",
+            }}
           />
           <Text style={styles.nameText}>Your Name</Text>
         </View>
@@ -45,6 +53,7 @@ const ProfileView = () => {
       <TouchableOpacity style={styles.button} onPress={handleEditPress}>
         <Text style={styles.buttonText}>Edit Profile</Text>
       </TouchableOpacity>
+    
     </ScrollView>
   );
 };
@@ -52,17 +61,17 @@ const ProfileView = () => {
 const styles = {
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   headerContainer: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   coverPhoto: {
-    width: '100%',
+    width: "100%",
     height: 200,
   },
   profileContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: -50,
   },
   profilePhoto: {
@@ -72,7 +81,7 @@ const styles = {
   },
   nameText: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginTop: 10,
   },
   bioContainer: {
@@ -82,32 +91,32 @@ const styles = {
     fontSize: 16,
   },
   statsContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginTop: 20,
     marginBottom: 20,
   },
   statContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     flex: 1,
   },
   statCount: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   statLabel: {
     fontSize: 16,
-    color: '#999',
+    color: "#999",
   },
   button: {
-    backgroundColor: '#0066cc',
+    backgroundColor: "#0066cc",
     borderRadius: 5,
     padding: 10,
     marginHorizontal: 20,
   },
   buttonText: {
     fontSize: 16,
-    color: '#fff',
-    textAlign: 'center',
+    color: "#fff",
+    textAlign: "center",
   },
 };
 

@@ -3,6 +3,7 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 
 export default function Input({ placeholder, error, ...props }) {
   return (
+    <>
     <Animated.View
       entering={FadeInDown.delay(200).duration(1000).springify()}
       style={{
@@ -24,9 +25,11 @@ export default function Input({ placeholder, error, ...props }) {
           paddingHorizontal: 10,
         }} // Adjust height as needed
       />
-      {error && (
-        <Text style={{ fontSize: 12, color: "red", top: 8 }}>{error}</Text>
-      )}
+      
     </Animated.View>
+    {error && (
+        <Text style={{ fontSize: 12, color: "#BF360C", top:-10,alignSelf:"flex-start",paddingLeft:6}}>{error}</Text>
+      )}
+      </>
   );
 }

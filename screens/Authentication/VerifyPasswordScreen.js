@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import {
   ActivityIndicator,
@@ -15,17 +15,18 @@ import ButtonComponent from "../../components/CustomComponent/Button";
 import Input from "../../components/CustomComponent/Input";
 import useYupValidation from "../../hooks/useYupValidation";
 import { api } from "../../services/password";
+import PINInput from "../../components/CustomComponent/PINInput";
 
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 
 export default function VerifyEmailPassword() {
   const navigation = useNavigation();
-  const { value: confirmationCode, handleInputChange: handleConfirmationCode } =
-    useYupValidation("");
+
+  const [pin, setPin] = useState("");
 
   const { data, isFetching, refetch, error } = useQuery({
-    queryFn: () => api.get(`/api/v1/auth/verifyemail/${confirmationCode}`),
-    queryKey: ["verifyemail", confirmationCode],
+    queryFn: () => api.get(`/api/v1/auth/verifyemail/${pin}`),
+    queryKey: ["verifyemail", pin],
     enabled: false,
     onSuccess: () => {
       Alert.alert("Success", "Email has been verified successfully");
@@ -33,12 +34,15 @@ export default function VerifyEmailPassword() {
     },
     onError: (error) => {
       Alert.alert("Please verify your email before expiration");
-     // navigation.navigate("Login");
+      // navigation.navigate("Login");
     },
   });
+  const handlePINChange = (newPIN) => {
+    setPin(newPIN);
+  };
 
   const handleActionToResetPassword = async () => {
-    if (!confirmationCode) {
+    if (!pin) {
       Alert.alert("Error", "Verification code is required");
       return;
     }
@@ -62,13 +66,9 @@ export default function VerifyEmailPassword() {
           {/* title and form */}
 
           <View className="flex items-center mx-6 space-y-3 py-40">
-            <Input
-              placeholder="Verification Code"
-              value={confirmationCode}
-              onChangeText={handleConfirmationCode}
-              //onBlur={handlePasswordBlur}
-              //error={passwordError}
-            />
+            <View className=" py-4">
+              <PINInput onPINChange={handlePINChange} />
+            </View>
 
             <ButtonComponent
               className="w-full bg-blue-700/70 p-3 rounded-2xl mb-3"
