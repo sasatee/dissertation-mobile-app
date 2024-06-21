@@ -65,6 +65,7 @@ const RequestEmailScreen = () => {
               onChangeText={handleEmailChange}
               onBlur={handleEmailBlur}
               error={emailError}
+              keyboardType="email-address"
             />
             <ButtonComponent
               className="w-full bg-blue-700/70 p-3 rounded-2xl mb-3"

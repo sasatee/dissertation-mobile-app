@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+// import React, { useState, useEffect } from "react";
 import {
   Button,
   Image,
@@ -7,13 +7,33 @@ import {
   Text,
   Alert,
   TouchableOpacity,
+  TextInput,
+  ActivityIndicator,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { Feather } from "@expo/vector-icons";
+import useLoginState from "../../hooks/UseLoginState";
+import { useSelector } from "react-redux";
+import { ref, getStorage, uploadBytes, getDownloadURL } from "firebase/storage";
+import { app } from "../../firebase"; // Import your Firebase app configuration
+import { useEffect, useState } from "react";
+import { checkIsDoctorLogin } from "../../redux/slice/authenticationSlice";
+
+
 
 export default function ImagePickerExample() {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+   const isDoctor = useSelector(checkIsDoctorLogin)
+  const [gender, setGender] = useState("");
   const [image, setImage] = useState(null);
   const [hasPermission, setHasPermission] = useState(null);
+
+  // Uploading state to Firebase
+  const [uploading, setUploading] = useState(false);
+
+  const decodedtoken = useLoginState();
+  const userLoginWithJWT = useSelector((state) => state.auth.token);
 
   // Request permission when component mounts
   useEffect(() => {
@@ -24,6 +44,29 @@ export default function ImagePickerExample() {
       setHasPermission(status === "granted");
     })();
   }, []);
+
+  const uploadImageToFirebase = async (uri) => {
+    try {
+      setUploading(true);
+      const response = await fetch(uri);
+      const blob = await response.blob();
+    
+
+      const storage = getStorage(app);
+      const storageRef = ref(storage, `images/${Date.now()}-${blob?._data?.name}`);
+
+      await uploadBytes(storageRef, blob);
+      const downloadURL = await getDownloadURL(storageRef);
+
+      return downloadURL;
+    } catch (error) {
+      console.error("Error uploading image to Firebase:", error);
+      Alert.alert("Error", "Failed to upload image to Firebase.");
+      return null;
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const pickImage = async () => {
     if (!hasPermission) {
@@ -42,8 +85,6 @@ export default function ImagePickerExample() {
         quality: 1,
       });
 
-      console.log("Image Picker Result:", result);
-
       if (!result.canceled) {
         const uri =
           result.assets && result.assets.length > 0
@@ -54,6 +95,50 @@ export default function ImagePickerExample() {
     } catch (error) {
       console.error("Error picking image:", error);
       Alert.alert("Error", "Something went wrong while picking the image.");
+    }
+  };
+
+  const handleSave = async () => {
+    if (!image) {
+      Alert.alert("No Image Selected", "Please select an image first.");
+      return;
+    }
+
+    const imageURL = await uploadImageToFirebase(image);
+    if (imageURL) {
+      // Proceed to send form data with imageURl
+      await uploadProfileData(imageURL);
+    }
+  };
+
+  const uploadProfileData = async (imageURL) => {
+    const formData = new FormData();
+    console.log("URL", imageURL);
+    formData.append("profilePicture", imageURL);
+    formData.append("firstName", firstName);
+    formData.append("lastName", lastName);
+    formData.append("gender", gender);
+
+    try {
+      let response = await fetch(
+        `http://192.168.100.7:3000/api/v1/profile/${decodedtoken?.userId}`,
+        {
+          method: "PATCH",
+          body: formData,
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: "Bearer " + userLoginWithJWT,
+          },
+        }
+      );
+
+      let data = await response.json();
+
+      console.log("Upload successful!", data);
+      // Optionally, update local state or show a success message
+    } catch (error) {
+      console.error("Upload failed:", error);
+      Alert.alert("Error", "Failed to upload profile data to server.");
     }
   };
 
@@ -74,8 +159,8 @@ export default function ImagePickerExample() {
   }
 
   return (
-    <View className="flex-1 items-center justify-start py-5 ">
-      <TouchableOpacity onPress={pickImage} >
+    <View style={styles.container}>
+      <TouchableOpacity onPress={pickImage}>
         {image ? (
           <View>
             <Image
@@ -116,6 +201,42 @@ export default function ImagePickerExample() {
           </View>
         )}
       </TouchableOpacity>
+
+      <TextInput
+        style={styles.input}
+        placeholder="First Name"
+        value={firstName}
+        onChangeText={setFirstName}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Last Name"
+        value={lastName}
+        onChangeText={setLastName}
+      />
+      {/* <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        disableFullscreenUI
+      /> */}
+      <TextInput
+        style={styles.input}
+        placeholder="Gender"
+        value={gender}
+        onChangeText={setGender}
+      />
+
+      <Button
+        title={uploading ? "Uploading..." : "Save"}
+        onPress={handleSave}
+        disabled={uploading}
+      />
+      {uploading && <ActivityIndicator size="large" color="#0000ff" />}
+
+      {isDoctor && <Text>is doctor true</Text>}
     </View>
   );
 }
@@ -125,9 +246,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    padding: 20,
   },
-  image: {
-    width: 200,
-    height: 200,
+  input: {
+    height: 40,
+    width: "100%",
+    borderColor: "gray",
+    borderWidth: 1,
+    marginTop: 10,
+    paddingHorizontal: 10,
   },
 });

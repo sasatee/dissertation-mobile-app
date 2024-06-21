@@ -57,7 +57,6 @@ const HomeScreen = () => {
   function handleSearch(query) {
     setSearchQuery(query);
     const formattedQuery = query.toLowerCase();
-    console.log(formattedQuery);
     const filteredData = filter(data, (item) => contains(item, formattedQuery));
     setSearchData(filteredData);
   }

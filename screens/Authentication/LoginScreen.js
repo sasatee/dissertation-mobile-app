@@ -60,12 +60,12 @@ const LoginScreen = () => {
 
   const handleUserLogin = async () => {
     const userCredentials = {
-      email: "kuzamahitaro@gmail.com",
+      email: "raja@gmail.com",
       password: "secretpassword@1",
     };
     setLoading(true);
     try {
-      const result = await dispatch(signInUser(userCredentials));
+      const result = dispatch(signInUser(userCredentials));
       //const result =  dispatch(signInUser({ email, password }));
 
       if (result.payload.token) {
@@ -142,6 +142,7 @@ const LoginScreen = () => {
                 onChangeText={handleEmailChange}
                 onBlur={handleEmailBlur}
                 error={emailError}
+                keyboardType="email-address"
               />
 
               <Input

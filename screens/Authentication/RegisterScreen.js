@@ -178,13 +178,14 @@ export default function RegisterScreen() {
                 error={lastnameError}
               />
               {/* <Text style={{color:'white',marginBottom:-10}}>Selected Gender: {gender}</Text> */}
-              <DropDown onGenderChange={setGender} Gender={gender}  /> 
+              <DropDown onGenderChange={setGender} Gender={gender} />
               <Input
                 placeholder="Email Address"
                 value={email}
                 onChangeText={handleEmailChange}
                 onBlur={handleEmailBlur}
                 error={emailError}
+                keyboardType="email-address"
               />
               <Input
                 placeholder="Password"
