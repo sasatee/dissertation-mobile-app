@@ -77,7 +77,7 @@ export default function BottomTabNavigation() {
         options={{ tabBarButton: () => null, tabBarVisible: false }}
       />
 
-      <Tab.Screen name="Schedule" component={Schedule} />
+      {/* <Tab.Screen name="Schedule" component={Schedule} /> */}
 
       <Tab.Screen
         name="profile1"

@@ -29,7 +29,6 @@ import useLoginState from "../hooks/UseLoginState";
 
 const HomeScreen = () => {
   const decodedToken = useLoginState();
-  console.log(decodedToken)
   const { logout, user } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchData, setSearchData] = useState([]);

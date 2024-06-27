@@ -15,7 +15,7 @@ import {
   View,
 } from "react-native";
 import { useSelector } from "react-redux";
-import { app } from "../../firebase"; // Import your Firebase app configuration
+import { app } from "../../firebase"; 
 import useLoginState from "../../hooks/UseLoginState";
 import { checkIsDoctorLogin } from "../../redux/slice/authenticationSlice";
 
@@ -31,7 +31,7 @@ export default function ImagePickerExample() {
   const [uploading, setUploading] = useState(false);
 
   const decodedtoken = useLoginState();
-  const userLoginWithJWT = useSelector((state) => state.auth.token);
+  const userLoginWithJWT = useSelector((state) => state.auth.token); 
 
   // Request permission when component mounts
   useEffect(() => {
@@ -121,7 +121,7 @@ export default function ImagePickerExample() {
 
     try {
       let response = await fetch(
-        `http://192.168.100.7:3000/api/v1/profile/${decodedtoken?.userId}`,
+        `https://dissertation-backend-two.vercel.app/api/v1/profile/${decodedtoken?.userId}`,
         {
           method: "PATCH",
           body: formData,
@@ -236,7 +236,7 @@ export default function ImagePickerExample() {
       />
       {uploading && <ActivityIndicator size="large" color="#0000ff" />}
 
-      {isDoctor && <Text>is doctor true</Text>}
+      {isDoctor && <Text> doctor is true</Text>}
     </View>
   );
 }

@@ -6,11 +6,9 @@ import logger from "redux-logger";
 export const store = configureStore({
   reducer: {
     auth: authenticationSlice,
-
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(),
-  devTools: true, 
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(),
+  devTools: true,
 });
 
 setupListeners(store.dispatch);
