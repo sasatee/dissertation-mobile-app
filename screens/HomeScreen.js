@@ -32,6 +32,7 @@ const HomeScreen = () => {
   const { logout, user } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchData, setSearchData] = useState([]);
+  console.log("DECODEEDDD",decodedToken)
 
   const { data, isError, isLoading, fetchStatus, isFetching, error } = useQuery(
     {
@@ -43,19 +44,16 @@ const HomeScreen = () => {
 
   const contains = ({ firstName, lastName, specialization }, query) => {
     const formattedQuery = query.toLowerCase();
-    if (
-      firstName.toLowerCase().includes(formattedQuery) ||
-      lastName.toLowerCase().includes(formattedQuery) ||
-      specialization.toLowerCase().includes(formattedQuery)
-    ) {
-      return true;
-    }
-    return false;
+    return (
+      (firstName && firstName.toLowerCase().includes(formattedQuery)) ||
+      (lastName && lastName.toLowerCase().includes(formattedQuery)) ||
+      (specialization && specialization.toLowerCase().includes(formattedQuery))
+    );
   };
 
   function handleSearch(query) {
     setSearchQuery(query);
-    const formattedQuery = query.toLowerCase();
+    const formattedQuery = query?.toLowerCase();
     const filteredData = filter(data, (item) => contains(item, formattedQuery));
     setSearchData(filteredData);
   }
