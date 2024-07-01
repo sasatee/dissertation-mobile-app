@@ -9,7 +9,6 @@ import { useSelector } from "react-redux";
 import { checkIsDoctorLogin } from "../../redux/slice/authenticationSlice";
 import Schedule from "./ScheduleAppointmentScreen";
 
-
 const ViewAllAppointment = () => {
   const { data } = useQuery({
     queryKey: ["Appointment"],
@@ -17,12 +16,10 @@ const ViewAllAppointment = () => {
   });
   const isDoctorTrue = useSelector(checkIsDoctorLogin);
 
-
   const navigation = useNavigation();
 
   return (
     <>
-      <ViewProfileChat />
       {isDoctorTrue ? (
         <View
           className="bg-white flex-1 rounded-t-3xl rou shadow-slate-700 saturate-150 "
@@ -39,7 +36,12 @@ const ViewAllAppointment = () => {
             renderItem={({ item }) => {
               //console.log(item.bookedTime,item.bookedTimeAMOrPM);
               return (
-                <TouchableOpacity className="my-3 px-5 ">
+                <TouchableOpacity
+                  className="my-3 px-5 "
+                  onPress={() =>
+                    navigation.navigate("ViewAppointmentDetailsForDoctor")
+                  }
+                >
                   <View className="bg-gray-200/40 rounded-3xl  border-r-2">
                     <View className="flex  flex-row">
                       <Image
@@ -82,7 +84,10 @@ const ViewAllAppointment = () => {
           />
         </View>
       ) : (
-        <Schedule />
+        <>
+          <ViewProfileChat />
+          <Schedule />
+        </>
       )}
     </>
   );

@@ -13,7 +13,8 @@ import Schedule from "../screens/Appointment/ScheduleAppointmentScreen";
 import CallScreen from "../screens/ChatAndCall/CallScreen";
 import ChannelScreen from "../screens/ChatAndCall/ChannelAndChatScreen";
 import NormalStackNavigator from "./NormalStackNavigator";
-import ImagePickerExample from "../screens/Profile/Profile1";
+import SetProfile from "../screens/Profile/Profile1";
+import ViewAllAppointmentDetailsForDoctor from "../screens/Appointment/ViewAllAppointmentDetailsForDoctor";
 
 const Tab = createBottomTabNavigator();
 
@@ -81,7 +82,13 @@ export default function BottomTabNavigation() {
 
       <Tab.Screen
         name="profile1"
-        component={ImagePickerExample}
+        component={SetProfile}
+        options={{ tabBarButton: () => null, tabBarVisible: false }}
+      />
+      
+      <Tab.Screen
+        name="ViewAppointmentDetailsForDoctor"
+        component={ViewAllAppointmentDetailsForDoctor}
         options={{ tabBarButton: () => null, tabBarVisible: false }}
       />
 

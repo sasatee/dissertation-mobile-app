@@ -1,7 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 
 import ProfileView from "../screens/Profile";
-import ImagePickerExample from "../screens/Profile/Profile1";
+import SetProfile from "../screens/Profile/Profile1";
 
 const Stack = createStackNavigator();
 export default function NormalStackNavigator() {
@@ -9,7 +9,7 @@ export default function NormalStackNavigator() {
     <Stack.Navigator>
       <Stack.Group>
         <Stack.Screen name="Profile" component={ProfileView} />
-        <Stack.Screen name="Profile1" component={ImagePickerExample} />
+        <Stack.Screen name="Profile1" component={SetProfile} />
 
       </Stack.Group>
     </Stack.Navigator>

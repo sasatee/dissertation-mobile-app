@@ -15,14 +15,24 @@ const ChatProvider = ({ children }) => {
   const decodedToken = useLoginState();
 
   // Fetch user profile
-  const { data: profile, isLoading: profileLoading, error: profileError } = useQuery({
+  const {
+    data: profile,
+    isLoading: profileLoading,
+    error: profileError,
+  } = useQuery({
     queryKey: ["profile", { id: decodedToken?.userId }],
-    queryFn: ({ signal }) => getUserProfileById({ signal, id: decodedToken?.userId }),
+    queryFn: ({ signal }) =>
+      getUserProfileById({ signal, id: decodedToken?.userId }),
     enabled: !!decodedToken?.userId,
-  });
+});
+  console.log("PROFILE", profile);
 
   // Fetch Stream token
-  const { data: streamToken, isLoading: tokenLoading, error: tokenError } = useQuery({
+  const {
+    data: streamToken,
+    isLoading: tokenLoading,
+    error: tokenError,
+  } = useQuery({
     queryFn: getStreamToken,
     queryKey: ["Stream"],
     enabled: !!decodedToken?.userId,

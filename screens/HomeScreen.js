@@ -32,15 +32,14 @@ const HomeScreen = () => {
   const { logout, user } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchData, setSearchData] = useState([]);
-  console.log("DECODEEDDD",decodedToken)
+  const [isLimited, setIsLimited] = useState(true); // New state to handle view limit
+  console.log("DECODEEDDD", decodedToken);
 
-  const { data, isError, isLoading, fetchStatus, isFetching, error } = useQuery(
-    {
-      queryKey: ["doctors"],
-      queryFn: getAllDoctor,
-      staleTime: 5000,
-    }
-  );
+  const { data, isError, isLoading, fetchStatus, isFetching, error } = useQuery({
+    queryKey: ["doctors"],
+    queryFn: getAllDoctor,
+    staleTime: 5000,
+  });
 
   const contains = ({ firstName, lastName, specialization }, query) => {
     const formattedQuery = query.toLowerCase();
@@ -73,7 +72,13 @@ const HomeScreen = () => {
     }
   };
 
+  const handleViewMore = () => {
+    setIsLimited(false);
+    navigation.navigate("Doctors"); // Add navigation to a full list screen
+  };
+
   let contentForFlatlist = searchQuery === "" ? data : searchData;
+  let limitedContent =  contentForFlatlist?.slice(0, 4) 
 
   return (
     <SafeAreaView className="bg-white/100 flex-1 pt-3">
@@ -96,7 +101,7 @@ const HomeScreen = () => {
               value={searchQuery}
             />
           </View>
-          <View className=" m-1">
+          <View className="m-1">
             {user && decodedToken && (
               <TouchableOpacity onPress={logout}>
                 <Image
@@ -122,13 +127,13 @@ const HomeScreen = () => {
       </View>
       <View className="mt-4">
         <FlatList
-          data={contentForFlatlist}
+          data={limitedContent}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
             <TouchableOpacity
               onPress={() => navigation.navigate("Booking", item._id)}
             >
-              <View className="flex-row ml-5 mb-4 ">
+              <View className="flex-row ml-5 mb-4">
                 <Image
                   source={{ uri: item.profilePicture }}
                   className="h-10 w-10 rounded-xl"
@@ -146,8 +151,16 @@ const HomeScreen = () => {
             </TouchableOpacity>
           )}
         />
+        {  contentForFlatlist?.length > 4 && (
+          <TouchableOpacity onPress={handleViewMore}>
+            <Text style={{ color: "#007BFF", marginTop: 5, marginLeft: 3, alignSelf: 'center' }}>
+              View More
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
-      <View className='space-y-5 px-2'>
+      
+      <View className="space-y-5 px-2">
         <TouchableOpacity onPress={() => navigation.navigate("profile1")}>
           <Text>View profile</Text>
         </TouchableOpacity>

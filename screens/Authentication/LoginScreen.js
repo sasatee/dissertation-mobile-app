@@ -60,13 +60,14 @@ const LoginScreen = () => {
 
   const handleUserLogin = async () => {
     const userCredentials = {
-      email: "Sasha@gmail.com",
+      email: "tailor1@gmail.com",
       password: "secretpassword@1",
     };
     setLoading(true);
     try {
       const result = dispatch(signInUser(userCredentials));
       //const result =  dispatch(signInUser({ email, password }));
+    
 
       if (result.payload.token) {
         dispatch(

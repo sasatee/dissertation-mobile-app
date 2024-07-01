@@ -18,7 +18,6 @@ export const signUpUser = createAsyncThunk(
     try {
       const { data } = await axios.post(
         BASE_URL + "/api/v1/auth/register",
-        //"https://bee2-102-117-34-69.ngrok-free.app/api/v1/auth/register",
         body
       );
       // console.log(data);
@@ -35,7 +34,6 @@ export const signInUser = createAsyncThunk(
     try {
       const { data } = await axios.post(
         BASE_URL + "/api/v1/auth/login",
-        //" https://bee2-102-117-34-69.ngrok-free.app/api/v1/auth/login",
         userCredentials
       );
 

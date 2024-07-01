@@ -1,8 +1,8 @@
-// import React, { useState, useEffect } from "react";
 import { Feather } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
+import { BASE_URL } from "@env";
 import {
   ActivityIndicator,
   Alert,
@@ -15,23 +15,27 @@ import {
   View,
 } from "react-native";
 import { useSelector } from "react-redux";
-import { app } from "../../firebase"; 
+import { app } from "../../firebase";
 import useLoginState from "../../hooks/UseLoginState";
 import { checkIsDoctorLogin } from "../../redux/slice/authenticationSlice";
+import Spacer from "../../components/CustomComponent/Spacer";
 
-export default function ImagePickerExample() {
+export default function SetProfile() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const isDoctor = useSelector(checkIsDoctorLogin);
   const [gender, setGender] = useState("");
   const [image, setImage] = useState(null);
   const [hasPermission, setHasPermission] = useState(null);
+  const baseURL = BASE_URL.toString();
 
   // Uploading state to Firebase
   const [uploading, setUploading] = useState(false);
 
   const decodedtoken = useLoginState();
-  const userLoginWithJWT = useSelector((state) => state.auth.token); 
+  const userLoginWithJWT = useSelector((state) => state.auth.token);
+
+
 
   // Request permission when component mounts
   useEffect(() => {
@@ -113,7 +117,7 @@ export default function ImagePickerExample() {
 
   const uploadProfileData = async (imageURL) => {
     const formData = new FormData();
-    console.log("URL", imageURL);
+
     formData.append("profilePicture", imageURL);
     formData.append("firstName", firstName);
     formData.append("lastName", lastName);
@@ -121,7 +125,7 @@ export default function ImagePickerExample() {
 
     try {
       let response = await fetch(
-        `https://dissertation-backend-two.vercel.app/api/v1/profile/${decodedtoken?.userId}`,
+        `${baseURL}/api/v1/profile/${decodedtoken?.userId}`,
         {
           method: "PATCH",
           body: formData,
@@ -159,75 +163,83 @@ export default function ImagePickerExample() {
   }
 
   return (
-    <View style={styles.container}>
+    <View className="bg-white flex-1 justify-center items-center p-12">
       <TouchableOpacity onPress={pickImage}>
         {image ? (
-          <View>
-            <Image
-              source={{ uri: image }}
-              style={{ height: 100, width: 100, borderRadius: 75 }}
-            />
-            <View
-              style={{
-                position: "absolute",
-                right: 5,
-                bottom: 5,
-                backgroundColor: "white",
-                borderRadius: 20,
-                padding: 5,
-              }}
-            >
-              <Feather name="edit" size={16} color="blue" />
+          <>
+            <View>
+              <Image
+                source={{ uri: image }}
+                style={{ height: 100, width: 100, borderRadius: 75 }}
+              />
+              <View
+                style={{
+                  position: "absolute",
+                  right: 5,
+                  bottom: 5,
+                  backgroundColor: "white",
+                  borderRadius: 20,
+                  padding: 5,
+                }}
+              >
+                <Feather name="edit" size={16} color="blue" />
+              </View>
             </View>
-          </View>
+            <Spacer />
+          </>
         ) : (
-          <View>
-            <Image
-              source={{ uri: "https://via.placeholder.com/150" }}
-              style={{ height: 100, width: 100, borderRadius: 75 }}
-            />
-            <View
-              style={{
-                position: "absolute",
-                right: 5,
-                bottom: 5,
-                backgroundColor: "white",
-                borderRadius: 20,
-                padding: 5,
-              }}
-            >
-              <Feather name="edit" size={16} color="blue" />
+          <>
+            <View>
+              <Image
+                source={{ uri: "https://via.placeholder.com/150" }}
+                style={{ height: 100, width: 100, borderRadius: 75 }}
+              />
+              <View
+                style={{
+                  position: "absolute",
+                  right: 5,
+                  bottom: 5,
+
+                  borderRadius: 20,
+                }}
+              >
+                <Feather name="edit" size={16} color="blue" />
+              </View>
             </View>
-          </View>
+            <Spacer />
+          </>
         )}
       </TouchableOpacity>
 
       <TextInput
         style={styles.input}
-        placeholder="First Name"
+        className="border border-slate-600 rounded-2xl"
+        placeholder="Name"
+        placeholderTextColor="#8D6F64"
         value={firstName}
         onChangeText={setFirstName}
       />
+      <Spacer />
+
       <TextInput
         style={styles.input}
-        placeholder="Last Name"
+        className="border border-slate-600 rounded-2xl"
+        placeholder="Surname"
+        placeholderTextColor="#8D6F64"
         value={lastName}
         onChangeText={setLastName}
       />
-      {/* <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        disableFullscreenUI
-      /> */}
+      <Spacer />
+
       <TextInput
         style={styles.input}
+        className="border border-slate-600 rounded-2xl"
         placeholder="Gender"
+        placeholderTextColor="#8D6F64"
         value={gender}
         onChangeText={setGender}
       />
+      <Spacer />
 
       <Button
         title={uploading ? "Uploading..." : "Save"}
@@ -246,14 +258,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    padding: 20,
   },
   input: {
-    height: 40,
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+
     width: "100%",
-    borderColor: "gray",
-    borderWidth: 1,
-    marginTop: 10,
-    paddingHorizontal: 10,
+    fontSize: 14,
+    fontWeight: "500",
   },
 });

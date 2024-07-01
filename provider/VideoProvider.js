@@ -26,8 +26,9 @@ const VideoProvider = ({ children }) => {
   const { data: token } = useQuery({
     queryFn: getStreamToken,
     queryKey: ["Stream"],
-    // enabled: !!streamToken,
+    
   });
+  
 
   useEffect(() => {
     if (!profile) return;
