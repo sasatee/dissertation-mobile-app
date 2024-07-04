@@ -56,7 +56,7 @@ export async function getAllAppointment() {
   try {
     const headers = await getHeaders();
     const response = await axiosInstance.get(`api/v1/appointment`, { headers });
-
+  
     return response.data.appointments;
   } catch (error) {
     // throw new Error(

@@ -102,7 +102,7 @@ const HomeScreen = () => {
             />
           </View>
           <View className="m-1">
-            {user && decodedToken && (
+            {!!user && decodedToken && (
               <TouchableOpacity onPress={logout}>
                 <Image
                   className="h-10 w-10 rounded-full"
