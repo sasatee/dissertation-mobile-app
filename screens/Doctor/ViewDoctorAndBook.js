@@ -2,7 +2,7 @@ import React from "react";
 import { ScrollView } from "react-native";
 
 
-import BookAppointment from "../../components/Appointment/BookAppointmentSection";
+import BookAppointment from "../../components/Appointment/BookAppointment";
 import ViewDoctorDetail from "../../components/Doctor/ViewDoctorHisDetail";
 const CombineScreenViewDocAndBook = ({ route }) => {
   return (

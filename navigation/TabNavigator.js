@@ -8,13 +8,12 @@ import HomeScreen from "../screens/HomeScreen";
 // Icons
 import { FontAwesome6 } from "@expo/vector-icons";
 import Entypo from "@expo/vector-icons/Entypo";
-import Schedule from "../screens/Appointment/ScheduleAppointmentScreen";
 
 import CallScreen from "../screens/ChatAndCall/CallScreen";
 import ChannelScreen from "../screens/ChatAndCall/ChannelAndChatScreen";
 import NormalStackNavigator from "./NormalStackNavigator";
 import SetProfile from "../screens/Profile/Profile1";
-import ViewAllAppointmentDetailsForDoctor from "../screens/Appointment/ViewAllAppointmentDetailsForDoctor";
+import ViewAllAppointmentDetailsForDoctor from "../screens/Appointment/ViewAllAppointmentScreen";
 
 const Tab = createBottomTabNavigator();
 

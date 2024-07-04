@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 const DeleteConfirmationModal = ({ onCancel, onDelete }) => {
+
+
   return (
     <View style={styles.modalContainer}>
       <Text style={styles.modalText}>

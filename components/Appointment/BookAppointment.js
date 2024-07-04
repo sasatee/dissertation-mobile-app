@@ -274,7 +274,7 @@ const BookAppointment = ({ route }) => {
                 <ActivityIndicator size="small" color="white" />
               ) : (
                 <Text className="text-xl font-mulishsemibold text-white text-center">
-                  Make Appointment
+                  Book Appointment
                 </Text>
               )}
             </View>
