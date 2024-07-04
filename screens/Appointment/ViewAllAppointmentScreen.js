@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   FlatList,
   Text,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   RefreshControl,
+  Switch,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
@@ -16,21 +17,32 @@ import ViewProfileChat from "../../components/Doctor/ViewDoctorProfileChat";
 import { useSelector } from "react-redux";
 import { checkIsDoctorLogin } from "../../redux/slice/authenticationSlice";
 import Schedule from "./ScheduleAppointmentScreen";
+  import { BottomSheetModal, BottomModalProvider } from "@gorhom/bottom-sheet";
+import UpdateAppointmentWithBottomSheet from "../../components/CustomComponent/BottomSheetComponentAppointment";
 
 const ViewAllAppointment = () => {
-
-  const { data ,isFetching} = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ["Appointment"],
     queryFn: getAllAppointment,
-    onSuccess: () => {
-      
-    },
+    onSuccess: () => {},
   });
   const isDoctorTrue = useSelector(checkIsDoctorLogin);
 
   const navigation = useNavigation();
 
+  //bottom component
 
+  const [isOpen, isSetOpen] = useState(false);
+
+  const BottomSheetModalRef = useRef(null);
+
+  const snapPoints = ["25%", "50%"];
+  function handlePressModalForUpdate() {
+    BottomSheetModalRef.current?.present();
+
+    isSetOpen(true);
+  }
+  //
   const formatDateTime = (dateString) => {
     const date = new Date(dateString);
     return isValid(date) ? format(date, "MM-dd-yyyy HH:mm") : "Invalid Date";
@@ -39,76 +51,95 @@ const ViewAllAppointment = () => {
   return (
     <>
       {isDoctorTrue ? (
-        <FlatList
-          data={data}
-          refreshControl={
-            <RefreshControl
-              refreshing={isFetching}
-              onRefresh={() => console.log("Refreshing...")}
-            />
-          }
-          renderItem={({ item }) => {
-            console.log(item);
-            return (
-              <View style={styles.container}>
-                {/* Card */}
-                <View style={styles.card} className="mx-3 py-2">
-                  <Text className="text-xs content-end text-right text-slate-500">
-                    <Text>Created at: </Text>
-                    {formatDateTime(item.createdAt)}
-                  </Text>
-                  
-                  {/* Header */}
-                  <View style={styles.header}>
-                    <Image
-                      style={styles.image}
-                      source={{
-                        uri: `${item?.profilePicture}`,
-                      }}
-                    />
+        <>
+          <BottomSheetModal
+            ref={BottomSheetModalRef}
+            index={0}
+            snapPoints={snapPoints}
+            backgroundStyle={{ borderRadius: 50 }}
+            onDismiss={() => isSetOpen(false)}
+            
+          >
+            <UpdateAppointmentWithBottomSheet />
+          </BottomSheetModal>
+          <FlatList
+            data={data}
+            
+            refreshControl={
+              <RefreshControl
+                refreshing={isFetching}
+                onRefresh={() => console.log("Refreshing...")}
+              />
+            }
+            renderItem={({ item }) => {
+             // console.log(item)
+              return (
+                <View
+                  style={[
+                    styles.container,
+                    { backgroundColor: isOpen ? "gray" : "white" },
+                  ]}
+                >
+                  {/* Card */}
+                  <View style={styles.card} className="mx-3 py-2">
+                    <Text className="text-xs content-end text-right text-slate-500">
+                      <Text>Created at: </Text>
+                      {formatDateTime(item.createdAt)}
+                    </Text>
 
-                    <View>
-                      <Text className="text-xs text-left text-slate-500">
-                        {item?.userFullName}
-                      </Text>
-                      <Text className="text-xs text-sky-400">
-                        Appointment at: {item?.bookedTimeAMOrPM}
-                      </Text>
-                      <Text className="text-xs text-gray-500">
-                        Gender: {item?.gender}
-                      </Text>
+                    {/* Header */}
+                    <View style={styles.header}>
+                      <Image
+                        style={styles.image}
+                        source={{
+                          uri: `${item?.profilePicture}`,
+                        }}
+                      />
+
+                      <View>
+                        <Text className="text-xs text-left text-slate-500">
+                          {item?.userFullName}
+                        </Text>
+                        <Text className="text-xs text-sky-400">
+                          Appointment at: {item?.bookedTimeAMOrPM}
+                        </Text>
+                        <Text className="text-xs text-gray-500">
+                          Gender: {item?.gender}
+                        </Text>
+                      </View>
                     </View>
-                  </View>
 
-                  {/* Content */}
-                  <View style={styles.content}>
-                    <View style={styles.buttonContainer}>
-                      <TouchableOpacity
-                        style={styles.button}
-                        className="bg-black"
-                        onPress={() => console.log("Update")}
-                      >
-                        <Text style={styles.textButton}>Update</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={styles.button}
-                        className="bg-red-500"
-                        onPress={() => console.log("Delete")}
-                      >
-                        <Text style={styles.textButton}>Delete</Text>
-                      </TouchableOpacity>
+                    {/* Content */}
+                    <View style={styles.content}>
+                      <View style={styles.buttonContainer}>
+                        <TouchableOpacity
+                          style={styles.button}
+                          className="bg-black"
+                          onPress={handlePressModalForUpdate}
+                        >
+                          <Text style={styles.textButton}>Update</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={styles.button}
+                          className="bg-red-500"
+                          onPress={() => console.log("Delete")}
+                        >
+                          <Text style={styles.textButton}>Delete</Text>
+                        </TouchableOpacity>
+                      </View>
                     </View>
                   </View>
                 </View>
-              </View>
-            );
-          }}
-          showsVerticalScrollIndicator={true}
-        />
+              );
+            }}
+            showsVerticalScrollIndicator={true}
+          />
+        </>
       ) : (
         <>
           <ViewProfileChat />
           <Schedule />
+
         </>
       )}
     </>

@@ -15,6 +15,7 @@ import CallProvider from "../provider/CallProvider";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import { merchantIdentifier } from "@env";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 const MainNavigator = () => {
   const userLoginWithJWT = useSelector((state) => state.auth.token);
@@ -29,15 +30,17 @@ const MainNavigator = () => {
     <NavigationContainer>
       {isLoggedIn ? (
         <SafeAreaProvider>
-          <StripeProvider publishableKey={id}>
-            <ChatProvider>
-              <VideoProvider>
-                <CallProvider>
-                  <BottomTabNavigation />
-                </CallProvider>
-              </VideoProvider>
-            </ChatProvider>
-          </StripeProvider>
+          <BottomSheetModalProvider>
+            <StripeProvider publishableKey={id}>
+              <ChatProvider>
+                <VideoProvider>
+                  <CallProvider>
+                    <BottomTabNavigation />
+                  </CallProvider>
+                </VideoProvider>
+              </ChatProvider>
+            </StripeProvider>
+          </BottomSheetModalProvider>
         </SafeAreaProvider>
       ) : (
         <AuthStackNavigation />

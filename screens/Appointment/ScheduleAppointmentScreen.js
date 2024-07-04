@@ -7,7 +7,7 @@ import {
   View,
   Text,
   TouchableOpacity,
-  FlatList,
+  
   Image,
 } from "react-native";
 import moment from "moment";
@@ -17,6 +17,7 @@ import { format } from "date-fns";
 import useLoginState from "../../hooks/UseLoginState";
 import { useQuery } from "@tanstack/react-query";
 import { getAppointmentSchedule } from "../../services/appointment";
+import { FlatList } from "react-native-gesture-handler";
 
 const { width } = Dimensions.get("window");
 
@@ -222,6 +223,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingVertical: 24,
+    backgroundColor:"white"
   },
   header: {
     paddingHorizontal: 16,
