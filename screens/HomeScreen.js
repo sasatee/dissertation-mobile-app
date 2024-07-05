@@ -26,6 +26,7 @@ import {
 } from "../redux/slice/authenticationSlice";
 import { getAllDoctor } from "../services/doctor";
 import useLoginState from "../hooks/UseLoginState";
+import Slider from "../components/CustomComponent/Slider";
 
 const HomeScreen = () => {
   const decodedToken = useLoginState();
@@ -33,13 +34,14 @@ const HomeScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchData, setSearchData] = useState([]);
   const [isLimited, setIsLimited] = useState(true); // New state to handle view limit
-  console.log("DECODEEDDD", decodedToken);
 
-  const { data, isError, isLoading, fetchStatus, isFetching, error } = useQuery({
-    queryKey: ["doctors"],
-    queryFn: getAllDoctor,
-    staleTime: 5000,
-  });
+  const { data, isError, isLoading, fetchStatus, isFetching, error } = useQuery(
+    {
+      queryKey: ["doctors"],
+      queryFn: getAllDoctor,
+      staleTime: 5000,
+    }
+  );
 
   const contains = ({ firstName, lastName, specialization }, query) => {
     const formattedQuery = query.toLowerCase();
@@ -78,7 +80,7 @@ const HomeScreen = () => {
   };
 
   let contentForFlatlist = searchQuery === "" ? data : searchData;
-  let limitedContent =  contentForFlatlist?.slice(0, 4) 
+  let limitedContent = contentForFlatlist?.slice(0, 3);
 
   return (
     <SafeAreaView className="bg-white/100 flex-1 pt-3">
@@ -100,6 +102,7 @@ const HomeScreen = () => {
               style={styles.searchControl}
               value={searchQuery}
             />
+            
           </View>
           <View className="m-1">
             {!!user && decodedToken && (
@@ -151,15 +154,23 @@ const HomeScreen = () => {
             </TouchableOpacity>
           )}
         />
-        {  contentForFlatlist?.length > 4 && (
+        {contentForFlatlist?.length > 3 && (
           <TouchableOpacity onPress={handleViewMore}>
-            <Text style={{ color: "#007BFF", marginTop: 5, marginLeft: 3, alignSelf: 'center' }}>
+            <Text
+              style={{
+                color: "#007BFF",
+                marginTop: 0,
+                marginLeft: 3,
+                alignSelf: "center",
+              }}
+            >
               View More
             </Text>
           </TouchableOpacity>
         )}
       </View>
-      
+      <Slider />
+
       <View className="space-y-5 px-2">
         <TouchableOpacity onPress={() => navigation.navigate("profile1")}>
           <Text>View profile</Text>

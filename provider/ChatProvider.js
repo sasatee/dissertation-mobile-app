@@ -23,7 +23,7 @@ const ChatProvider = ({ children }) => {
     queryKey: ["profile", { id: decodedToken?.userId }],
     queryFn: ({ signal }) =>
       getUserProfileById({ signal, id: decodedToken?.userId }),
-    enabled: !!decodedToken?.userId,
+    enabled: !!decodedToken?.userId && !! decodedToken,
 });
   console.log("PROFILE", profile);
 

@@ -22,7 +22,7 @@ import DeleteConfirmationModal from "../../components/Appointment/DeleteAppointm
 import UpdateAppointmentWithBottomSheet from "../../components/Appointment/EditAppointment";
 
 const ViewAllAppointment = () => {
-  const { data, isFetching } = useQuery({
+  const { data, isFetching,isFetched } = useQuery({
     queryKey: ["Appointment"],
     queryFn: getAllAppointment,
     onSuccess: () => {},
@@ -35,27 +35,22 @@ const ViewAllAppointment = () => {
 
   const [isOpen, isSetOpen] = useState(false);
 
-
-  
   // State for delete confirmation modal
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
-  const [appointmentbyId,setAppointmentById] =useState(null)
+  const [appointmentbyId, setAppointmentById] = useState(null);
 
   const BottomSheetModalRef = useRef(null);
 
   const snapPoints = ["25%", "50%"];
   function handlePressModalForUpdate(appointmentId) {
     BottomSheetModalRef.current?.present();
-    setAppointmentById(appointmentId)
- 
+    setAppointmentById(appointmentId);
 
     isSetOpen(true);
   }
 
   //delete
-
-  
 
   const handleDeleteConfirmation = (appointment) => {
     setSelectedAppointment(appointment);
@@ -83,104 +78,111 @@ const ViewAllAppointment = () => {
 
   return (
     <>
-    
       {isDoctorTrue ? (
         <>
-        <View style={{ flex: 1, backgroundColor: "white" }}>
-          <BottomSheetModal
-            ref={BottomSheetModalRef}
-            index={0}
-            snapPoints={snapPoints}
-            backgroundStyle={{ borderRadius: 50 }}
-            onDismiss={() => isSetOpen(false)}
-          >
-            <UpdateAppointmentWithBottomSheet route={appointmentbyId} />
-          </BottomSheetModal>
-          <FlatList
-            data={data}
-            refreshControl={
-              <RefreshControl
-                refreshing={isFetching}
-                onRefresh={() => console.log("Refreshing...")}
-              />
-            }
-            renderItem={({ item }) => {
-              return (
-                <View
-                  style={[
-                    styles.container,
-                    { backgroundColor: isOpen ? "#FFFFF7" : "white" },
-                  ]}
-                >
-                  {/* Card */}
-                  <View style={styles.card} className="mx-3 py-2">
-                    <Text className="text-xs content-end text-right text-slate-500">
-                      <Text>Created at: </Text>
-                      {formatDateTime(item.createdAt)}
-                    </Text>
-
-                    {/* Header */}
-                    <View style={styles.header}>
-                      <Image
-                        style={styles.image}
-                        source={{
-                          uri: `${item?.profilePicture}`,
-                        }}
-                      />
-
-                      <View>
-                        <Text className="text-xs text-left text-slate-500">
-                          {item?.userFullName}
+          <View style={{ flex: 1, backgroundColor: "white" }}>
+            <BottomSheetModal
+              ref={BottomSheetModalRef}
+              index={0}
+              snapPoints={snapPoints}
+              backgroundStyle={{ borderRadius: 50 }}
+              onDismiss={() => isSetOpen(false)}
+            >
+              <UpdateAppointmentWithBottomSheet route={appointmentbyId} />
+            </BottomSheetModal>
+            <FlatList
+              data={data}
+              refreshControl={
+                <RefreshControl
+                  refreshing={isFetching}
+                  onRefresh={() => console.log("Refreshing...")}
+                />
+              }
+              renderItem={({ item }) => {
+                return (
+                  <View
+                    style={[
+                      styles.container,
+                      { backgroundColor: isOpen ? "#FFFFF7" : "white" },
+                    ]}
+                  >
+                    {/* Card */}
+                    <View style={styles.card} className="mx-3 py-2">
+                      {isFetched ? (
+                        <Text className="text-xs content-end text-right text-slate-500">
+                          <Text>Updated at: </Text>
+                          {formatDateTime(item.updatedAt)}
                         </Text>
-                        <Text className="text-xs text-sky-400">
-                          Appointment at: {item?.bookedTimeAMOrPM}
+                      ) : (
+                        <Text className="text-xs content-end text-right text-slate-500">
+                          <Text>Created at: </Text>
+                          {formatDateTime(item.createdAt)}
                         </Text>
-                        <Text className="text-xs text-gray-500">
-                          Gender: {item?.gender}
-                        </Text>
-                      </View>
-                    </View>
+                      )}
+                      {/* Header */}
+                      <View style={styles.header}>
 
-                    {/* Content */}
-                    <View style={styles.content}>
-                      <View style={styles.buttonContainer}>
-                        <TouchableOpacity
-                          style={styles.button}
-                          className="bg-black"
-                          onPress={() => handlePressModalForUpdate(item._id)}
-                        >
-                          <Text style={styles.textButton}>Update</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          style={styles.button}
-                          className="bg-red-500"
-                          onPress={() => console.log("Delete")}
-                        >
-                          <Text
-                            style={styles.textButton}
-                            onPress={() => handleDeleteConfirmation(item)}
-                          >
-                            Delete
+                      {/* ToDO "change image for user profile"*/}
+                        <Image
+                          style={styles.image}
+                          source={{
+                            uri: `${item?.profilePicture}`,
+                          }}
+                        />
+                         {/* ToDO "change image for user profile"*/}
+
+                        <View>
+                          <Text className="text-xs text-left text-slate-500">
+                            {item?.userFullName}
                           </Text>
-                        </TouchableOpacity>
+                          <Text className="text-xs text-sky-400">
+                            Appointment at: {item?.bookedTimeAMOrPM}
+                          </Text>
+                          <Text className="text-xs text-gray-500">
+                            Gender: {item?.gender}
+                          </Text>
+                        </View>
+                      </View>
+
+                      {/* Content */}
+                      <View style={styles.content}>
+                        <View style={styles.buttonContainer}>
+                          <TouchableOpacity
+                            style={styles.button}
+                            className="bg-black"
+                            onPress={() => handlePressModalForUpdate(item._id)}
+                          >
+                            <Text style={styles.textButton}>Update</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            style={styles.button}
+                            className="bg-red-500"
+                            onPress={() => console.log("Delete")}
+                          >
+                            <Text
+                              style={styles.textButton}
+                              onPress={() => handleDeleteConfirmation(item)}
+                            >
+                              Delete
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
                       </View>
                     </View>
                   </View>
-                </View>
-              );
-            }}
-            showsVerticalScrollIndicator={true}
-          />
-          {/* Delete Confirmation Modal */}
-          {showDeleteModal && (
-            <DeleteConfirmationModal
-              onCancel={handleCancelDelete}
-              onDelete={handleDeleteAppointment}
+                );
+              }}
+              showsVerticalScrollIndicator={true}
             />
-          )}
+            {/* Delete Confirmation Modal */}
+            {showDeleteModal && (
+              <DeleteConfirmationModal
+                onCancel={handleCancelDelete}
+                onDelete={handleDeleteAppointment}
+              />
+            )}
           </View>
         </>
-       
       ) : (
         <>
           <ViewProfileChat />

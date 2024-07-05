@@ -14,6 +14,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+
 import { useSelector } from "react-redux";
 import { app } from "../../firebase";
 import useLoginState from "../../hooks/UseLoginState";
@@ -34,8 +35,6 @@ export default function SetProfile() {
 
   const decodedtoken = useLoginState();
   const userLoginWithJWT = useSelector((state) => state.auth.token);
-
-
 
   // Request permission when component mounts
   useEffect(() => {
@@ -163,82 +162,79 @@ export default function SetProfile() {
   }
 
   return (
-    <View className="bg-white flex-1 justify-center items-center p-12">
+    <View style={styles.container}>
       <TouchableOpacity onPress={pickImage}>
         {image ? (
-          <>
-            <View>
-              <Image
-                source={{ uri: image }}
-                style={{ height: 100, width: 100, borderRadius: 75 }}
-              />
-              <View
-                style={{
-                  position: "absolute",
-                  right: 5,
-                  bottom: 5,
-                  backgroundColor: "white",
-                  borderRadius: 20,
-                  padding: 5,
-                }}
-              >
-                <Feather name="edit" size={16} color="blue" />
-              </View>
+          <View>
+            <Image
+              source={{ uri: image }}
+              style={{ height: 100, width: 100, borderRadius: 75 }}
+            />
+            <View
+              style={{
+                position: "absolute",
+                right: 5,
+                bottom: 4,
+                backgroundColor: "white",
+                borderRadius: 20,
+                padding: 5,
+              }}
+            >
+              <Feather name="edit" size={16} color="blue" />
             </View>
-            <Spacer />
-          </>
+          </View>
         ) : (
-          <>
-            <View>
-              <Image
-                source={{ uri: "https://via.placeholder.com/150" }}
-                style={{ height: 100, width: 100, borderRadius: 75 }}
-              />
-              <View
-                style={{
-                  position: "absolute",
-                  right: 5,
-                  bottom: 5,
-
-                  borderRadius: 20,
-                }}
-              >
-                <Feather name="edit" size={16} color="blue" />
-              </View>
+          <View>
+            <Image
+              source={{ uri: "https://via.placeholder.com/150" }}
+              style={{ height: 100, width: 100, borderRadius: 75 }}
+            />
+            <View
+              style={{
+                position: "absolute",
+                right: 5,
+                bottom: 5,
+                backgroundColor: "white",
+                borderRadius: 20,
+                padding: 5,
+              }}
+            >
+              <Feather name="edit" size={16} color="blue" />
             </View>
-            <Spacer />
-          </>
+          </View>
         )}
       </TouchableOpacity>
 
+      <Spacer />
+
       <TextInput
         style={styles.input}
-        className="border border-slate-600 rounded-2xl"
-        placeholder="Name"
-        placeholderTextColor="#8D6F64"
+        className="bg-gray-200 p-2 rounded-xl border-gray-500"
+        placeholder="Your name"
         value={firstName}
         onChangeText={setFirstName}
       />
+
       <Spacer />
 
       <TextInput
         style={styles.input}
-        className="border border-slate-600 rounded-2xl"
+        className="bg-gray-200 p-2 rounded-xl border-gray-500"
         placeholder="Surname"
-        placeholderTextColor="#8D6F64"
         value={lastName}
         onChangeText={setLastName}
       />
+
       <Spacer />
 
       <TextInput
         style={styles.input}
-        className="border border-slate-600 rounded-2xl"
+        className="bg-gray-200 p-2 rounded-xl border-gray-500"
         placeholder="Gender"
-        placeholderTextColor="#8D6F64"
         value={gender}
         onChangeText={setGender}
       />
+
       <Spacer />
 
       <Button
@@ -246,9 +242,10 @@ export default function SetProfile() {
         onPress={handleSave}
         disabled={uploading}
       />
+
       {uploading && <ActivityIndicator size="large" color="#0000ff" />}
 
-      {isDoctor && <Text> doctor is true</Text>}
+      {isDoctor && <Text>Doctor is true</Text>}
     </View>
   );
 }
@@ -256,15 +253,19 @@ export default function SetProfile() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
     justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
+    paddingHorizontal: 20,
   },
   input: {
-    paddingVertical: 12,
-    paddingHorizontal: 15,
-
     width: "100%",
-    fontSize: 14,
-    fontWeight: "500",
+    height: 50,
+    borderColor: "gray",
+    paddingVertical: 10,
+    // borderWidth: 1,
+    // borderRadius: 8,
+    paddingHorizontal: 20,
+    marginBottom: 10,
   },
 });

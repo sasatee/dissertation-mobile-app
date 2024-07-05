@@ -17,6 +17,7 @@ import { bookAppointment } from "../../services/appointment";
 import { DoctorPaymentPrice } from "../../services/doctor";
 import { PaymentToBookAppointment } from "../../services/payment";
 import { queryClientfn } from "../../services/queryClient";
+import { appointmentSchema } from "../../validation/auth"; // Import yup schema
 
 const BookAppointment = ({ route }) => {
   //stripe hook
@@ -48,7 +49,6 @@ const BookAppointment = ({ route }) => {
       ToastAndroid.show("Appointment successfully book", ToastAndroid.SHORT);
     },
     onError: (data) => {
-      //ToastAndroid.show("Please make selection", ToastAndroid.LONG);
       console.log(data);
     },
   });
@@ -64,11 +64,17 @@ const BookAppointment = ({ route }) => {
       ToastAndroid.show(`${error}`, ToastAndroid.SHORT);
     },
   });
-
+  // Function to handle payment and booking
   async function makePayment() {
+    try {
+      await appointmentSchema.validate({ reason }); // Validate reason using yup
+    } catch (error) {
+      ToastAndroid.show(error.message, ToastAndroid.SHORT);
+      return;
+    }
     //1.create a payment intent
     const murTousd = Math.floor(price / 47);
-    console.log(murTousd)
+
     payment({
       amount: price,
     });
@@ -76,13 +82,8 @@ const BookAppointment = ({ route }) => {
     const paymentAccept = await initPaymentSheet({
       merchantDisplayName: "JustDoctor.me",
       paymentIntentClientSecret: paymentKeyData?.paymentIntent,
-      // defaultBillingDetails: {
-      //   name: "adda",
-      //   address: "addasada",
-      // },
     });
     if (paymentAccept.error) {
-      //console.log(paymentAccept.error);
       ToastAndroid.show("Something went wrong", ToastAndroid.SHORT);
       return;
     }
@@ -101,8 +102,7 @@ const BookAppointment = ({ route }) => {
       return;
     }
 
-     const bookedTime = getUpdatedBookedTime(selectedDate, selectedTime);
-     console.log(bookedTime)
+    const bookedTime = getUpdatedBookedTime(selectedDate, selectedTime);
 
     //if payment ok ==> create appointment
     mutate({
@@ -160,13 +160,13 @@ const BookAppointment = ({ route }) => {
     //console.log(timeList)
   };
 
-   const getUpdatedBookedTime = (date, time) => {
+  const getUpdatedBookedTime = (date, time) => {
     if (!date || !time) return null;
-    const [timePart, meridiem] = time.split(' ');
-    const [hour, minute] = timePart.split(':');
+    const [timePart, meridiem] = time.split(" ");
+    const [hour, minute] = timePart.split(":");
     let hour24 = parseInt(hour);
-    if (meridiem === 'PM' && hour24 !== 12) hour24 += 12;
-    if (meridiem === 'AM' && hour24 === 12) hour24 = 0;
+    if (meridiem === "PM" && hour24 !== 12) hour24 += 12;
+    if (meridiem === "AM" && hour24 === 12) hour24 = 0;
     const dateMoment = moment(date);
     dateMoment.hours(hour24).minutes(minute);
     return dateMoment.toISOString();

@@ -27,3 +27,7 @@ export const lastnameValidationSchema = Yup.string().required("This field  is re
 export const passwordConfirmationSchema = Yup.string()
   .required("Confirm password is required")
   .oneOf([Yup.ref("password"), null], "Passwords must match");
+
+  export const appointmentSchema = Yup.object().shape({
+    reason: Yup.string().required('Reason is required to book an appointment'),
+  });
