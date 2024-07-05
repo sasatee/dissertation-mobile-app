@@ -1,31 +1,32 @@
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { useNavigation } from "@react-navigation/native";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { format, isValid } from "date-fns"; // Import isValid to check date validity
 import React, { useRef, useState } from "react";
 import {
   FlatList,
-  Text,
-  View,
   Image,
-  TouchableOpacity,
-  StyleSheet,
   RefreshControl,
-  Switch,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ToastAndroid
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { useQuery } from "@tanstack/react-query";
-import { getAllAppointment } from "../../services/appointment";
-import { format, isValid } from "date-fns"; // Import isValid to check date validity
-import ViewProfileChat from "../../components/Doctor/ViewDoctorProfileChat";
 import { useSelector } from "react-redux";
-import { checkIsDoctorLogin } from "../../redux/slice/authenticationSlice";
-import Schedule from "./ScheduleAppointmentScreen";
-import { BottomSheetModal, BottomModalProvider } from "@gorhom/bottom-sheet";
 import DeleteConfirmationModal from "../../components/Appointment/DeleteAppointmetwithModal";
 import UpdateAppointmentWithBottomSheet from "../../components/Appointment/EditAppointment";
+import ViewProfileChat from "../../components/Doctor/ViewDoctorProfileChat";
+import { checkIsDoctorLogin } from "../../redux/slice/authenticationSlice";
+import apiClient from "../../services/apiClient";
+import { getAllAppointment } from "../../services/appointment";
+import Schedule from "./ScheduleAppointmentScreen";
+import { queryClientfn } from "../../services/queryClient";
 
 const ViewAllAppointment = () => {
-  const { data, isFetching,isFetched } = useQuery({
+  const { data, isFetching, isFetched } = useQuery({
     queryKey: ["Appointment"],
     queryFn: getAllAppointment,
-    onSuccess: () => {},
   });
   const isDoctorTrue = useSelector(checkIsDoctorLogin);
 
@@ -50,7 +51,33 @@ const ViewAllAppointment = () => {
     isSetOpen(true);
   }
 
-  //delete
+  //delete query
+  
+
+  const {
+    mutate: deleteAppointment,
+    isLoading: isMutationLoading,
+     data: deleteappontment,
+    isSuccess,
+    error,
+    submittedAt,
+  } = useMutation({
+    mutationFn: (newData) =>
+      apiClient.delete(`api/v1/appointment/${newData._id}`),
+
+    onSettled: () => {
+      // Invalidate queries after mutation is settled
+      queryClientfn.invalidateQueries(["Appointment"]);
+    },
+
+    onSuccess:()=>{
+      ToastAndroid.show(deleteAppointment?.data?.msg, ToastAndroid.TOP);
+      
+    }
+  });
+  console.log("DELETE APPOINTMENT", deleteappontment?.data?.msg, isSuccess);
+
+  //
 
   const handleDeleteConfirmation = (appointment) => {
     setSelectedAppointment(appointment);
@@ -58,9 +85,12 @@ const ViewAllAppointment = () => {
   };
 
   const handleDeleteAppointment = () => {
-    // Perform delete operation here
-    console.log("Deleting appointment:", selectedAppointment);
-    // Close the modal after deletion
+    if (selectedAppointment && selectedAppointment._id) {
+      console.log("selectedAppointment", selectedAppointment._id);
+      deleteAppointment({ _id: selectedAppointment._id });
+    } else {
+      console.error("No appointment selected for deletion");
+    }
     setShowDeleteModal(false);
   };
 
@@ -121,15 +151,14 @@ const ViewAllAppointment = () => {
                       )}
                       {/* Header */}
                       <View style={styles.header}>
-
-                      {/* ToDO "change image for user profile"*/}
+                        {/* ToDO "change image for user profile"*/}
                         <Image
                           style={styles.image}
                           source={{
                             uri: `${item?.profilePicture}`,
                           }}
                         />
-                         {/* ToDO "change image for user profile"*/}
+                        {/* ToDO "change image for user profile"*/}
 
                         <View>
                           <Text className="text-xs text-left text-slate-500">

@@ -5,7 +5,6 @@ import filter from "lodash.filter";
 import React, { useState } from "react";
 import {
   Alert,
-  Button,
   FlatList,
   Image,
   SafeAreaView,
@@ -20,13 +19,14 @@ import { useDispatch, useSelector } from "react-redux";
 import useAuth from "../provider/GoogleProvider";
 
 import FeatherIcon from "react-native-vector-icons/Feather";
+import Rating from "../components/CustomComponent/Rating";
+import Slider from "../components/CustomComponent/Slider";
+import useLoginState from "../hooks/UseLoginState";
 import {
   logoutJwtToken,
   selectCurrentJwtToken,
 } from "../redux/slice/authenticationSlice";
 import { getAllDoctor } from "../services/doctor";
-import useLoginState from "../hooks/UseLoginState";
-import Slider from "../components/CustomComponent/Slider";
 
 const HomeScreen = () => {
   const decodedToken = useLoginState();
@@ -102,7 +102,6 @@ const HomeScreen = () => {
               style={styles.searchControl}
               value={searchQuery}
             />
-            
           </View>
           <View className="m-1">
             {!!user && decodedToken && (
@@ -175,10 +174,8 @@ const HomeScreen = () => {
         <TouchableOpacity onPress={() => navigation.navigate("profile1")}>
           <Text>View profile</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("Layout")}>
-          <Text>View profile</Text>
-        </TouchableOpacity>
       </View>
+      <Rating />
     </SafeAreaView>
   );
 };

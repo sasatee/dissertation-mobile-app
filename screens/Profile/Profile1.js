@@ -8,6 +8,8 @@ import {
   Alert,
   Button,
   Image,
+  SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -27,6 +29,13 @@ export default function SetProfile() {
   const isDoctor = useSelector(checkIsDoctorLogin);
   const [gender, setGender] = useState("");
   const [image, setImage] = useState(null);
+
+  //doctor
+  const [desc, setDesc] = useState("");
+  const [price, setPrice] = useState(null);
+  const [specialization, setSpecialization] = useState("");
+  const [experience, setExperience] = useState("");
+
   const [hasPermission, setHasPermission] = useState(null);
   const baseURL = BASE_URL.toString();
 
@@ -121,7 +130,17 @@ export default function SetProfile() {
     formData.append("firstName", firstName);
     formData.append("lastName", lastName);
     formData.append("gender", gender);
+    //
+    formData.append("description", desc);
+    formData.append("experience", experience);
+    formData.append("specialization", specialization);
+    formData.append("price", price);
+    //
 
+    // "description": null,
+    // "experience": null,
+    // "price": null,
+    // "specialization": null
     try {
       let response = await fetch(
         `${baseURL}/api/v1/profile/${decodedtoken?.userId}`,
@@ -162,102 +181,155 @@ export default function SetProfile() {
   }
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity onPress={pickImage}>
-        {image ? (
-          <View>
-            <Image
-              source={{ uri: image }}
-              style={{ height: 100, width: 100, borderRadius: 75 }}
-            />
-            <View
-              style={{
-                position: "absolute",
-                right: 5,
-                bottom: 4,
-                backgroundColor: "white",
-                borderRadius: 20,
-                padding: 5,
-              }}
-            >
-              <Feather name="edit" size={16} color="blue" />
-            </View>
-          </View>
-        ) : (
-          <View>
-            <Image
-              source={{ uri: "https://via.placeholder.com/150" }}
-              style={{ height: 100, width: 100, borderRadius: 75 }}
-            />
-            <View
-              style={{
-                position: "absolute",
-                right: 5,
-                bottom: 5,
-                backgroundColor: "white",
-                borderRadius: 20,
-                padding: 5,
-              }}
-            >
-              <Feather name="edit" size={16} color="blue" />
-            </View>
-          </View>
-        )}
-      </TouchableOpacity>
+    <SafeAreaView style={styles.container}>
+      <ScrollView
+        //showsVerticalScrollIndicator={true}
+        alwaysBounceVertical={true}
+        centerContent={true}
+      >
+        <View style={styles.containerinside}>
+          <TouchableOpacity onPress={pickImage}>
+            {image ? (
+              <View>
+                <Image
+                  source={{ uri: image }}
+                  style={{ height: 100, width: 100, borderRadius: 75 }}
+                />
+                <View
+                  style={{
+                    position: "absolute",
+                    right: 5,
+                    bottom: 4,
+                    backgroundColor: "white",
+                    borderRadius: 20,
+                    padding: 5,
+                  }}
+                >
+                  <Feather name="edit" size={16} color="blue" />
+                </View>
+              </View>
+            ) : (
+              <View>
+                <Image
+                  source={{ uri: "https://via.placeholder.com/150" }}
+                  style={{ height: 100, width: 100, borderRadius: 75 }}
+                />
+                <View
+                  style={{
+                    position: "absolute",
+                    right: 5,
+                    bottom: 5,
+                    backgroundColor: "white",
+                    borderRadius: 20,
+                    padding: 5,
+                  }}
+                >
+                  <Feather name="edit" size={16} color="blue" />
+                </View>
+              </View>
+            )}
+          </TouchableOpacity>
 
-      <Spacer />
+          <Spacer />
 
-      <TextInput
-        style={styles.input}
-        className="bg-gray-200 p-2 rounded-xl border-gray-500"
-        placeholder="Your name"
-        value={firstName}
-        onChangeText={setFirstName}
-      />
+          <TextInput
+            style={styles.input}
+            className="bg-gray-200 p-2 rounded-xl border-gray-500"
+            placeholder="Your name"
+            value={firstName}
+            onChangeText={setFirstName}
+          />
 
-      <Spacer />
+          <Spacer />
 
-      <TextInput
-        style={styles.input}
-        className="bg-gray-200 p-2 rounded-xl border-gray-500"
-        placeholder="Surname"
-        value={lastName}
-        onChangeText={setLastName}
-      />
+          <TextInput
+            style={styles.input}
+            className="bg-gray-200 p-2 rounded-xl border-gray-500"
+            placeholder="Surname"
+            value={lastName}
+            onChangeText={setLastName}
+          />
 
-      <Spacer />
+          <Spacer />
 
-      <TextInput
-        style={styles.input}
-        className="bg-gray-200 p-2 rounded-xl border-gray-500"
-        placeholder="Gender"
-        value={gender}
-        onChangeText={setGender}
-      />
+          <TextInput
+            style={styles.input}
+            className="bg-gray-200 p-2 rounded-xl border-gray-500"
+            placeholder="Gender"
+            value={gender}
+            onChangeText={setGender}
+          />
 
-      <Spacer />
+          <Spacer />
 
-      <Button
-        title={uploading ? "Uploading..." : "Save"}
-        onPress={handleSave}
-        disabled={uploading}
-      />
+          {isDoctor && (
+            <>
+              <TextInput
+                style={styles.input}
+                className="bg-gray-200 p-2 rounded-xl border-gray-500"
+                placeholder="Description"
+                value={desc}
+                onChangeText={setDesc}
+              />
 
-      {uploading && <ActivityIndicator size="large" color="#0000ff" />}
+              <Spacer />
 
-      {isDoctor && <Text>Doctor is true</Text>}
-    </View>
+              <TextInput
+                style={styles.input}
+                className="bg-gray-200 p-2 rounded-xl border-gray-500"
+                placeholder="Specialization"
+                value={specialization}
+                onChangeText={setSpecialization}
+              />
+
+              <Spacer />
+              <TextInput
+                style={styles.input}
+                className="bg-gray-200 p-2 rounded-xl border-gray-500"
+                placeholder="Experience"
+                value={experience}
+                onChangeText={setExperience}
+              />
+
+              <Spacer />
+              <TextInput
+                numberOfLines={2}
+                style={styles.input}
+                className="bg-gray-200 p-2 rounded-xl border-gray-500"
+                placeholder="Price"
+                value={price}
+                onChangeText={setPrice}
+              />
+
+              <Spacer />
+            </>
+          )}
+          <Button
+            title={uploading ? "Uploading..." : "Save"}
+            onPress={handleSave}
+            style={{ margin: 50 }}
+            disabled={uploading}
+          />
+          {uploading && <ActivityIndicator size="large" color="#0000ff" />}
+
+          {isDoctor && <Text>Doctor is true</Text>}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
     backgroundColor: "white",
     paddingHorizontal: 20,
   },
+  containerinside: {
+    alignItems: "center",
+    marginTop: 20,
+  },
+
   input: {
     width: "100%",
     height: 50,
