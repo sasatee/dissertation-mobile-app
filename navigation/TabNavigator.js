@@ -14,6 +14,7 @@ import ChannelScreen from "../screens/ChatAndCall/ChannelAndChatScreen";
 import NormalStackNavigator from "./NormalStackNavigator";
 import SetProfile from "../screens/Profile/Profile1";
 import ViewAllAppointmentDetailsForDoctor from "../screens/Appointment/ViewAllAppointmentScreen";
+import ChatBot from "../screens/Chatbot/ChatBot";
 
 const Tab = createBottomTabNavigator();
 
@@ -95,6 +96,12 @@ export default function BottomTabNavigation() {
       <Tab.Screen
         name="Layout"
         component={NormalStackNavigator}
+        options={{ tabBarButton: () => null, tabBarVisible: false }}
+      />
+       <Tab.Screen
+       
+        name="ChatBot"
+        component={ChatBot}
         options={{ tabBarButton: () => null, tabBarVisible: false }}
       />
     </Tab.Navigator>

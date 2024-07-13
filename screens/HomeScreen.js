@@ -27,6 +27,7 @@ import {
   selectCurrentJwtToken,
 } from "../redux/slice/authenticationSlice";
 import { getAllDoctor } from "../services/doctor";
+import ChatBot from "./Chatbot/ChatBot";
 
 const HomeScreen = () => {
   const decodedToken = useLoginState();
@@ -168,14 +169,20 @@ const HomeScreen = () => {
           </TouchableOpacity>
         )}
       </View>
-      <Slider />
-
       <View className="space-y-5 px-2">
         <TouchableOpacity onPress={() => navigation.navigate("profile1")}>
           <Text>View profile</Text>
         </TouchableOpacity>
       </View>
       <Rating />
+      <Slider />
+      <ChatBot />
+
+     
+
+   
+   
+
     </SafeAreaView>
   );
 };

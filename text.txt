@@ -1,194 +1,221 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { useGetAllAppointmentQuery } from "../services/appointment";
+curl \
+  -H 'Content-Type: application/json' \
+  -d '{"contents":[{"parts":[{"text":"Explain how AI works"}]}]}' \
+  -X POST 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyAqRdoLv_z4R3y4lMvYxrqZfGgaaow6WrE'
+
+
+
+
+  import "react-native-gesture-handler";
+import { StatusBar } from "expo-status-bar";
 import {
-  useGetAllAppointments,
-  useGetAppointmentById,
-  useCreateNewAppointment,
-  useDeleteAppointmentById,
-} from "../hooks/apiAppointment";
+  Button,
+  Pressable,
+  StyleSheet,
+  Switch,
+  Text,
+  useWindowDimensions,
+  View,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
+import {
+  BottomSheetModal,
+  BottomSheetModalProvider,
+} from "@gorhom/bottom-sheet";
+import { useRef, useState } from "react";
+import { AntDesign } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
+import { FlatList } from "react-native-gesture-handler";
+import axios from "axios";
+// import { isSpeakingAsync, speak, stop } from "expo-speech";
+import ChatBubble from "./ChatBubble";
 
-const CombineScreenViewDocAndBook = () => {
-  //   const shouldFetchAppointments = true;
+const messages = [
+  { id: "1", text: "Hello!", sender: "user" },
+  { id: "2", text: "Hi there!", sender: "other" },
+  // Add more messages here
+];
 
-  //   const { data, isLoading, isError, status } = useGetAllAppointmentQuery(null, {
-  //     skip: !shouldFetchAppointments,
-  //   });
+export default function ChatBot() {
+  const [isOpen, setIsOpen] = useState(false);
 
-  const {
-    appointments,
-    loading: appointmentsLoading,
-    error: appointmentsError,
-  } = useGetAllAppointments();
-  // Use other hooks similarly...
+  const bottomSheetModalRef = useRef(null);
 
-  if (appointmentsLoading) {
-    return (
-      <View
-        style={{ flex: 1, justifyContent: "center", flexDirection: "column" }}
-      >
-        <Text>Loading... </Text>
-      </View>
+  const snapPoints = ["75%"];
+
+  function handlePresentModal() {
+    bottomSheetModalRef.current?.present();
+    setTimeout(() => {
+      setIsOpen(true);
+    }, 100);
+  }
+  //Chatbot
+
+  const [chat, SetChat] = useState([]);
+  const [userInput, setUserInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+
+  const Api_key = "AIzaSyAqRdoLv_z4R3y4lMvYxrqZfGgaaow6WrE";
+
+  const handleUserInput = async () => {
+    let updateChat = [
+      ...chat,
+      {
+        role: "user",
+        parts: [{ text: userInput }],
+      },
+    ];
+
+    setLoading(true);
+
+    try {
+      const reponse = await axios.post(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${Api_key}`,
+        {
+          contents: updateChat,
+        }
+      );
+      console.log("Gemini Pro api response", reponse.data);
+
+      const modelReponse =
+        reponse.data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+
+      if (modelReponse) {
+        // Add model response
+        const updatedChatWithModel = [
+          ...updateChat,
+          {
+            role: "model",
+            parts: [{ text: modelReponse }],
+          },
+        ];
+        SetChat(updatedChatWithModel);
+      }
+    } catch (error) {
+      console.error("Eror calling Gemini Pro Api", error);
+      setError("An error occurred. Please try Again  later! ");
+    }
+    setLoading(false);
+  };
+
+  const handleSpeech = async (text) => {
+    if (isSpeaking) {
+      //if already speaking,stop the speech
+
+      stop();
+      setIsSpeaking(false);
+    } else {
+      //if not speaking , start the speech
+      if (!(await isSpeakingAsync())) {
+        speak(text);
+        setIsSpeaking(true);
+      }
+    }
+
+    const renderChatItem = ({ item }) => (
+      <ChatBubble
+        role={item.role}
+        text={item.part[0].text}
+//onSpeech={() => handleSpeech(item.parts[0].text)}
+      />
     );
-  }
 
-  if (appointmentsError) {
+    //
     return (
-      <View
-        style={{ flex: 1, justifyContent: "center", flexDirection: "column" }}
-      >
-        <Text>Error: {appointmentsError.message}</Text>
-      </View>
+      <BottomSheetModalProvider>
+        <View style={[styles.container, { backgroundColor: "white" }]}>
+          <Button title="Present Modal" onPress={handlePresentModal} />
+
+          <BottomSheetModal
+            ref={bottomSheetModalRef}
+            index={0}
+            snapPoints={snapPoints}
+            backgroundStyle={{ borderRadius: 50 }}
+            onDismiss={() => setIsOpen(false)}
+          >
+            <View className="flex-1 bg-white p-8">
+              <Text className="text-center text-lg text-ellipsis decoration mt-5">
+                Chat Bot
+              </Text>
+              <FlatList
+                data={messages}
+                keyExtractor={renderChatItem}
+                //     renderItem={({ item,index }) => (
+                //       <View
+                //         className={`my-3 ${
+                //           item.sender === "user" ? "items-end" : "items-start"
+                //         }`}
+                //       >
+                //         <View
+                //           className={`p-3 ${
+                //             item.sender === "user" ? " bg-blue-500" : "bg-black"
+                //           } rounded-lg`}
+                //         >
+                //           <Text className="text-white">{item.text}</Text>
+                //         </View>
+                //       </View>
+                //     )}
+                renderItem={(item, index) => index.toString()}
+              />
+            </View>
+            <View className="flex-row  items-center mt-9">
+              <TextInput
+                placeholder="Type your message..."
+                placeholderTextColor="#aaa"
+                value={userInput}
+                onChangeText={setUserInput}
+                className="flex-1 h-20 mr-5 p-6 border bg-[#fff]"
+              />
+              <TouchableOpacity
+                onPress={handleUserInput}
+                className="p-9 bg-slate-600 border border-fuchsia-600"
+              >
+                <Text className="text-center text-slate-950">SEND</Text>
+              </TouchableOpacity>
+            </View>
+          </BottomSheetModal>
+        </View>
+      </BottomSheetModalProvider>
     );
-  }
-  return (
-    <View
-      style={{ flex: 1, justifyContent: "center", flexDirection: "column" }}
-    >
-      <Text>{JSON.stringify(appointments)}</Text>
-    </View>
-  );
-};
+  };
+}
 
-export default CombineScreenViewDocAndBook;
-
-const styles = StyleSheet.create({});
-
-
-
-
-
-
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
-import { BASE_URL } from '@env';
-
-const baseURL = BASE_URL.toString();
-
-
-// Custom function to construct headers
-const constructHeaders = async () => {
-  const headers = new Headers();
-
-  const token = await ReactNativeAsyncStorage.getItem('jwtToken');
-  const googleAccessToken = await ReactNativeAsyncStorage.getItem('googleAccessToken');
-
-  if (token && googleAccessToken) {
-    headers.set('Authorization', `Bearer ${token},${googleAccessToken}`);
-  } else if (token) {
-    headers.set('Authorization', `Bearer ${token}`);
-  } else if (googleAccessToken) {
-    headers.set('Authorization', `Bearer ${googleAccessToken}`);
-  } else {
-    console.error('No token available');
-  }
-
-  return headers;
-};
-
-// Base query with custom headers
-// const baseQuery = fetchBaseQuery({
-//   baseUrl: baseURL,
-//   prepareHeaders: async (headers, { getState }) => {
-//     const customHeaders = await constructHeaders();
-//     console.log(customHeaders)
-//     customHeaders.forEach((value, key) => {
-//       headers.set(key, value);
-//     });
-//     return headers;
-//   },
-// });
-
-const baseQuery = fetchBaseQuery({
-  baseUrl: baseURL,
-  prepareHeaders: async (headers, { getState }) => {
-    // Remove any existing Authorization header to ensure it's fresh
-    headers.set('Authorization', undefined);
-
-    // Construct headers with the latest token
-    const customHeaders = await constructHeaders();
-    console.log(customHeaders);
-    customHeaders.forEach((value, key) => {
-      // Here, only the latest token value will be set
-      headers.set(key, value);
-    });
-    
-    return headers;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "gray",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  contentContainer: {
+    flex: 1,
+    alignItems: "center",
+    paddingHorizontal: 15,
+  },
+  row: {
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginVertical: 10,
+  },
+  title: {
+    fontWeight: "900",
+    letterSpacing: 0.5,
+    fontSize: 16,
+  },
+  subtitle: {
+    color: "#101318",
+    fontSize: 14,
+    fontWeight: "bold",
+  },
+  description: {
+    color: "#56636F",
+    fontSize: 13,
+    fontWeight: "normal",
+    width: "100%",
   },
 });
-
-
-// API service
-export const appointments = createApi({
-  reducerPath: 'appointments',
-  baseQuery: baseQuery,
-  endpoints: (builder) => ({
-    getAppointments: builder.query({
-      query: () => 'api/v1/appointment',
-    }),
-    getAppointmentById: builder.query({
-      query: (id) => `api/v1/appointment/${id}`,
-    }),
-    createNewAppointment: builder.mutation({
-      query: (newAppointment) => ({
-        url: 'api/v1/appointment',
-        method: 'POST',
-        body: newAppointment,
-      }),
-    }),
-    deleteAppointmentById: builder.mutation({
-      query: (id) => ({
-        url: `api/v1/appointment/${id}`,
-        method: 'DELETE',
-      }),
-    }),
-  }),
-});
-
-// Export hooks for usage in functional components
-export const {
-  useGetAppointmentsQuery,
-  useGetAppointmentByIdQuery,
-  useCreateNewAppointmentMutation,
-  useDeleteAppointmentByIdMutation,
-} = appointments;
-
-
-
-
-
-
-
-
-
-import React from "react";
-import {
-  CallContent,
-  StreamCall,
-  StreamVideo,
-  StreamVideoClient,
-  User,
-} from "@stream-io/video-react-native-sdk";
-import { STREAM_PUBLIC } from "@env";
-import { Text } from "react-native";
-
-const apiKey = STREAM_PUBLIC;
-const userId = "6640b042da333b00082e9a37";
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjY0MGIwNDJkYTMzM2IwMDA4MmU5YTM3In0.6640b042da333b00082e9a37";
-const callId = "default_f496fa0c-caa6-4722-8ce4-64db35659a95";
-const user = { id: userId };
-
-const client = new StreamVideoClient({ apiKey, user, token });
-const call = client.call("default", callId);
-call.join({ create: true });
-
-const CallScreen = () => {
-  return (
-    <StreamVideo client={client}>
-      <StreamCall call={call}><CallContent/></StreamCall>
-    </StreamVideo>
-  );
-};
-
-export default CallScreen;

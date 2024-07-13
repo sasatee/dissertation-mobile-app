@@ -68,9 +68,11 @@ const ViewAllAppointment = () => {
     onSettled: () => {
       // Invalidate queries after mutation is settled
       queryClientfn.invalidateQueries(["Appointment"]);
+      ToastAndroid.show("Delete Appointment successfully ", ToastAndroid.LONG);
     },
 
     onSuccess:()=>{
+      ToastAndroid.show("Delete Appointment successfully ", ToastAndroid.LONG);
       ToastAndroid.show(deleteAppointment?.data?.msg, ToastAndroid.TOP);
       
     }
@@ -110,12 +112,13 @@ const ViewAllAppointment = () => {
     <>
       {isDoctorTrue ? (
         <>
-          <View style={{ flex: 1, backgroundColor: "white" }}>
+          <View style={{ flex: 1, backgroundColor: "#FAF6F5" }}>
             <BottomSheetModal
               ref={BottomSheetModalRef}
               index={0}
               snapPoints={snapPoints}
-              backgroundStyle={{ borderRadius: 50 }}
+              backgroundStyle={{ borderRadius: 90 }}
+          
               onDismiss={() => isSetOpen(false)}
             >
               <UpdateAppointmentWithBottomSheet route={appointmentbyId} />

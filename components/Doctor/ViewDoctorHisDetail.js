@@ -32,7 +32,7 @@ export default function ViewDoctorDetail({ route }) {
     await channel.watch();
     navigation.navigate("Chat", channel.id);
   };
-  // co
+
   let content;
 
   if (isLoading) {
@@ -78,7 +78,7 @@ export default function ViewDoctorDetail({ route }) {
               </Text>
             </View>
           </TouchableOpacity>
-
+          <Text>$ {data?.doctor?.price}</Text>
           <Text className=" text-sm/tight text-gray-500">
             {data?.doctor?.description}
           </Text>
