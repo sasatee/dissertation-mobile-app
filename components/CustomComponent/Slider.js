@@ -1,5 +1,5 @@
-import { View, Text, FlatList, Image, Dimensions } from "react-native";
-import React from "react";
+import { View, FlatList, Image, Dimensions } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
 
 const SliderList = [
   {
@@ -35,13 +35,31 @@ const SliderList = [
 ];
 
 const Slider = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const flatListRef = useRef(null);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex === SliderList.length - 1 ? 0 : prevIndex + 1));
+    }, 3000); // Change slide every 3 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (flatListRef.current) {
+      flatListRef.current.scrollToIndex({ index: currentIndex, animated: true });
+    }
+  }, [currentIndex]);
+
   return (
     <View className="my-10 mx-1">
       <FlatList
+        ref={flatListRef}
         data={SliderList}
         horizontal
         showsHorizontalScrollIndicator={false}
-        renderItem={({ item, index }) => (
+        renderItem={({ item }) => (
           <Image
             source={{ uri: item.imgUrl }}
             style={{
@@ -52,6 +70,7 @@ const Slider = () => {
             }}
           />
         )}
+        keyExtractor={(item) => item.id.toString()}
       />
     </View>
   );
