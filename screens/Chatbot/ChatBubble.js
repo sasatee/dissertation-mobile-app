@@ -12,7 +12,7 @@ const ChatBubble = ({ role, text, onSpeech }) => {
       <Text style={styles.chatText}>{text}</Text>
       {role === "model" && (
         <TouchableOpacity onPress={onSpeech} style={styles.speechIcon}>
-          <Text>🎤</Text>
+          <Text className='text-lg'> 🤖</Text>
         </TouchableOpacity>
       )}
     </View>
