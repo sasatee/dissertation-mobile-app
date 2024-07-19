@@ -41,7 +41,7 @@ const Slider = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex === SliderList.length - 1 ? 0 : prevIndex + 1));
-    }, 3000); // Change slide every 3 seconds
+    }, 5000); // Change slide every 3 seconds
 
     return () => clearInterval(interval);
   }, []);
