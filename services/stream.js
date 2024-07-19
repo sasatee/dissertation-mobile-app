@@ -1,4 +1,4 @@
-import { BASE_URL } from "@env";
+import { BASE_URL,host_url } from "@env";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import axios, { Axios } from "axios";
 

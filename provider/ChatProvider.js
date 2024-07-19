@@ -8,94 +8,84 @@ import useLoginState from "../hooks/UseLoginState";
 import { getUserProfileById } from "../services/profile";
 import { getStreamToken } from "../services/stream";
 
-// Initialize Stream client
 const client = StreamChat.getInstance(STREAM_PUBLIC);
 
 const ChatProvider = ({ children }) => {
   const decodedToken = useLoginState();
 
-  // Fetch user profile
-  const {
-    data: profile,
-    isLoading: profileLoading,
-    error: profileError,
-  } = useQuery({
+  const { data: profile } = useQuery({
     queryKey: ["profile", { id: decodedToken?.userId }],
+
     queryFn: ({ signal }) =>
       getUserProfileById({ signal, id: decodedToken?.userId }),
-    enabled: !!decodedToken?.userId && !!decodedToken,
-  });
-  console.log("Decoded Token:", decodedToken);
-  console.log("PROFILE:", profile);
-
-  // Fetch Stream token
-  const {
-    data: streamToken,
-    isLoading: tokenLoading,
-    error: tokenError,
-  } = useQuery({
-    queryFn: getStreamToken,
-    queryKey: ["Stream"],
     enabled: !!decodedToken?.userId,
   });
-  //console.log("Stream Token:", streamToken);
+
+  const { data: streamToken } = useQuery({
+    queryFn: getStreamToken,
+    queryKey: ["Stream"],
+
+    // enabled: !!streamToken
+  });
 
   const [isReady, setIsReady] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Ensure both profile and streamToken are available before attempting to connect
-    if (profile && streamToken) {
-      const connect = async () => {
-        try {
-          setIsLoading(true);
-          // Disconnect previous user if already connected
-          if (client.userID) {
-            await client.disconnectUser();
-          }
-          // Connect the new user
-          await client.connectUser(
-            {
-              id: profile._id,
-              name: `${profile.firstName} ${profile.lastName}`,
-              image: profile.profilePicture,
-            },
-            streamToken
-          );
-          setIsReady(true);
-        } catch (error) {
-          setError(error.message);
-          console.error("Error connecting to Stream:", error);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-
-      connect();
-
-      return () => {
-        // Cleanup function
-        if (client.userID) {
-          client.disconnectUser();
-        }
-        setIsReady(false);
-      };
+    if (!profile) {
+      setIsLoading(true);
+      return;
     }
-  }, [profile, streamToken]);
 
-  if (profileLoading || tokenLoading || isLoading) {
+    const connect = async () => {
+      try {
+        // Disconnect the previous user if already connected
+        if (client.user) {
+          await client.disconnectUser();
+        }
+
+        // Connect as the new user
+        await client.connectUser(
+          {
+            id: profile?._id,
+            name: `${profile?.firstName} ${profile?.lastName}`,
+            image: profile?.profilePicture,
+          },
+          streamToken
+        );
+        //console.log(client.devToken(profile?._id));
+        setIsReady(true);
+      } catch (error) {
+        setError(error.message);
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    connect();
+
+    return () => {
+      if (isReady) {
+        client.disconnectUser();
+      }
+      setIsReady(false);
+    };
+  }, [profile?._id]);
+
+  if (error) {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <ActivityIndicator size="large" color="blue" />
+        <Text>{error}</Text>
       </View>
     );
   }
 
-  if (error || profileError || tokenError) {
+  if (isLoading) {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Text>{error || profileError?.message || tokenError?.message}</Text>
+        <ActivityIndicator size={"large"} color="blue" />
       </View>
     );
   }
