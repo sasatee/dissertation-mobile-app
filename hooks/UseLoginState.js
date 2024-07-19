@@ -49,7 +49,7 @@ const useLoginState = () => {
     };
 
     checkLoginState();
-  }, []);
+  }, [dispatch]);
 
   return decodedToken;
 };

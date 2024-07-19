@@ -23,9 +23,10 @@ const ChatProvider = ({ children }) => {
     queryKey: ["profile", { id: decodedToken?.userId }],
     queryFn: ({ signal }) =>
       getUserProfileById({ signal, id: decodedToken?.userId }),
-    enabled: !!decodedToken?.userId && !! decodedToken,
-});
-  console.log("PROFILE", profile);
+    enabled: !!decodedToken?.userId && !!decodedToken,
+  });
+  console.log("Decoded Token:", decodedToken);
+  console.log("PROFILE:", profile);
 
   // Fetch Stream token
   const {
@@ -37,6 +38,7 @@ const ChatProvider = ({ children }) => {
     queryKey: ["Stream"],
     enabled: !!decodedToken?.userId,
   });
+  //console.log("Stream Token:", streamToken);
 
   const [isReady, setIsReady] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
