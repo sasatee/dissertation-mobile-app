@@ -11,6 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const CallScreen = ({ route }) => {
   const navigation = useNavigation();
+
   //const client = useStreamVideoClient();
   // const callId = route.params;
 
@@ -41,7 +42,7 @@ const CallScreen = ({ route }) => {
     if (navigation.canGoBack()) {
       navigation.goBack();
     } else {
-      navigation.navigate("Chat");
+      navigation.navigate("Chat",route?.params);
     }
     return null;
   }

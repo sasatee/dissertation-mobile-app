@@ -26,31 +26,26 @@ const VideoProvider = ({ children }) => {
   const { data: token } = useQuery({
     queryFn: getStreamToken,
     queryKey: ["Stream"],
-    
   });
-  
 
+  const userId = profile?._id;
   useEffect(() => {
     if (!profile) return;
 
     const initVideoClient = async () => {
-      const userId = profile?._id;
-      //console.log(userId)
       const user = {
         id: userId,
         name: `${profile?.firstName} ${profile?.lastName}`,
         image: profile?.profilePicture,
       };
 
-      
-        const client = new StreamVideoClient({
-          apiKey,
-          user,
-          token,
-        });
+      const client = new StreamVideoClient({
+        apiKey,
+        user,
+        token,
+      });
 
-        setVideoClient(client);
-      
+      setVideoClient(client);
     };
 
     initVideoClient();
