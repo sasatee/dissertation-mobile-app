@@ -12,6 +12,7 @@ const initialState = {
   isDoctor: null,
 };
 
+console.log(initialState)
 export const signUpUser = createAsyncThunk(
   "user/register",
   async (body, { rejectWithValue }) => {

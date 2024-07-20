@@ -7,7 +7,7 @@ export const store = configureStore({
   reducer: {
     auth: authenticationSlice,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
   devTools: true,
 });
 

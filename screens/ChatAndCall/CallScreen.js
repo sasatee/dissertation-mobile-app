@@ -49,7 +49,7 @@ const CallScreen = ({ route }) => {
 
   return (
     <StreamCall call={call}>
-      {isRinging ? <RingingCallContent /> : <CallContent />}
+      {isRinging && <RingingCallContent /> }
     </StreamCall>
   );
 };

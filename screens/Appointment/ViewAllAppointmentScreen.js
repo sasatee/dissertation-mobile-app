@@ -77,7 +77,7 @@ const ViewAllAppointment = () => {
       
     }
   });
-  console.log("DELETE APPOINTMENT", deleteappontment?.data?.msg, isSuccess);
+  //console.log("DELETE APPOINTMENT", deleteappontment?.data?.msg, isSuccess);
 
   //
 
@@ -88,7 +88,7 @@ const ViewAllAppointment = () => {
 
   const handleDeleteAppointment = () => {
     if (selectedAppointment && selectedAppointment._id) {
-      console.log("selectedAppointment", selectedAppointment._id);
+      //console.log("selectedAppointment", selectedAppointment._id);
       deleteAppointment({ _id: selectedAppointment._id });
     } else {
       console.error("No appointment selected for deletion");
