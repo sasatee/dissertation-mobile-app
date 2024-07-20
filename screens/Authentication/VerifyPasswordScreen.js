@@ -46,6 +46,7 @@ export default function VerifyEmailPassword() {
       Alert.alert("Error", "Verification code is required");
       return;
     }
+    navigation.navigate("Login");
     // Refetch query manually
     await refetch();
   };
