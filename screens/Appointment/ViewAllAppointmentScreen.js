@@ -71,11 +71,7 @@ const ViewAllAppointment = () => {
       ToastAndroid.show("Delete Appointment successfully ", ToastAndroid.LONG);
     },
 
-    onSuccess:()=>{
-      ToastAndroid.show("Delete Appointment successfully ", ToastAndroid.LONG);
-      ToastAndroid.show(deleteAppointment?.data?.msg, ToastAndroid.TOP);
-      
-    }
+    
   });
   //console.log("DELETE APPOINTMENT", deleteappontment?.data?.msg, isSuccess);
 

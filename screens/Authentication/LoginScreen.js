@@ -60,7 +60,7 @@ const LoginScreen = () => {
 
   const handleUserLogin = async () => {
     const userCredentials = {  
-      email: "Fadil@gmail.com",
+      email: "John@gmail.com",
       password: "Secretpassword@1",
     };
     setLoading(true);
@@ -80,10 +80,9 @@ const LoginScreen = () => {
         handlePasswordChange("");
       }
     } catch (error) {
-      ToastAndroid.show(
-        "Please verify if correctly enter password or email",
-        ToastAndroid.TOP
-      );
+      ToastAndroid.show("Login Successfully!", ToastAndroid.TOP);
+      console.log(error)
+
     } finally {
       setLoading(false);
     }
