@@ -78,14 +78,6 @@ export default function BottomTabNavigation() {
         options={{ tabBarButton: () => null, tabBarVisible: false }}
       />
 
-      {/* <Tab.Screen name="Schedule" component={Schedule} /> */}
-
-      <Tab.Screen
-        name="profile1"
-        component={SetProfile}
-        options={{ tabBarButton: () => null, tabBarVisible: false }}
-      />
-      
       <Tab.Screen
         name="ViewAppointmentDetailsForDoctor"
         component={ViewAllAppointmentDetailsForDoctor}
@@ -98,11 +90,19 @@ export default function BottomTabNavigation() {
         component={NormalStackNavigator}
         options={{ tabBarButton: () => null, tabBarVisible: false }}
       />
-       <Tab.Screen
-       
+      <Tab.Screen
         name="ChatBot"
         component={ChatBot}
         options={{ tabBarButton: () => null, tabBarVisible: false }}
+      />
+      <Tab.Screen
+        name="Setting"
+        component={SetProfile}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <AntDesign name="setting" size={size} color={color} />
+          ),
+        }}
       />
     </Tab.Navigator>
   );

@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import Ionicons from '@expo/vector-icons/Ionicons';
 import "react-native-gesture-handler";
 
 import axios from "axios";
@@ -107,8 +108,11 @@ export default function ChatBot() {
 
   return (
     <BottomSheetModalProvider>
-      <View className="flex-1 items-center justify-center m-10  bg-gray-">
-        <Button title="Present Modal" onPress={handlePresentModal} />
+      <View className="flex-1 items-end justify-center m-10  bg-gray-">
+        <TouchableOpacity onPress={handlePresentModal} >
+        <Text className='top-1 text-sm text-sky-500'>Any help ?</Text>
+        <Ionicons name="chatbubble-ellipses-sharp" size={30} color="gray" />
+        </TouchableOpacity>
         <BottomSheetModal
           ref={bottomSheetModalRef}
           index={0}
@@ -117,8 +121,8 @@ export default function ChatBot() {
           onDismiss={() => setIsOpen(false)}
         >
           <View className="flex-1 bg-gray-100 border-t-slate-700 rounded-3xl  p-4">
-            <Text className="text-center text-xl font-mulishsemibold mb-8">
-              Ai Bot
+            <Text className="text-center text-md text-gray-500 font-mulishsemibold mb-8">
+              Health Assistance
             </Text>
             {loading && <ActivityIndicator size="large" color="#0000ff" />}
             <FlatList

@@ -304,15 +304,36 @@ export default function SetProfile() {
               <Spacer />
             </>
           )}
-          <Button
-            title={uploading ? "Uploading..." : "Save"}
-            onPress={handleSave}
-            style={{ margin: 50 }}
-            disabled={uploading}
-          />
-          {uploading && <ActivityIndicator size="large" color="#0000ff" />}
-
-          {isDoctor && <Text>Doctor is true</Text>}
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              padding: 16,
+              marginHorizontal: 10,
+            }}
+          >
+            <View style={{ width: "100%", maxWidth: 300, marginVertical: 32 }}>
+              <TouchableOpacity
+                onPress={handleSave}
+                disabled={uploading}
+                style={{
+                  backgroundColor: "#808080", 
+                  paddingVertical: 12,
+                  paddingHorizontal: 32,
+                  borderRadius: 8,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                {uploading ? (
+                  <ActivityIndicator size="large" color="#0000ff" />
+                ) : (
+                  <Text style={{ color: "#fff", fontSize: 16 }}>Save</Text>
+                )}
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>

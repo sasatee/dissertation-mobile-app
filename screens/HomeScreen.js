@@ -3,6 +3,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import filter from "lodash.filter";
 import React, { useState } from "react";
+
 import {
   Alert,
   FlatList,
@@ -154,7 +155,7 @@ const HomeScreen = () => {
             </TouchableOpacity>
           )}
         />
-        {contentForFlatlist?.length > 3 && (
+        {contentForFlatlist?.length > 2 && (
           <TouchableOpacity onPress={handleViewMore}>
             <Text
               style={{
@@ -169,12 +170,7 @@ const HomeScreen = () => {
           </TouchableOpacity>
         )}
       </View>
-      <View className="space-y-5 px-2">
-        <TouchableOpacity onPress={() => navigation.navigate("profile1")}>
-          <Text>View profile</Text>
-        </TouchableOpacity>
-      </View>
-      <Rating />
+     
       <Slider />
       <ChatBot />
 
