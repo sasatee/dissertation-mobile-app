@@ -10,6 +10,7 @@ import {
 
 import { useQuery } from "@tanstack/react-query";
 import { getAllDoctor } from "../../services/doctor";
+import Rating from "../CustomComponent/Rating";
 
 const ViewAllDoctorDetails = ({ navigation }) => {
   const { data, isError, isLoading, fetchStatus, isFetching, error } = useQuery(
@@ -63,10 +64,12 @@ const ViewAllDoctorDetails = ({ navigation }) => {
                   {item.lastName}
                 </Text>
 
-                <View className="flex flex-row-reverse">
-                  <Text className="text-xs -left-0.5  text-black/80"> rating :
-                   <Text className='text-xs'> {item.rating}</Text> 
-                  </Text>
+                <View className="flex flex-row pl-8">
+          
+                    <Text className='text-md text-black/80'>Rating:</Text>
+                     
+                  
+                    <Rating rating={item.rating} isDisabled={true}  size={12}/>
                 </View>
                 <View className="flex left-8 flex-row-reverse self-center py-3 gap-2 -top-1">
                   <Text className="bg-blue-500 text-white font-bold py-2 px-4 border border-blue-700 rounded-xl">

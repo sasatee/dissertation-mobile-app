@@ -1,16 +1,16 @@
-import { Text, View } from 'react-native';
-import { AirbnbRating } from 'react-native-ratings';
+import { Text, View } from "react-native";
+import { AirbnbRating } from "react-native-ratings";
 
-const Rating = () => {
+const Rating = ({ rating, isDisabled,size }) => {
+  console.log("RATING STAR", rating);
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{fontSize:18, color:'black'}}>Rating Star</Text> 
+    <View>
       <AirbnbRating
         count={5}
-        defaultRating={5}
-        size={15}
+        defaultRating={rating}
+        size={size}
         showRating={false}
-       // isDisabled
+        isDisabled={isDisabled}
         selectedColor="gold"
       />
     </View>

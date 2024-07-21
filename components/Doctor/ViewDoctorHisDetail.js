@@ -12,6 +12,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { useChatContext } from "stream-chat-expo";
 import useLoginState from "../../hooks/UseLoginState";
 import { useNavigation } from "@react-navigation/native";
+import Rating from "../CustomComponent/Rating";
 
 export default function ViewDoctorDetail({ route }) {
   const paramsId = route.params;
@@ -78,10 +79,25 @@ export default function ViewDoctorDetail({ route }) {
               </Text>
             </View>
           </TouchableOpacity>
-          <Text>$ {data?.doctor?.price}</Text>
-          <Text className=" text-sm/tight text-gray-500">
-            {data?.doctor?.description}
-          </Text>
+
+          <View className="items-start flex-1">
+            <View className="mb-5">
+              <Text className="tex-md text-black">
+                consultation fees:{" "}
+                <Text className="text-blue-400">$ {data?.doctor?.price}</Text>{" "}
+              </Text>
+              
+            </View>
+          </View>
+          
+
+          <View className="mt-">
+          
+          <Rating isDisabled={false} size={20} />
+            <Text className=" text-sm/tight text-gray-500">
+              {data?.doctor?.description}
+            </Text>
+          </View>
         </View>
       </View>
     );
