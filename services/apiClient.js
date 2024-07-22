@@ -2,12 +2,12 @@ import { BASE_URL } from "@env";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
-// Create Axios instance
+
 const apiClient = axios.create({
   baseURL: BASE_URL.toString(),
 });
 
-// Request interceptor to attach headers
+// Request interceptor headers
 apiClient.interceptors.request.use(
   async (config) => {
     try {
@@ -15,7 +15,8 @@ apiClient.interceptors.request.use(
       const token = await ReactNativeAsyncStorage.getItem("jwtToken");
       const googleAccessToken = await ReactNativeAsyncStorage.getItem("googleAccessToken");
 
-      // Attach headers conditionally
+      // Attach headers 
+
       if (token && googleAccessToken) {
         config.headers.Authorization = `Bearer ${token},${googleAccessToken}`;
       } else if (token) {
