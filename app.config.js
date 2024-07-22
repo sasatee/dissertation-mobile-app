@@ -1,10 +1,6 @@
-
-import 'dotenv/config';
-
+import "dotenv/config";
 
 export default ({ config }) => {
-  console.log("Environment Variables:");
-console.log(process.env);
   return {
     ...config,
     expo: {
