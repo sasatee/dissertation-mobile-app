@@ -1,4 +1,5 @@
-import { STREAM_PUBLIC } from "@env";
+import Constants from "expo-constants";
+
 import { useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
@@ -7,6 +8,8 @@ import { Chat, OverlayProvider } from "stream-chat-expo";
 import useLoginState from "../hooks/UseLoginState";
 import { getUserProfileById } from "../services/profile";
 import { getStreamToken } from "../services/stream";
+
+const { STREAM_PUBLIC } = Constants.expoConfig.extra;
 
 const client = StreamChat.getInstance(STREAM_PUBLIC);
 

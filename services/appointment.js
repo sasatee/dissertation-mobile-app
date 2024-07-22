@@ -1,6 +1,9 @@
-import { BASE_URL } from "@env";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import axios, { Axios } from "axios";
+
+import Constants from "expo-constants";
+
+const { BASE_URL } = Constants.expoConfig.extra;
 
 const baseURL = BASE_URL.toString();
 
@@ -105,7 +108,7 @@ export async function updateAppointment({ appointmentId, data }) {
 
     return response.data;
   } catch (error) {
-    console.log(error.response)
+    console.log(error.response);
     throw new Error(
       JSON.stringify(error.response.data) ||
         "Could not update appointment with doctor"

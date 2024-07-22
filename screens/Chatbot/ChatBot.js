@@ -1,4 +1,4 @@
-import { API_KEY_Gemini } from "@env";
+import Constants from 'expo-constants';
 import {
   BottomSheetModal,
   BottomSheetModalProvider,
@@ -20,8 +20,13 @@ import { FlatList } from "react-native-gesture-handler";
 // import { isSpeakingAsync, speak, stop } from "expo-speech";
 import ChatBubble from "./ChatBubble";
 
+
+
 export default function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
+  const {
+    API_KEY_GEMINI,
+  } = Constants.expoConfig.extra;
 
   const bottomSheetModalRef = useRef(null);
 
@@ -41,7 +46,7 @@ export default function ChatBot() {
   const [error, setError] = useState(null);
   const [isSpeaking, setIsSpeaking] = useState(false);
 
-  const Api_key = API_KEY_Gemini.toString();
+  const Api_key = API_KEY_GEMINI.toString();
 
   const handleUserInput = async () => {
     let updateChat = [

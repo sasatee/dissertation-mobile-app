@@ -30,6 +30,26 @@ import {
 import { getAllDoctor } from "../services/doctor";
 import ChatBot from "./Chatbot/ChatBot";
 
+
+import Constants from 'expo-constants';
+
+if (Constants.expoConfig && Constants.expoConfig.extra) {
+  const {
+    BASE_URL,
+    HOST_URL,
+    WEB_CLIENT_ID,
+    API_KEY_FIREBASE,
+    MERCHANT_IDENTIFIER,
+    STREAM_PUBLIC,
+    API_KEY_GEMINI,
+  } = Constants.expoConfig.extra;
+
+  console.log("BASE_URL: ", BASE_URL.toString());
+} else {
+  console.error("Constants.expoConfig or Constants.expoConfig.extra is null or undefined.");
+}
+
+
 const HomeScreen = () => {
   const decodedToken = useLoginState();
   const { logout, user } = useAuth();

@@ -5,11 +5,15 @@ import {
   StreamVideoClient,
   StreamVideo,
 } from "@stream-io/video-react-native-sdk";
-import { STREAM_PUBLIC } from "@env";
+
+import Constants from "expo-constants";
+
 import useLoginState from "../hooks/UseLoginState";
 import { useQuery } from "@tanstack/react-query";
 import { getUserProfileById } from "../services/profile";
 import { getStreamToken } from "../services/stream";
+
+const { STREAM_PUBLIC } = Constants.expoConfig.extra;
 
 const VideoProvider = ({ children }) => {
   const [VideoClient, setVideoClient] = useState(null);

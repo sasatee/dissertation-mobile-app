@@ -1,6 +1,13 @@
-import { BASE_URL } from "@env";
+
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+
+import Constants from 'expo-constants';
+
+const {
+  BASE_URL,
+ 
+} = Constants.expoConfig.extra;
 
 const baseURL = BASE_URL.toString();
 

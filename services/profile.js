@@ -1,6 +1,8 @@
-import { BASE_URL } from "@env";
+import Constants from "expo-constants";
+
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import axios, { Axios } from "axios";
+const { BASE_URL } = Constants.expoConfig.extra;
 
 const baseURL = BASE_URL.toString();
 
@@ -28,8 +30,6 @@ const getHeaders = async () => {
 
   return headers;
 };
-
-
 
 export const getUserProfileById = async ({ id, signal }) => {
   try {

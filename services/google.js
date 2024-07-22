@@ -1,9 +1,12 @@
-import { BASE_URL } from "@env";
+import Constants from "expo-constants";
+
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setGoogleAccessToken } from "../redux/slice/authenticationSlice";
+
+const { BASE_URL } = Constants.expoConfig.extra;
 
 export const useGoogleLogin = () => {
   const [error1, setError] = useState(null);

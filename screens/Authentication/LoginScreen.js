@@ -65,8 +65,8 @@ const LoginScreen = () => {
     };
     setLoading(true);
     try {
-      const result = dispatch(signInUser(userCredentials));
-      // const result =  dispatch(signInUser({ email, password }));
+      //const result = dispatch(signInUser(userCredentials));
+       const result =  dispatch(signInUser({ email, password }));
     
 
       if (result.payload.token) {

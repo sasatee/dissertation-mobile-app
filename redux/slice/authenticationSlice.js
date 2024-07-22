@@ -1,8 +1,12 @@
-import { BASE_URL } from "@env";
+import Constants from 'expo-constants';
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import axios from "axios";
+
+const {
+  BASE_URL,
+} = Constants.expoConfig.extra;
 
 const initialState = {
   token: null,

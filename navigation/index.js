@@ -14,13 +14,15 @@ import VideoProvider from "../provider/VideoProvider";
 import CallProvider from "../provider/CallProvider";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StripeProvider } from "@stripe/stripe-react-native";
-import { merchantIdentifier } from "@env";
+
+import Constants from "expo-constants";
+
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+
+const { merchantIdentifier } = Constants.expoConfig.extra;
 
 const MainNavigator = () => {
   const userLoginWithJWT = useSelector((state) => state.auth.token);
-
-  const id = merchantIdentifier.toString();
 
   const { user: userLoginWithGoogle } = useAuth();
 
@@ -31,7 +33,7 @@ const MainNavigator = () => {
       {isLoggedIn ? (
         <SafeAreaProvider>
           <BottomSheetModalProvider>
-            <StripeProvider publishableKey={id}>
+            <StripeProvider publishableKey={merchantIdentifier}>
               <ChatProvider>
                 <VideoProvider>
                   <CallProvider>

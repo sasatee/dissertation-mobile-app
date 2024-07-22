@@ -14,13 +14,15 @@ import React, {
 } from "react";
 import { auth } from "../firebase";
 
-import { WEB_CLIENT_ID } from "@env";
+
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
 import { logoutGoogleAccessToken } from "../redux/slice/authenticationSlice";
 import { useGoogleLogin } from "../services/google";
+import Constants from 'expo-constants';
 
 const AuthContext = createContext({});
+const { WEB_CLIENT_ID } = Constants.expoConfig.extra;
 
 export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);

@@ -2,7 +2,7 @@ import { Feather } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
-import { BASE_URL } from "@env";
+import Constants from "expo-constants";
 import {
   ActivityIndicator,
   Alert,
@@ -22,6 +22,8 @@ import { app } from "../../firebase";
 import useLoginState from "../../hooks/UseLoginState";
 import { checkIsDoctorLogin } from "../../redux/slice/authenticationSlice";
 import Spacer from "../../components/CustomComponent/Spacer";
+
+const { BASE_URL } = Constants.expoConfig.extra;
 
 export default function SetProfile() {
   const [firstName, setFirstName] = useState("");
@@ -318,7 +320,7 @@ export default function SetProfile() {
                 onPress={handleSave}
                 disabled={uploading}
                 style={{
-                  backgroundColor: "#808080", 
+                  backgroundColor: "#808080",
                   paddingVertical: 12,
                   paddingHorizontal: 32,
                   borderRadius: 8,

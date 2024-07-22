@@ -1,6 +1,9 @@
-import { BASE_URL } from "@env";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+
+import Constants from "expo-constants";
+
+const { BASE_URL } = Constants.expoConfig.extra;
 
 const baseURL = BASE_URL.toString();
 
@@ -71,7 +74,7 @@ export const DoctorPaymentPrice = async ({ id, signal }) => {
       id,
       signal,
     });
-   
+
     return response.data.doctor.price;
   } catch (error) {
     // throw new Error(
