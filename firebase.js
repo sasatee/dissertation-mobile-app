@@ -1,17 +1,17 @@
 // firebaseConfig.js
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { initializeAuth, getAuth, getReactNativePersistence } from "firebase/auth";
+import {
+  initializeAuth,
+  getAuth,
+  getReactNativePersistence,
+} from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 
 import Constants from "expo-constants";
 
+const { API_KEY_FIREBASE } = Constants.expoConfig.extra;
 
-const {
-  API_KEY_FIREBASE,
- 
-} = Constants.expoConfig.extra;
-console.log(API_KEY_FIREBASE)
 const firebaseConfig = {
   apiKey: API_KEY_FIREBASE.toString(),
   authDomain: "tinder--auth.firebaseapp.com",
